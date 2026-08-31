@@ -1,0 +1,33 @@
+/* ==========================================================================
+   TATVYRA — TYPEFACES
+
+   Lumaire is the brand display face. Its font files are licensed and are NOT
+   included in this repository. To switch headlines to Lumaire:
+
+     1. Place the licensed files in  public/fonts/
+          Lumaire.woff2
+          Lumaire.woff        (optional)
+     2. Uncomment the @font-face block below.
+
+   Nothing else needs to change — --font-display already lists 'Lumaire' first.
+   Do not substitute a downloaded look-alike; until the licensed files are in
+   place headlines fall back to Helvetica, the brand's own secondary face.
+
+   Helvetica needs no @font-face: it is a system face on the platforms the
+   brand ships to, with Arial as the final fallback.
+
+   Poppins is intentionally not loaded — the guidelines reserve it for the
+   product catalogue, not the website.
+   ========================================================================== */
+
+/*
+@font-face {
+  font-family: 'Lumaire';
+  src:
+    url('/fonts/Lumaire.woff2') format('woff2'),
+    url('/fonts/Lumaire.woff') format('woff');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+*/

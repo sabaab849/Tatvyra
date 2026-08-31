@@ -1,0 +1,131 @@
+/* ==========================================================================
+   TATVYRA — DESIGN TOKENS
+   Colour and type values come from the Tatvyra brand guidelines.
+   Nothing outside this palette may be introduced.
+   ========================================================================== */
+
+:root {
+  /* --- Brand colour ----------------------------------------------------- */
+  --tatvyra-purple: #5a218a;
+  --tatvyra-orange: #f26422;
+  --tatvyra-lilac: #c9b8e8;
+  --tatvyra-aubergine: #30143f;
+  --tatvyra-peach: #f6b39b;
+  --tatvyra-warm-white: #f8f5ec;
+  --tatvyra-ink: #2a2118;
+
+  /* Channel form of the brand colours, for gradients and alpha washes.
+     Fading to `transparent` interpolates through transparent black and
+     greys the tint, so washes fade to the same hue at zero alpha. */
+  --lilac-rgb: 201 184 232;
+  --peach-rgb: 246 179 155;
+
+  /* --- Semantic surfaces ------------------------------------------------
+     Warm White carries ~55% of the page. Tints below are the brand colours
+     mixed into Warm White only — no new hues are introduced.               */
+  --surface: var(--tatvyra-warm-white);
+  /* Raised panels sit on Warm White and are defined by their hairline border,
+     not by a lighter tint — the palette has nothing lighter than Warm White. */
+  --surface-raised: var(--tatvyra-warm-white);
+  --surface-sunken: color-mix(in srgb, var(--tatvyra-ink) 5%, var(--tatvyra-warm-white));
+  --surface-lilac: color-mix(in srgb, var(--tatvyra-lilac) 26%, var(--tatvyra-warm-white));
+  --surface-peach: color-mix(in srgb, var(--tatvyra-peach) 26%, var(--tatvyra-warm-white));
+  --surface-purple: var(--tatvyra-purple);
+  --surface-aubergine: var(--tatvyra-aubergine);
+
+  /* --- Semantic text ---------------------------------------------------- */
+  --text: var(--tatvyra-ink);
+  /* Mix levels are set so every tint clears WCAG AA (4.5:1) on Warm White. */
+  --text-muted: color-mix(in srgb, var(--tatvyra-ink) 75%, var(--tatvyra-warm-white));
+  --text-faint: color-mix(in srgb, var(--tatvyra-ink) 65%, var(--tatvyra-warm-white));
+  --text-heading: var(--tatvyra-purple);
+  --text-on-dark: var(--tatvyra-warm-white);
+  --text-on-dark-muted: color-mix(in srgb, var(--tatvyra-warm-white) 68%, var(--tatvyra-aubergine));
+
+  /* --- Lines & shadows -------------------------------------------------- */
+  --line: color-mix(in srgb, var(--tatvyra-ink) 14%, var(--tatvyra-warm-white));
+  --line-strong: color-mix(in srgb, var(--tatvyra-ink) 26%, var(--tatvyra-warm-white));
+  --line-on-dark: color-mix(in srgb, var(--tatvyra-warm-white) 24%, transparent);
+  --focus: var(--tatvyra-orange);
+
+  --shadow-soft: 0 1px 2px rgb(42 33 24 / 0.04), 0 12px 28px -18px rgb(42 33 24 / 0.28);
+  --shadow-lift: 0 2px 4px rgb(42 33 24 / 0.05), 0 24px 48px -28px rgb(42 33 24 / 0.34);
+
+  /* --- Typography -------------------------------------------------------
+     Display face: Lumaire (headlines only).
+     UI/body face: Helvetica.
+     Poppins is deliberately absent — it is reserved for the catalogue.
+
+     The Lumaire files are NOT in this repository (see BRAND-NOTES.md).
+     Drop Lumaire.woff2 / Lumaire.woff into public/fonts/ and uncomment the
+     @font-face block in fonts.css. Until then headlines fall back to
+     Helvetica, which is the brand's own second face.                       */
+  --font-display: 'Lumaire', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-body: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+  --display-tracking: -0.022em;
+  --display-leading: 0.98;
+
+  /* Fluid type scale */
+  --step--2: clamp(0.688rem, 0.67rem + 0.09vw, 0.75rem);
+  --step--1: clamp(0.813rem, 0.79rem + 0.11vw, 0.875rem);
+  --step-0: clamp(0.938rem, 0.91rem + 0.14vw, 1rem);
+  --step-1: clamp(1.063rem, 1rem + 0.31vw, 1.25rem);
+  --step-2: clamp(1.25rem, 1.14rem + 0.55vw, 1.625rem);
+  --step-3: clamp(1.5rem, 1.28rem + 1.09vw, 2.25rem);
+  --step-4: clamp(1.875rem, 1.45rem + 2.13vw, 3.25rem);
+  --step-5: clamp(2.375rem, 1.6rem + 3.86vw, 4.75rem);
+  --step-6: clamp(2.875rem, 1.53rem + 6.7vw, 7rem);
+
+  /* --- Space ------------------------------------------------------------ */
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-s: 1rem;
+  --space-m: 1.5rem;
+  --space-l: 2rem;
+  --space-xl: 3rem;
+  --space-2xl: 4rem;
+  --space-3xl: 6rem;
+  --section-y: clamp(3.5rem, 2.2rem + 6.5vw, 7.5rem);
+  --section-y-tight: clamp(2.75rem, 1.9rem + 4.2vw, 5rem);
+
+  /* --- Layout ----------------------------------------------------------- */
+  --page-max: 82.5rem; /* 1320px */
+  --gutter: clamp(1.25rem, 0.7rem + 2.4vw, 3rem);
+  /* The real rendered header height (the lockup plus its clear space), and the
+     height it settles to on scroll. Sticky offsets are derived from these. */
+  --header-h: 96px;
+  --header-h-compact: 85px;
+
+  /* --- Shape (restrained) ----------------------------------------------- */
+  --radius-s: 2px;
+  --radius-m: 4px;
+  --radius-image: 6px;
+  --radius-pill: 999px;
+
+  /* --- Motion ----------------------------------------------------------- */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 180ms;
+  --dur: 320ms;
+  --dur-slow: 620ms;
+
+  --z-header: 60;
+  --z-drawer: 80;
+  --z-overlay: 90;
+}
+
+@media (max-width: 48rem) {
+  :root {
+    --header-h: 84px;
+    --header-h-compact: 83px;
+  }
+}
+
+@media (max-width: 30rem) {
+  :root {
+    --header-h: 80px;
+    --header-h-compact: 79px;
+  }
+}
