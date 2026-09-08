@@ -50,6 +50,16 @@
 
   --shadow-soft: 0 1px 2px rgb(42 33 24 / 0.04), 0 12px 28px -18px rgb(42 33 24 / 0.28);
   --shadow-lift: 0 2px 4px rgb(42 33 24 / 0.05), 0 24px 48px -28px rgb(42 33 24 / 0.34);
+  /* The scrolled header's lift — shallow enough to read as an edge, not a card. */
+  --shadow-header: 0 8px 28px -14px rgb(42 33 24 / 0.26);
+
+  /* --- Scrolled header glass -------------------------------------------
+     Warm White thinned with transparent — the same color-mix technique as
+     --line-on-dark, so the blurred bar introduces no eighth hue. The mix
+     stays high enough that nav type keeps its full contrast over whatever
+     passes beneath it. */
+  --glass-bg: color-mix(in srgb, var(--tatvyra-warm-white) 76%, transparent);
+  --glass-blur: 20px;
 
   /* --- Typography -------------------------------------------------------
      Display face: Lumaire (headlines only).
@@ -95,13 +105,16 @@
   --gutter: clamp(1.25rem, 0.7rem + 2.4vw, 3rem);
   /* The real rendered header height (the lockup plus its clear space), and the
      height it settles to on scroll. Sticky offsets are derived from these. */
-  --header-h: 96px;
-  --header-h-compact: 85px;
+  --header-h: 108px;
+  --header-h-compact: 94px;
 
   /* --- Shape (restrained) ----------------------------------------------- */
   --radius-s: 2px;
   --radius-m: 4px;
   --radius-image: 6px;
+  /* Sits above --radius-image so a padded card reads as one rounded shape
+     rather than a soft box with a sharper picture floating inside it. */
+  --radius-card: 12px;
   --radius-pill: 999px;
 
   /* --- Motion ----------------------------------------------------------- */
@@ -118,14 +131,14 @@
 
 @media (max-width: 48rem) {
   :root {
-    --header-h: 84px;
-    --header-h-compact: 83px;
+    --header-h: 92px;
+    --header-h-compact: 88px;
   }
 }
 
 @media (max-width: 30rem) {
   :root {
-    --header-h: 80px;
-    --header-h-compact: 79px;
+    --header-h: 86px;
+    --header-h-compact: 84px;
   }
 }

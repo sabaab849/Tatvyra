@@ -44,7 +44,7 @@ export default function Header() {
             >
               <MenuIcon />
             </button>
-            <Logo width={148} className="header__logo" />
+            <Logo width={158} className="header__logo" />
           </div>
 
           <nav className="header__nav" aria-label="Primary">

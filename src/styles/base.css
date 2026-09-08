@@ -252,4 +252,7 @@ p {
     opacity: 1;
     translate: none;
   }
+
+  /* The card still gains its border and shadow on hover — only the lift goes. */
+  .pcard:hover { translate: none; }
 }

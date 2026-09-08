@@ -7,7 +7,7 @@
 .hero {
   position: relative;
   overflow: hidden;
-  padding-block: clamp(3rem, 1.5rem + 6vw, 6.5rem) clamp(2.5rem, 1rem + 5vw, 5rem);
+  padding-block: clamp(3rem, 1.5rem + 6vw, 6.5rem) 0;
   /* A single soft lilac wash, painted on the section itself so it can never
      show a box edge. No gradient between two brand colours is used anywhere. */
   background:
@@ -21,6 +21,9 @@
 
 .hero__inner {
   position: relative;
+  /* The section's bottom padding lives here so the trust strip below can run
+     flush to the section edge. */
+  padding-bottom: clamp(2.5rem, 1rem + 5vw, 5rem);
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.02fr);
   align-items: center;
@@ -51,30 +54,69 @@
   margin-top: var(--space-l);
 }
 
-.hero__meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1.25rem;
-  margin-top: var(--space-xl);
-  padding-top: var(--space-s);
+/* The trust strip runs edge to edge under the hero, so it is pulled out of
+   the shell and given its own block padding rather than the section's. */
+.trust-marquee {
+  margin-top: clamp(2.5rem, 1rem + 5vw, 5rem);
   border-top: 1px solid var(--line);
-  font-size: var(--step--2);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--text-faint);
+  padding-block: clamp(0.9rem, 0.6rem + 1vw, 1.5rem);
 }
 
-.hero__meta li { position: relative; padding-left: 1rem; }
+.trust-marquee__viewport {
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+  /* Fade the claims out at both edges instead of slicing them mid-word. The
+     mask reads alpha only, so the opaque stops use Ink rather than an eighth
+     hue — this keeps the palette check in BRAND-NOTES.md returning seven. */
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    var(--tatvyra-ink) 8%,
+    var(--tatvyra-ink) 92%,
+    transparent
+  );
+}
 
-.hero__meta li::before {
+.trust-marquee__track {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: clamp(2rem, 1.2rem + 2.4vw, 4rem);
+  padding-right: clamp(2rem, 1.2rem + 2.4vw, 4rem);
+  font-size: var(--step-1);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  white-space: nowrap;
+  animation: trust-scroll 42s linear infinite;
+}
+
+.trust-marquee:hover .trust-marquee__track { animation-play-state: paused; }
+
+.trust-marquee__track li {
+  position: relative;
+  padding-left: clamp(1.75rem, 1.1rem + 1.8vw, 3rem);
+}
+
+/* The dot sits in the gap ahead of each claim and so reads as the separator. */
+.trust-marquee__track li::before {
   content: '';
   position: absolute;
   left: 0;
-  top: 0.5em;
-  width: 5px;
-  height: 5px;
+  top: 50%;
+  translate: 0 -50%;
+  width: 0.5em;
+  height: 0.5em;
   border-radius: 50%;
   background: var(--tatvyra-orange);
+}
+
+/* Each track is one full copy, so shifting by its own width lands the second
+   track exactly where the first started — the seam is invisible. */
+@keyframes trust-scroll {
+  from { translate: 0 0; }
+  to { translate: -100% 0; }
 }
 
 .hero__media { position: relative; }
@@ -97,7 +139,7 @@
      to the image's intrinsic width and would overflow the viewport. */
   .hero__media { order: -1; width: min(100%, 30rem); margin-inline: auto; }
   .hero__title { font-size: var(--step-5); }
-  .hero__meta { margin-top: var(--space-l); }
+  .trust-marquee { margin-top: var(--space-xl); }
 }
 
 /* --- Brand philosophy ----------------------------------------------------- */
@@ -123,17 +165,18 @@
 
 /* --- Categories ----------------------------------------------------------- */
 
+/* Two across, not four: at four the photographs were thumbnails. The row gap
+   runs wider than the column gap so the two rows read as separate spreads. */
 .categories__grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: clamp(1rem, 0.5rem + 1.6vw, 1.75rem);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(2.5rem, 1.4rem + 3.4vw, 5rem) clamp(1.5rem, 0.6rem + 2.8vw, 3.5rem);
 }
 
 .categories__grid > li { display: flex; }
 .categories__grid > li > * { width: 100%; }
 
-@media (max-width: 62rem) { .categories__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 34rem) { .categories__grid { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 44rem) { .categories__grid { grid-template-columns: minmax(0, 1fr); } }
 
 /* --- Clean label / standards --------------------------------------------- */
 

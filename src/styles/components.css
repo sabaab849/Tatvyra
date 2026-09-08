@@ -165,16 +165,34 @@
   position: sticky;
   top: 0;
   z-index: var(--z-header);
-  /* Opaque Warm White, not a blurred glass panel — content must not ghost
-     through, and glassmorphism is off-brand. */
+  /* At rest the bar is opaque Warm White, but it keeps a hairline so it still
+     reads as a band against a Warm White page rather than dissolving into it. */
   background: var(--surface);
-  border-bottom: 1px solid transparent;
+  border-bottom: 1px solid var(--line);
   transition:
     border-color var(--dur) var(--ease),
-    background-color var(--dur) var(--ease);
+    background-color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
 }
 
-.header--compact { border-bottom-color: var(--line); }
+/* Scrolled: the bar lifts off the page. The ground thins to a blur so content
+   passes beneath it as tint, and a stronger hairline plus a shallow lift keep
+   the bottom edge unambiguous. */
+.header--compact {
+  border-bottom-color: var(--line-strong);
+  box-shadow: var(--shadow-header);
+}
+
+/* The glass is applied only where it can actually be blurred. Without
+   backdrop-filter the bar keeps its opaque Warm White ground, so nav type is
+   never left floating over unblurred page content. */
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .header--compact {
+    background: var(--glass-bg);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  }
+}
 
 .header__inner {
   display: grid;
@@ -190,7 +208,7 @@
 /* The lockup itself settles a little on scroll, which is what actually makes
    the bar shorter — min-height alone cannot shrink past the logo. */
 .header__logo .logo__img { transition: width var(--dur) var(--ease); }
-.header--compact .header__logo .logo__img { width: 128px !important; }
+.header--compact .header__logo .logo__img { width: 134px !important; }
 
 .header__lead { display: flex; align-items: center; gap: var(--space-s); }
 
@@ -204,15 +222,20 @@
 .header__nav-list {
   display: flex;
   align-items: center;
-  gap: clamp(1rem, 0.3rem + 1.6vw, 2rem);
+  gap: clamp(1.125rem, 0.35rem + 1.7vw, 2.25rem);
 }
 
+/* A step above body size, and above the tracking that made the words drift
+   apart: at --step-0 the categories read as running text in a wide bar rather
+   than as navigation. Sized between --step-0 and --step-1 because --step-1
+   would crowd the lockup at the 68rem breakpoint. */
 .header__link {
   position: relative;
   display: inline-block;
-  padding-block: 0.35rem;
-  font-size: var(--step--1);
-  letter-spacing: 0.055em;
+  padding-block: 0.6rem;
+  font-size: clamp(1rem, 0.92rem + 0.26vw, 1.15rem);
+  font-weight: 500;
+  letter-spacing: 0.004em;
   color: var(--text);
   white-space: nowrap;
   transition: color var(--dur-fast) var(--ease);
@@ -223,7 +246,8 @@
   position: absolute;
   inset-inline: 0;
   bottom: 0;
-  height: 1px;
+  height: 2px;
+  border-radius: var(--radius-pill);
   background: var(--tatvyra-orange);
   scale: 0 1;
   transform-origin: left;
@@ -235,15 +259,15 @@
 .header__link.is-active::after { scale: 1 1; }
 .header__link.is-active { color: var(--tatvyra-purple); font-weight: 700; }
 
-.header__actions { display: flex; align-items: center; gap: 0.25rem; }
+.header__actions { display: flex; align-items: center; gap: 0.125rem; }
 
 .header__icon {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border-radius: var(--radius-pill);
   color: var(--text);
   transition: background-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
@@ -282,13 +306,13 @@
 }
 
 @media (max-width: 48rem) {
-  .header__logo .logo__img { width: 128px !important; }
+  .header__logo .logo__img { width: 134px !important; }
 }
 
 @media (max-width: 30rem) {
   .header__inner { gap: var(--space-2xs); }
   .header__logo .logo__img,
-  .header--compact .header__logo .logo__img { width: 120px !important; }
+  .header--compact .header__logo .logo__img { width: 126px !important; }
 }
 
 /* --- Drawers & overlays --------------------------------------------------- */
@@ -610,7 +634,9 @@
 
 /* --- Product card --------------------------------------------------------- */
 
-.pgrid { display: grid; gap: clamp(1.5rem, 0.9rem + 2.4vw, 2.75rem) clamp(1rem, 0.5rem + 1.6vw, 2rem); }
+/* Gaps are near-square now that each card is a bordered surface — an uneven
+   gutter made the row read as one panel rather than four cards. */
+.pgrid { display: grid; gap: clamp(1.5rem, 0.9rem + 2.4vw, 2.5rem) clamp(1.25rem, 0.75rem + 1.6vw, 2rem); }
 .pgrid--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .pgrid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .pgrid--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -628,10 +654,36 @@
   .pgrid { gap: var(--space-l) var(--space-s); }
 }
 
-.pcard { display: flex; flex-direction: column; height: 100%; }
+/* A real card surface. The palette has nothing lighter than Warm White, so on
+   a --surface-sunken section the card lifts by being Warm White against the
+   tint, and on a plain Warm White page the hairline and the hover shadow do
+   the work a lighter fill cannot. */
+.pcard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: clamp(0.75rem, 0.55rem + 0.7vw, 1rem);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface-raised);
+  transition:
+    border-color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease),
+    translate var(--dur) var(--ease);
+}
+
+.pcard:hover,
+.pcard:focus-within {
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow-soft);
+}
+
+.pcard:hover { translate: 0 -3px; }
 
 .pcard__media {
   display: block;
+  border-radius: var(--radius-image);
   background: var(--surface-sunken);
   isolation: isolate;
 }
@@ -657,7 +709,14 @@
   text-transform: uppercase;
 }
 
-.pcard__body { display: flex; flex-direction: column; flex: 1; padding-top: var(--space-s); }
+/* Inset from the picture so the type block is clearly the card's second half,
+   not a caption hanging off the image. */
+.pcard__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: var(--space-s) var(--space-3xs) var(--space-3xs);
+}
 
 .pcard__category {
   font-size: var(--step--2);
@@ -677,7 +736,6 @@
 }
 
 .pcard__link::after { content: ''; position: absolute; inset: 0; }
-.pcard { position: relative; }
 .pcard__link { transition: color var(--dur-fast) var(--ease); }
 .pcard:hover .pcard__link { color: var(--tatvyra-aubergine); }
 
@@ -720,10 +778,14 @@
 .pcard__price-value { font-weight: 700; color: var(--text); }
 .pcard__price-tbc { color: var(--text-faint); letter-spacing: 0.03em; }
 
+/* At four-up the card is ~250px inside its padding, which is just enough for
+   the button and the link side by side. Wrapping lets the link drop to its own
+   line rather than breaking "Add to cart" across two. */
 .pcard__actions {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-s);
+  gap: 0.5rem var(--space-2xs);
   margin-top: 0.6rem;
   position: relative;
   z-index: 1;
@@ -732,7 +794,8 @@
 .pcard__add {
   flex: 1;
   min-height: 2.5rem;
-  padding-inline: 1rem;
+  padding-inline: 0.75rem;
+  white-space: nowrap;
   border: 1px solid var(--tatvyra-purple);
   border-radius: var(--radius-pill);
   color: var(--tatvyra-purple);
@@ -771,26 +834,22 @@
 
 .grid-empty { color: var(--text-muted); padding-block: var(--space-xl); }
 
-/* --- Category card -------------------------------------------------------- */
+/* --- Category card --------------------------------------------------------
+   Editorial rather than boxed: the photograph carries the card and the type
+   sits directly on the page beneath it. The panel, its border and its inner
+   padding are gone — those were what made four of these read as a row of
+   blocks rather than as four ranges. */
 
 .ccard {
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: var(--surface-raised);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-image);
-  overflow: hidden;
-  transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease), translate var(--dur) var(--ease);
+  transition: translate var(--dur) var(--ease);
 }
 
-.ccard:hover {
-  border-color: var(--line-strong);
-  box-shadow: var(--shadow-soft);
-  translate: 0 -3px;
-}
+.ccard:hover { translate: 0 -4px; }
 
-.ccard__media { aspect-ratio: 4 / 3; border-radius: 0; }
+.ccard__media { aspect-ratio: 4 / 3; }
 .ccard__media img { transition: scale var(--dur-slow) var(--ease-out); }
 .ccard:hover .ccard__media img { scale: 1.04; }
 
@@ -798,37 +857,64 @@
   display: flex;
   flex-direction: column;
   flex: 1;
-  gap: 0.4rem;
-  padding: var(--space-m) var(--space-m) var(--space-s);
+  gap: 0.35rem;
+  padding-top: var(--space-m);
 }
 
+/* The index is the one piece of orange in the card, which is what makes the
+   set read as a numbered run rather than as four unrelated tiles. */
 .ccard__number {
-  font-size: var(--step--2);
+  font-size: var(--step--1);
   font-weight: 700;
-  letter-spacing: 0.16em;
-  color: var(--text-muted);
+  letter-spacing: 0.2em;
+  color: var(--tatvyra-orange);
 }
 
-.ccard__name { color: var(--tatvyra-purple); }
-.ccard__teaser { font-size: var(--step--1); color: var(--text-muted); line-height: 1.5; }
+.ccard__name { color: var(--tatvyra-purple); line-height: 1.02; }
+
+.ccard__teaser {
+  margin-top: 0.35rem;
+  font-size: var(--step-0);
+  color: var(--text-muted);
+  line-height: 1.55;
+  max-width: 36ch;
+}
 
 .ccard__more {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-s);
-  margin-top: auto;
+  margin-top: var(--space-m);
   padding-top: var(--space-s);
-  font-size: var(--step--2);
-  letter-spacing: 0.09em;
+  border-top: 1px solid var(--line);
+  font-size: var(--step--1);
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text-faint);
+  transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
 }
 
+/* `auto` on the meta row would push the rule to the tallest card in the row
+   and leave the shorter ones with a gap under their teaser. Aligning the
+   rules across the row is the editorial detail, so the body stretches. */
+.ccard__body > .ccard__teaser { flex: 1; }
+
+.ccard:hover .ccard__more { border-top-color: var(--line-strong); color: var(--text); }
 .ccard__more svg { color: var(--tatvyra-purple); transition: translate var(--dur) var(--ease); }
-.ccard:hover .ccard__more svg { translate: 4px 0; }
+.ccard:hover .ccard__more svg { translate: 6px 0; }
+
 .ccard--lilac .ccard__media { background: var(--surface-lilac); }
 .ccard--peach .ccard__media { background: var(--surface-peach); }
+
+/* Two-up: at four across, the images were too small to be photographs and
+   the names too small to be headings. */
+.ccard--lg .ccard__media { aspect-ratio: 3 / 2; }
+.ccard--lg .ccard__body { padding-top: var(--space-l); }
+
+@media (max-width: 34rem) {
+  .ccard--lg .ccard__media { aspect-ratio: 4 / 3; }
+}
 
 /* --- Section heading ------------------------------------------------------ */
 
@@ -842,7 +928,8 @@
 
 /* Measure is set on the individual lines: `ch` on the wrapper would be sized
    by the body font, not the display face, and choke long headlines. */
-.sheading__title { margin-top: 0.6rem; max-width: 18ch; }
+.sheading .eyebrow { font-size: var(--step--1); letter-spacing: 0.16em; }
+.sheading__title { margin-top: 0.75rem; max-width: 18ch; }
 .sheading__intro { margin-top: var(--space-s); max-width: 46ch; }
 .sheading__action { flex: none; padding-bottom: 0.35rem; }
 .sheading--center { flex-direction: column; align-items: center; text-align: center; }
