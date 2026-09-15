@@ -6,6 +6,9 @@ import Shop from './pages/Shop'
 import Product from './pages/Product'
 import About from './pages/About'
 import Contact from './pages/Contact'
+import Checkout from './pages/Checkout'
+import Payment from './pages/Payment'
+import OrderConfirmation from './pages/OrderConfirmation'
 import InfoPage from './pages/InfoPage'
 import NotFound from './pages/NotFound'
 
@@ -21,6 +24,13 @@ export default function App() {
             <Route path="product/:slug" element={<Product />} />
             <Route path="about" element={<About />} />
             <Route path="contact" element={<Contact />} />
+
+            {/* Cart -> details -> payment -> confirmation. Each step is its own
+                route so the back button behaves and a payment can be linked to
+                its order afterwards. */}
+            <Route path="checkout" element={<Checkout />} />
+            <Route path="checkout/payment" element={<Payment />} />
+            <Route path="order/:reference" element={<OrderConfirmation />} />
             <Route
               path="account"
               element={

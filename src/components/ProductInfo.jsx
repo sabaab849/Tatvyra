@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import Button from './Button'
 import QuantitySelector from './QuantitySelector'
 import { MARKS } from '../data/brand'
+import { priceFor } from '../data/catalogue'
+import { formatINR } from '../lib/money'
 import { useCart } from '../context/useCart'
 
 /**
@@ -13,6 +15,7 @@ import { useCart } from '../context/useCart'
 export default function ProductInfo({ product, category }) {
   const [size, setSize] = useState(product.sizes[0])
   const [quantity, setQuantity] = useState(1)
+  const price = formatINR(priceFor(product, size))
   const { addItem } = useCart()
 
   return (
@@ -26,8 +29,8 @@ export default function ProductInfo({ product, category }) {
       <p className="pinfo__descriptor">{product.descriptor}</p>
 
       <div className="pinfo__price">
-        {product.price ? (
-          <span className="pinfo__price-value">{product.price}</span>
+        {price ? (
+          <span className="pinfo__price-value">{price}</span>
         ) : (
           <>
             <span className="pinfo__price-tbc">Price on request</span>

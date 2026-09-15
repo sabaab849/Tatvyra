@@ -1095,7 +1095,422 @@
   .faq__title { max-width: 20ch; }
 }
 
+/* --- Product information ---------------------------------------------------
+   Reference copy closing a product page. It borrows the FAQ’s two-column
+   measure and hairline rhythm rather than bringing a panel or an alert style
+   of its own — this reads as documentation, not as a warning notice. */
+
+.pdoc {
+  padding-block: clamp(2.5rem, 1.5rem + 3.4vw, 4.5rem);
+  /* Plain surface with a hairline above. On all but one SKU this follows the
+     sunken related-products block (and on that one, the sunken FAQ), so a tint
+     here would merge the two into a single slab. */
+  background: var(--surface);
+  border-top: 1px solid rgb(var(--ink-rgb) / 0.14);
+}
+
+.pdoc__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(1.5rem, 0.6rem + 3vw, 4rem);
+  align-items: start;
+}
+
+.pdoc__title {
+  max-width: 14ch;
+  font-family: var(--font-serif);
+  font-size: clamp(1.625rem, 1.1rem + 1.9vw, 2.5rem);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  color: var(--tatvyra-purple);
+}
+
+.pdoc__list { display: grid; margin: 0; }
+
+.pdoc__item {
+  padding-block: var(--space-m);
+  border-top: 1px solid rgb(var(--ink-rgb) / 0.14);
+}
+
+/* The section already opens with its own rule, so the first item would double it. */
+.pdoc__item:first-child { padding-top: 0; border-top: 0; }
+.pdoc__item:last-child { padding-bottom: 0; }
+
+.pdoc__item dt {
+  font-family: var(--font-serif);
+  font-size: var(--step-0);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--tatvyra-purple);
+}
+
+/* Grid rather than stacked margins so the two-paragraph item and the privacy
+   link space themselves the same way. */
+.pdoc__item dd {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-xs);
+  margin: 0.45rem 0 0;
+  max-width: 62ch;
+  font-size: var(--step--1);
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.pdoc__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+  font-weight: 600;
+  color: var(--tatvyra-purple);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.pdoc__link svg { transition: translate var(--dur) var(--ease); }
+.pdoc__link:hover svg { translate: 4px 0; }
+
+@media (max-width: 62rem) {
+  .pdoc__inner { grid-template-columns: minmax(0, 1fr); }
+  .pdoc__title { max-width: 24ch; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .faq__sign::before,
   .faq__sign::after { transition: none; }
+}
+
+/* --- Checkout, payment, confirmation --------------------------------------
+   One layout across the three steps: the form column on the left, the money
+   and the address on the right. The summary is the shared OrderSummary, so the
+   figures cannot differ between steps. */
+
+.checkout__head { padding-bottom: 0; }
+
+.csteps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(1rem, 0.5rem + 1.6vw, 2rem);
+  margin-top: var(--space-l);
+}
+
+.csteps__step {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: var(--step--2);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.csteps__num {
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+}
+
+.csteps__step.is-current { color: var(--tatvyra-purple); }
+
+.csteps__step.is-current .csteps__num {
+  background: var(--tatvyra-purple);
+  border-color: var(--tatvyra-purple);
+  color: var(--tatvyra-warm-white);
+}
+
+.csteps__step.is-done { color: var(--text-muted); }
+
+.csteps__step.is-done .csteps__num {
+  background: var(--surface-lilac);
+  border-color: var(--surface-lilac);
+  color: var(--tatvyra-purple);
+}
+
+.checkout__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+  gap: clamp(2rem, 1rem + 3vw, 3.5rem);
+  align-items: start;
+  padding-block: var(--section-y-tight);
+}
+
+.checkout__form {
+  display: grid;
+  gap: var(--space-m);
+  padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+  background: var(--surface-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-image);
+}
+
+.checkout__subtitle {
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-weight: 700;
+  letter-spacing: -0.012em;
+  color: var(--tatvyra-purple);
+}
+
+.checkout__row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-m);
+}
+
+.field__error { font-size: var(--step--2); color: var(--accent-ink); }
+
+.checkout__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-m);
+  margin-top: var(--space-xs);
+}
+
+.checkout__back {
+  font-size: var(--step--2);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.checkout__back:hover { color: var(--tatvyra-purple); }
+.checkout__empty-action { margin-top: var(--space-l); }
+
+.checkout__aside {
+  display: grid;
+  gap: var(--space-m);
+  position: sticky;
+  top: calc(var(--header-h) + 1rem);
+}
+
+/* --- Order summary -------------------------------------------------------- */
+
+.osum,
+.checkout__recap {
+  padding: clamp(1.25rem, 1rem + 1.4vw, 1.75rem);
+  background: var(--surface-sunken);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-image);
+}
+
+.osum__title {
+  font-family: var(--font-display);
+  font-size: var(--step--1);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tatvyra-purple);
+}
+
+.osum__lines { display: grid; gap: var(--space-s); margin-top: var(--space-m); }
+
+.osum__line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-s);
+}
+
+.osum__item { display: grid; gap: 0.15rem; }
+.osum__name { font-size: var(--step--1); font-weight: 700; color: var(--text); }
+.osum__meta { font-size: var(--step--2); color: var(--text-muted); }
+.osum__amount { font-size: var(--step--1); font-weight: 700; white-space: nowrap; }
+
+.osum__totals {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: var(--space-m);
+  padding-top: var(--space-m);
+  border-top: 1px solid var(--line);
+}
+
+.osum__row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-s);
+  font-size: var(--step--1);
+  color: var(--text-muted);
+}
+
+.osum__row dd { font-weight: 700; color: var(--text); }
+.osum__row--total { padding-top: 0.6rem; border-top: 1px solid var(--line); }
+.osum__row--total dt { font-weight: 700; color: var(--text); }
+.osum__row--total dd { font-size: var(--step-1); color: var(--tatvyra-purple); }
+
+.checkout__recap-body {
+  margin-top: var(--space-s);
+  font-size: var(--step--1);
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+
+.checkout__recap .checkout__back { display: inline-block; margin-top: var(--space-s); }
+
+/* --- Payment -------------------------------------------------------------- */
+
+.pay__demo {
+  padding: var(--space-s) var(--space-m);
+  background: var(--surface-lilac);
+  border-radius: var(--radius-m);
+  font-size: var(--step--2);
+  line-height: 1.65;
+  color: var(--tatvyra-aubergine);
+}
+
+.pay__demo code {
+  padding: 0.05em 0.35em;
+  border-radius: var(--radius-s);
+  background: rgb(var(--ink-rgb) / 0.08);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.pay__methods {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-s);
+}
+
+.pay__method {
+  display: grid;
+  gap: 0.25rem;
+  padding: var(--space-s);
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-m);
+  cursor: pointer;
+  transition:
+    border-color var(--dur) var(--ease),
+    background-color var(--dur) var(--ease);
+}
+
+.pay__method:hover:not(:disabled) { border-color: var(--tatvyra-purple); }
+.pay__method.is-selected { border-color: var(--tatvyra-purple); background: var(--surface-lilac); }
+.pay__method:disabled { opacity: 0.55; cursor: default; }
+.pay__method-label { font-size: var(--step--1); font-weight: 700; color: var(--tatvyra-purple); }
+.pay__method-hint { font-size: var(--step--2); color: var(--text-muted); }
+
+.pay__fields { display: grid; gap: var(--space-m); }
+.pay__fields fieldset { margin: 0; padding: 0; border: 0; }
+
+.pay__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-m);
+}
+
+.pay__grid .field:not(.field--half) { grid-column: 1 / -1; }
+.pay__state:empty { display: none; }
+
+.pay__processing {
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+  padding: var(--space-s) var(--space-m);
+  background: var(--surface-lilac);
+  border-radius: var(--radius-m);
+  font-size: var(--step--1);
+  color: var(--tatvyra-aubergine);
+}
+
+.pay__processing-note { display: block; font-size: var(--step--2); color: var(--text-muted); }
+
+.pay__spinner {
+  flex: none;
+  width: 1.15rem;
+  height: 1.15rem;
+  border: 2px solid rgb(var(--ink-rgb) / 0.2);
+  border-top-color: var(--tatvyra-purple);
+  border-radius: 50%;
+  animation: pay-spin 0.7s linear infinite;
+}
+
+@keyframes pay-spin { to { rotate: 360deg; } }
+
+.pay__failure {
+  display: grid;
+  gap: 0.3rem;
+  padding: var(--space-s) var(--space-m);
+  background: color-mix(in srgb, var(--tatvyra-orange) 12%, var(--surface));
+  border-left: 3px solid var(--tatvyra-orange);
+  border-radius: var(--radius-m);
+}
+
+.pay__success {
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+  padding: var(--space-s) var(--space-m);
+  background: var(--surface-lilac);
+  border-left: 3px solid var(--tatvyra-purple);
+  border-radius: var(--radius-m);
+  font-size: var(--step--1);
+  font-weight: 700;
+  color: var(--tatvyra-purple);
+}
+
+.pay__tick {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 50%;
+  background: var(--tatvyra-purple);
+  color: var(--tatvyra-warm-white);
+  font-size: var(--step--2);
+}
+
+.pay__failure-title { font-size: var(--step--1); font-weight: 700; color: var(--accent-ink); }
+.pay__failure-body { font-size: var(--step--2); line-height: 1.6; color: var(--text-muted); }
+
+/* --- Confirmation --------------------------------------------------------- */
+
+.confirm__lead { font-size: var(--step-1); line-height: 1.55; color: var(--text-muted); }
+
+.confirm__facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-m);
+  padding-block: var(--space-m);
+  border-block: 1px solid var(--line);
+}
+
+.confirm__facts dt {
+  font-size: var(--step--2);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.confirm__facts dd { margin-top: 0.3rem; font-size: var(--step-0); font-weight: 700; color: var(--text); }
+
+.confirm__facts .confirm__reference {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: 0.04em;
+  color: var(--tatvyra-purple);
+}
+
+.confirm__block { display: grid; gap: var(--space-s); }
+.confirm__note { font-size: var(--step--1); line-height: 1.7; color: var(--text-muted); }
+
+@media (max-width: 62rem) {
+  .checkout__body { grid-template-columns: minmax(0, 1fr); }
+  .checkout__aside { position: static; }
+}
+
+@media (max-width: 40rem) {
+  .checkout__row,
+  .pay__grid,
+  .pay__methods,
+  .confirm__facts { grid-template-columns: minmax(0, 1fr); }
 }

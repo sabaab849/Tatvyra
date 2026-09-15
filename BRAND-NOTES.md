@@ -133,7 +133,7 @@ policies. None were invented. Instead:
 
 | Missing | How the site handles it |
 | --- | --- |
-| Prices | "Price on request", with a note on the PDP. `price: null` is ready for real values. |
+| Prices | **Placeholder.** The catalogue publishes none, so `src/data/catalogue.js` carries indicative rupee prices — per size where a SKU has several — purely so the cart can total an order. No payment backend is connected. Replace with the client's real pricing before launch. |
 | Checkout | The cart is real and persists, but routes to a pricing enquiry — no fake payment step. |
 | Ingredients / nutrition | The PDP states plainly that they are not yet published and points to the on-pack label and a real email address. |
 | Reviews, ratings, awards | Absent. No placeholder stars, no "as seen in". |

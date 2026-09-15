@@ -674,8 +674,44 @@
 
 .cart__remove:hover { color: var(--tatvyra-purple); }
 
+/* Unit price and line total, under the quantity controls. */
+.cart__line-price {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-s);
+  margin-top: 0.55rem;
+  font-size: var(--step--2);
+  color: var(--text-muted);
+}
+
+.cart__line-total { font-size: var(--step--1); font-weight: 700; color: var(--text); }
+
 .cart__foot { padding: var(--space-m); border-top: 1px solid var(--line); background: var(--surface-raised); }
 .cart__note { font-size: var(--step--1); color: var(--text-muted); margin-bottom: var(--space-s); }
+
+.cart__summary { display: grid; gap: 0.45rem; margin-bottom: var(--space-s); }
+
+.cart__summary-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-s);
+  font-size: var(--step--1);
+  color: var(--text-muted);
+}
+
+.cart__summary-row dd { font-weight: 700; color: var(--text); }
+
+.cart__summary-row--total {
+  margin-top: 0.15rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--line);
+  color: var(--text);
+}
+
+.cart__summary-row--total dt { font-weight: 700; }
+.cart__summary-row--total dd { font-size: var(--step-1); color: var(--tatvyra-purple); }
 
 .cart__continue {
   display: block;

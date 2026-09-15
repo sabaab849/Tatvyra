@@ -2,13 +2,25 @@ import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { useCart } from '../context/useCart'
 import { getCategory } from '../data/catalogue'
+import { formatINR } from '../lib/money'
 import { useOverlay } from '../lib/useOverlay'
 import { CloseIcon } from './Icons'
 import Button from './Button'
 import QuantitySelector from './QuantitySelector'
 
 export default function CartDrawer() {
-  const { items, count, isOpen, closeCart, setQuantity, removeItem } = useCart()
+  const {
+    items,
+    count,
+    isOpen,
+    closeCart,
+    setQuantity,
+    removeItem,
+    subtotal,
+    delivery,
+    total,
+    freeDeliveryFrom,
+  } = useCart()
   const panelRef = useRef(null)
   useOverlay(isOpen, closeCart, panelRef)
 
@@ -84,6 +96,14 @@ export default function CartDrawer() {
                           Remove
                         </button>
                       </div>
+                      <p className="cart__line-price">
+                        <span>
+                          {formatINR(line.unitPrice)}
+                          <span aria-hidden="true"> × {line.quantity}</span>
+                          <span className="visually-hidden"> each, quantity {line.quantity}</span>
+                        </span>
+                        <span className="cart__line-total">{formatINR(line.lineTotal)}</span>
+                      </p>
                     </div>
                   </li>
                 )
@@ -91,15 +111,28 @@ export default function CartDrawer() {
             </ul>
 
             <div className="cart__foot">
-              {/* No prices are published for these SKUs and no payment backend is
-                  connected, so the drawer routes to a real enquiry rather than
-                  showing a total or a checkout that does not exist. */}
+              <dl className="cart__summary">
+                <div className="cart__summary-row">
+                  <dt>Subtotal</dt>
+                  <dd>{formatINR(subtotal)}</dd>
+                </div>
+                <div className="cart__summary-row">
+                  <dt>Delivery</dt>
+                  <dd>{delivery === 0 ? 'Free' : formatINR(delivery)}</dd>
+                </div>
+                <div className="cart__summary-row cart__summary-row--total">
+                  <dt>Total</dt>
+                  <dd>{formatINR(total)}</dd>
+                </div>
+              </dl>
+              {/* Prices are placeholders and the payment step runs against a
+                  stand-in provider until the client confirms a real one. */}
               <p className="cart__note">
-                Pricing is confirmed per order. Send your list through and the team will come
-                back with sizes, availability and cost.
+                {delivery > 0 && `Free delivery over ${formatINR(freeDeliveryFrom)}. `}
+                Placeholder pricing — no live payment provider is connected yet.
               </p>
-              <Button to="/contact" variant="primary" full onClick={closeCart}>
-                Request pricing
+              <Button to="/checkout" variant="primary" full onClick={closeCart}>
+                Checkout
               </Button>
               <button type="button" className="cart__continue" onClick={closeCart}>
                 Continue shopping

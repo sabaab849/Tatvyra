@@ -1,8 +1,17 @@
 /**
  * Product data transcribed verbatim from Tatvyra "Catalogue V7".
- * Sizes and key benefits are exactly as printed. No prices, ingredient lists,
- * nutrition tables or reviews exist in the supplied material, so those fields
- * are intentionally null/empty and the UI omits them rather than inventing them.
+ * Sizes and key benefits are exactly as printed. Ingredient lists, nutrition
+ * tables and reviews do not exist in the supplied material, so those fields are
+ * intentionally empty and the UI omits them rather than inventing them.
+ *
+ * PRICES ARE PLACEHOLDERS. The catalogue publishes none, so the figures below
+ * are indicative retail prices for the prototype, held as whole rupees, purely
+ * so the cart can total an order. Replace them with the client's real pricing.
+ *
+ * `price` is the canonical unit price, and is the price of the first size.
+ * A product sold in several sizes also carries `prices`, with one entry per
+ * entry in `sizes`. Read both through priceFor() rather than reaching for
+ * either directly, so one product and size can never be priced two ways.
  */
 
 export const CATEGORIES = [
@@ -142,11 +151,12 @@ export const PRODUCTS = [
         a: 'Three jar sizes — 250g, 500g and 1000g.',
       },
       {
-        q: 'Why is no price shown?',
-        a: 'Retail pricing for this SKU has not been published yet, so the page shows Price on request rather than a number we cannot stand behind.',
+        q: 'Is every jar size the same price?',
+        a: 'No — each size is priced on its own, and the price updates when you change size. The 500g and 1000g jars work out cheaper per gram than the 250g.',
       },
     ],
-    price: null,
+    price: 299,
+    prices: { '250g': 299, '500g': 499, '1000g': 899 },
     featured: true,
   },
   {
@@ -202,7 +212,8 @@ export const PRODUCTS = [
       'Vegan',
     ],
     marks: ['clean-label', 'vegan', 'gluten-free', 'nutrition-forward'],
-    price: null,
+    price: 349,
+    prices: { '250g': 349, '500g': 599, '1000g': 1099 },
   },
   {
     sku: 'TAT-NB03',
@@ -228,7 +239,8 @@ export const PRODUCTS = [
     sizes: ['250g', '500g', '1000g'],
     benefits: ['High Vitamin E & Magnesium', 'Natural Calcium'],
     marks: ['clean-label', 'vegan'],
-    price: null,
+    price: 799,
+    prices: { '250g': 799, '500g': 1449, '1000g': 2699 },
   },
   {
     sku: 'TAT-NB04',
@@ -254,7 +266,8 @@ export const PRODUCTS = [
     sizes: ['250g', '500g', '1000g'],
     benefits: ['Naturally sweet & smoother texture', 'Rich in Copper & Magnesium'],
     marks: ['clean-label', 'vegan'],
-    price: null,
+    price: 749,
+    prices: { '250g': 749, '500g': 1349, '1000g': 2499 },
   },
 
   // 02 — MORINGA
@@ -285,7 +298,7 @@ export const PRODUCTS = [
       'Vegan',
     ],
     marks: ['clean-label', 'vegan', 'gluten-free'],
-    price: null,
+    price: 399,
     featured: true,
   },
   {
@@ -313,7 +326,7 @@ export const PRODUCTS = [
       'Portable single-dose',
     ],
     marks: ['clean-label', 'vegan'],
-    price: null,
+    price: 449,
   },
   {
     sku: 'TAT-MO03',
@@ -336,7 +349,7 @@ export const PRODUCTS = [
     sizes: ['60 caps / bottle'],
     benefits: ['Compressed daily-dose format', 'Same benefits as leaf powder'],
     marks: ['clean-label', 'vegan'],
-    price: null,
+    price: 549,
   },
   {
     sku: 'TAT-MO04',
@@ -359,7 +372,7 @@ export const PRODUCTS = [
     sizes: ['60 caps / bottle'],
     benefits: ['Encapsulated daily-dose format', 'Same benefits as leaf powder'],
     marks: ['clean-label', 'vegan'],
-    price: null,
+    price: 599,
   },
   {
     sku: 'TAT-MO05',
@@ -385,7 +398,7 @@ export const PRODUCTS = [
       'Alternative to tablets & capsules for taste-led buyers',
     ],
     marks: ['clean-label', 'vegan'],
-    price: null,
+    price: 699,
     isNew: true,
   },
 
@@ -415,7 +428,7 @@ export const PRODUCTS = [
       'Iron & magnesium',
     ],
     marks: ['clean-label', 'vegan', 'nutrition-forward'],
-    price: null,
+    price: 549,
     featured: true,
   },
   {
@@ -439,7 +452,7 @@ export const PRODUCTS = [
     sizes: ['60 caps / bottle'],
     benefits: ['Compressed daily-dose format', 'Same benefits as powder'],
     marks: ['clean-label', 'vegan'],
-    price: null,
+    price: 649,
   },
   {
     sku: 'TAT-SP03',
@@ -462,7 +475,7 @@ export const PRODUCTS = [
     sizes: ['60 caps / bottle'],
     benefits: ['Encapsulated daily-dose format', 'Same benefits as powder'],
     marks: ['clean-label', 'vegan'],
-    price: null,
+    price: 699,
   },
 
   // 04 — RAW HONEY
@@ -487,7 +500,8 @@ export const PRODUCTS = [
       'Traditionally used for cough & cold',
     ],
     marks: ['clean-label', 'single-origin'],
-    price: null,
+    price: 449,
+    prices: { '250g': 449, '500g': 799 },
     featured: true,
   },
   {
@@ -507,7 +521,8 @@ export const PRODUCTS = [
     sizes: ['250g', '500g'],
     benefits: ['Balanced multi-flower blend', 'Soothes sore throat', 'Aids digestion'],
     marks: ['clean-label', 'single-origin'],
-    price: null,
+    price: 399,
+    prices: { '250g': 399, '500g': 699 },
   },
   {
     sku: 'TAT-HN03',
@@ -530,7 +545,8 @@ export const PRODUCTS = [
       'Supports respiratory health',
     ],
     marks: ['clean-label', 'single-origin'],
-    price: null,
+    price: 599,
+    prices: { '250g': 599, '500g': 1049 },
   },
   {
     sku: 'TAT-HN04',
@@ -549,13 +565,24 @@ export const PRODUCTS = [
     sizes: ['250g', '500g'],
     benefits: ['Light & delicate flavour', 'Low Glycaemic impact', 'Slow to crystallise'],
     marks: ['clean-label', 'single-origin'],
-    price: null,
+    price: 699,
+    prices: { '250g': 699, '500g': 1249 },
   },
 ]
 
 export const getCategory = (slug) => CATEGORIES.find((c) => c.slug === slug)
 
 export const getProduct = (slug) => PRODUCTS.find((p) => p.slug === slug)
+
+/**
+ * The unit price of a product in a given size, in whole rupees.
+ *
+ * Single-size products carry only `price`; multi-size products carry a
+ * `prices` entry per size. Every surface — cards, product page, cart — prices
+ * through this, which is what keeps one product and size from showing two
+ * different numbers. Returns null rather than NaN when a price is missing.
+ */
+export const priceFor = (product, size) => product?.prices?.[size] ?? product?.price ?? null
 
 export const productsByCategory = (slug) => PRODUCTS.filter((p) => p.category === slug)
 

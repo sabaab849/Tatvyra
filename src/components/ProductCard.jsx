@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { getCategory } from '../data/catalogue'
+import { getCategory, priceFor } from '../data/catalogue'
+import { formatINR } from '../lib/money'
 import { useCart } from '../context/useCart'
 
 /**
@@ -8,14 +9,15 @@ import { useCart } from '../context/useCart'
  *
  * Deliberately spare: no ratings, no review counts, no invented badges. The
  * only chip shown is the product's format, which is printed in the catalogue.
- * Where a product has no published price the card says so plainly instead of
- * showing a number.
+ * The price follows the selected size chip and is read from the catalogue, so
+ * the card, the product page and the cart cannot disagree.
  */
 export default function ProductCard({ product, priority = false }) {
   const category = getCategory(product.category)
   const [size, setSize] = useState(product.sizes[0])
   const { addItem } = useCart()
   const hasSizeChoice = product.sizes.length > 1
+  const price = formatINR(priceFor(product, size))
 
   return (
     <article className="pcard">
@@ -59,8 +61,8 @@ export default function ProductCard({ product, priority = false }) {
 
         <div className="pcard__foot">
           <p className="pcard__price">
-            {product.price ? (
-              <span className="pcard__price-value">{product.price}</span>
+            {price ? (
+              <span className="pcard__price-value">{price}</span>
             ) : (
               <span className="pcard__price-tbc">Price on request</span>
             )}
