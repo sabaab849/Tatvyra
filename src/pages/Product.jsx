@@ -2,6 +2,9 @@ import { Link, Navigate, useParams } from 'react-router-dom'
 import ProductGallery from '../components/ProductGallery'
 import ProductInfo from '../components/ProductInfo'
 import ProductGrid from '../components/ProductGrid'
+import ProductSpotlight from '../components/ProductSpotlight'
+import ProductCampaign from '../components/ProductCampaign'
+import ProductFaq from '../components/ProductFaq'
 import SectionHeading from '../components/SectionHeading'
 import { getCategory, getProduct, productsByCategory } from '../data/catalogue'
 import usePageMeta from '../lib/usePageMeta'
@@ -49,6 +52,10 @@ export default function Product() {
           </div>
         </section>
       )}
+
+      <ProductSpotlight product={product} />
+      <ProductCampaign product={product} />
+      <ProductFaq product={product} />
     </div>
   )
 }

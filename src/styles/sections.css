@@ -2,47 +2,106 @@
    TATVYRA — HOMEPAGE SECTIONS
    ========================================================================== */
 
-/* --- Hero ----------------------------------------------------------------- */
+/* --- Hero -----------------------------------------------------------------
+   The hero is one supplied banner: the packshot, its cream ground and its
+   styling are baked into the photograph, which already leaves its left ~42%
+   open. The copy is laid over that open area rather than set beside it, so
+   the section paints no wash of its own — anything it painted would tint the
+   picture. --surface only shows through on the narrow layout and behind the
+   trust strip. */
 
 .hero {
   position: relative;
   overflow: hidden;
-  padding-block: clamp(3rem, 1.5rem + 6vw, 6.5rem) 0;
-  /* A single soft lilac wash, painted on the section itself so it can never
-     show a box edge. No gradient between two brand colours is used anywhere. */
-  background:
-    radial-gradient(
-      120% 92% at 82% 20%,
-      rgb(var(--lilac-rgb) / 0.34),
-      rgb(var(--lilac-rgb) / 0) 62%
-    ),
-    var(--surface);
+  padding-top: clamp(1rem, 0.5rem + 1.2vw, 2rem);
+  background: var(--surface);
+}
+
+.hero__stage {
+  position: relative;
+  /* Past this the centred shell walks the copy rightwards while the artwork's
+     open left stays a fraction of the width — capping the stage keeps the two
+     in step, at the cost of the banner not running fully bleed on very wide
+     screens. */
+  max-width: 100rem;
+  margin-inline: auto;
+  /* The banner's own ratio, so cover has nothing left to trim vertically. */
+  aspect-ratio: 1983 / 793;
+}
+
+.hero__banner {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+/* The photograph carries soft, out-of-focus leaf shadows dappled across its
+   open left, which read as a blur behind the copy. That area is otherwise one
+   flat cream — sampled at 245,233,221 across the whole region — so it is
+   covered in exactly that cream and faded out in the clean gap between the
+   last shadow (x≈640/1983) and the first jar (x≈840). The stage carries the
+   banner’s own aspect ratio, so cover never crops and the image maps onto the
+   element 1:1 — these percentages hit the same pixels at every width. */
+.hero__banner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to right,
+    rgb(245 233 221) 0%,
+    rgb(245 233 221) 33%,
+    rgb(245 233 221 / 0) 38%
+  );
+}
+
+.hero__banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Anchored right so the jars are never what gets cropped — the open left,
+     which the copy covers anyway, absorbs the loss instead. */
+  object-position: right center;
 }
 
 .hero__inner {
   position: relative;
-  /* The section's bottom padding lives here so the trust strip below can run
-     flush to the section edge. */
-  padding-bottom: clamp(2.5rem, 1rem + 5vw, 5rem);
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.02fr);
+  z-index: 1;
+  display: flex;
   align-items: center;
-  gap: clamp(2rem, 0.5rem + 4vw, 4rem);
+  /* The banner is 2.5:1, so the stage is given a height in that neighbourhood
+     and the picture covers whatever the copy actually needs. */
+  height: 100%;
+  padding-block: clamp(1.5rem, 0.75rem + 1.6vw, 3rem);
 }
 
-.hero__eyebrow { margin-bottom: var(--space-s); }
+/* Held inside the photograph's open left third at every width the wide layout
+   covers, so the type never runs across a jar. */
+.hero__copy { width: min(100%, 32rem); }
+
+.hero__eyebrow {
+  margin-bottom: var(--space-s);
+  font-family: var(--font-ui);
+  color: var(--text);
+}
 
 .hero__title {
-  font-size: var(--step-6);
+  font-size: var(--step-5);
   letter-spacing: -0.035em;
   line-height: 0.92;
+  /* Purple, like every other headline on the site. Ink here was a holdover
+     from the earthy pass, and left the one headline that matters most as
+     the only one not carrying the brand colour. */
+  color: var(--text-heading);
 }
 
 .hero__lede {
-  max-width: 34ch;
+  max-width: 38ch;
   margin-top: var(--space-m);
+  font-family: var(--font-ui);
   font-size: var(--step-1);
-  line-height: 1.5;
+  font-weight: 400;
+  line-height: 1.55;
   color: var(--text-muted);
 }
 
@@ -54,12 +113,41 @@
   margin-top: var(--space-l);
 }
 
+.hero__actions .btn { font-family: var(--font-ui); }
+
+/* The quiet link beside the primary button. At rest it is Ink over a hairline;
+   on hover the text turns Purple and a Burnt Orange rule sweeps in over the
+   hairline from the left, then leaves to the right when the pointer does.
+   Only background-size transitions — the layer's anchor flips instantly
+   between right and left, and that flip is what sets the direction each way. */
+.hero__actions .btn--quiet {
+  --btn-fg: var(--text);
+  --btn-fg-hover: var(--tatvyra-purple);
+}
+
+.hero__actions .btn--quiet .btn__label {
+  box-shadow: none;
+  background:
+    linear-gradient(var(--tatvyra-orange), var(--tatvyra-orange)) right bottom / 0% 2px no-repeat,
+    linear-gradient(currentColor, currentColor) left bottom / 100% 1px no-repeat;
+  transition: background-size var(--dur-slow) var(--ease-out);
+}
+
+/* .btn only recolours on :hover, so keyboard focus picks the Purple up here. */
+.hero__actions .btn--quiet:focus-visible { color: var(--btn-fg-hover); }
+
+.hero__actions .btn--quiet:is(:hover, :focus-visible) .btn__label {
+  background-position: left bottom, left bottom;
+  background-size: 100% 2px, 100% 1px;
+}
+
 /* The trust strip runs edge to edge under the hero, so it is pulled out of
    the shell and given its own block padding rather than the section's. */
 .trust-marquee {
-  margin-top: clamp(2.5rem, 1rem + 5vw, 5rem);
-  border-top: 1px solid var(--line);
-  padding-block: clamp(0.9rem, 0.6rem + 1vw, 1.5rem);
+  margin-top: 0;
+  background: var(--tatvyra-warm-white);
+  border-top: 1px solid rgb(var(--ink-rgb) / 0.1);
+  padding-block: clamp(1.35rem, 0.95rem + 1.5vw, 2.25rem);
 }
 
 .trust-marquee__viewport {
@@ -82,34 +170,39 @@
   display: flex;
   flex: 0 0 auto;
   align-items: center;
-  gap: clamp(2rem, 1.2rem + 2.4vw, 4rem);
-  padding-right: clamp(2rem, 1.2rem + 2.4vw, 4rem);
+  gap: clamp(2.5rem, 1.5rem + 3vw, 5rem);
+  padding-right: clamp(2.5rem, 1.5rem + 3vw, 5rem);
+  font-family: var(--font-ui);
   font-size: var(--step-1);
-  letter-spacing: 0.14em;
+  font-weight: 500;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--tatvyra-purple);
   white-space: nowrap;
-  animation: trust-scroll 42s linear infinite;
+  /* Measured at a 1500px viewport: the track runs 5930px, so 92s puts the
+     drift at ~65px/s, down from ~109. The bigger type and glyphs widen the
+     track, so the duration had to climb by more than the slow-down alone. */
+  animation: trust-scroll 92s linear infinite;
 }
 
 .trust-marquee:hover .trust-marquee__track { animation-play-state: paused; }
 
+/* The glyph now does the separating that the orange bullet used to do. */
 .trust-marquee__track li {
-  position: relative;
-  padding-left: clamp(1.75rem, 1.1rem + 1.8vw, 3rem);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
 }
 
-/* The dot sits in the gap ahead of each claim and so reads as the separator. */
-.trust-marquee__track li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  translate: 0 -50%;
-  width: 0.5em;
-  height: 0.5em;
-  border-radius: 50%;
-  background: var(--tatvyra-orange);
+/* Painted through the mask in currentColor, so the glyph always matches the
+   label beside it rather than shipping its own baked-in colour. */
+.trust-marquee__icon {
+  flex: none;
+  width: 2.8em;
+  height: 2.8em;
+  background-color: currentColor;
+  -webkit-mask: var(--icon) center / contain no-repeat;
+  mask: var(--icon) center / contain no-repeat;
 }
 
 /* Each track is one full copy, so shifting by its own width lands the second
@@ -119,32 +212,54 @@
   to { translate: -100% 0; }
 }
 
-.hero__media { position: relative; }
+/* Narrow: overlaying stops working once the photograph's open left is thinner
+   than a line of type, so the copy steps out from over the picture and the
+   cropped, product-only banner sits beneath it. <picture> swaps to that crop
+   at the same 60rem the layout does. */
+@media (max-width: 75rem) {
+  .hero__stage { aspect-ratio: auto; }
+  /* The narrow source is cropped to the products — there is no open left to
+     cover here, so the cream wash would sit straight on top of a jar. */
+  .hero__banner::after { content: none; }
 
-.hero__product {
-  width: 100%;
-  height: auto;
-  filter: drop-shadow(0 34px 46px rgb(42 33 24 / 0.16));
-  animation: hero-settle 900ms var(--ease-out) both;
+  .hero__banner { position: static; display: block; }
+  .hero__banner img { height: auto; }
+
+  .hero__inner {
+    height: auto;
+    padding-block: clamp(2.25rem, 1.4rem + 3.4vw, 3.5rem);
+  }
+
+  .hero__copy { width: 100%; }
+  .hero__title { font-size: var(--step-4); }
+  .hero__lede { max-width: 42ch; }
 }
 
-@keyframes hero-settle {
-  from { opacity: 0; translate: 0 20px; }
-  to { opacity: 1; translate: 0 0; }
+/* --- Brand philosophy -----------------------------------------------------
+   Retuned to the refresh palette so it reads as one cream block with the
+   category section directly below it: Purple eyebrow, Fraunces in Purple,
+   and body copy in the same translucent Ink the categories use. */
+
+.philosophy {
+  padding-block: 0;
+  background: var(--tatvyra-warm-white);
 }
 
-@media (max-width: 62rem) {
-  .hero__inner { grid-template-columns: minmax(0, 1fr); }
-  /* `width: min()` rather than max-width: an auto-margined grid item sizes
-     to the image's intrinsic width and would overflow the viewport. */
-  .hero__media { order: -1; width: min(100%, 30rem); margin-inline: auto; }
-  .hero__title { font-size: var(--step-5); }
-  .trust-marquee { margin-top: var(--space-xl); }
+.philosophy .eyebrow {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--tatvyra-purple);
 }
 
-/* --- Brand philosophy ----------------------------------------------------- */
-
-.philosophy { padding-block: 0; }
+.philosophy .display {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  color: var(--tatvyra-purple);
+}
 
 .philosophy__inner {
   display: grid;
@@ -152,31 +267,1039 @@
   gap: clamp(2rem, 1rem + 3vw, 4.5rem);
   align-items: start;
   padding-block: var(--section-y-tight);
-  border-top: 1px solid var(--line);
+  border-top: 1px solid rgb(var(--ink-rgb) / 0.1);
 }
 
 .philosophy__lead .display { margin-top: var(--space-s); max-width: 18ch; }
-.philosophy__body { display: grid; gap: var(--space-s); color: var(--text-muted); font-size: var(--step-0); max-width: 54ch; }
-.philosophy__body p:last-child { color: var(--text); font-weight: 700; }
+
+.philosophy__body {
+  display: grid;
+  gap: var(--space-s);
+  max-width: 54ch;
+  font-family: var(--font-ui);
+  font-size: var(--step-0);
+  line-height: 1.6;
+  color: rgb(var(--ink-rgb) / 0.7);
+}
+
+.philosophy__body p:last-child {
+  color: var(--tatvyra-purple);
+  font-weight: 600;
+}
 
 @media (max-width: 62rem) {
   .philosophy__inner { grid-template-columns: minmax(0, 1fr); }
 }
 
-/* --- Categories ----------------------------------------------------------- */
+/* --- Four pillars ---------------------------------------------------------
+   The four ranges as irregular blobs scattered across an editorial
+   composition, each carrying its packshot under a drawn lid that pops off on
+   hover and lets a few of the contents drift out.
 
-/* Two across, not four: at four the photographs were thumbnails. The row gap
-   runs wider than the column gap so the two rows read as separate spreads. */
-.categories__grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(2.5rem, 1.4rem + 3.4vw, 5rem) clamp(1.5rem, 0.6rem + 2.8vw, 3.5rem);
+   GEOMETRY. Everything that has to land on the jar — the lid, the neck under
+   it, the glow, the pieces — is placed from the custom properties set per card
+   in FourPillars.jsx: --lid-x/y/w/h (the cap's box as fractions of the
+   photograph) and --cap-round/-bot/-face (how round that cap's ellipse reads,
+   which differs per shot). Each frame is cut to the blob's own aspect, so
+   --stage-w/left resolve to 100/0 and the fractions convert to figure-box
+   percentages once. They stay computed rather than hard-coded so a re-crop
+   that drifts off 0.82 still lands. All of these vars are unitless numbers
+   multiplied by 1% at the point of use.
+
+   The lid and the pieces live OUTSIDE .pillar__blob, which clips, so they can
+   travel clear of the blob's edge. ---------------------------------------- */
+
+.pillars {
+  position: relative;
+  isolation: isolate;
+  padding-block: clamp(4rem, 2.2rem + 6vw, 7rem) clamp(3.5rem, 2rem + 5vw, 6rem);
+  background: var(--tatvyra-warm-white);
 }
 
-.categories__grid > li { display: flex; }
-.categories__grid > li > * { width: 100%; }
+/* Two soft washes, so this band reads as its own space between the philosophy
+   block above and the category block below. */
+.pillars::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(58% 44% at 16% 24%, rgb(var(--peach-rgb) / 0.22), transparent 70%),
+    radial-gradient(54% 42% at 84% 68%, rgb(var(--lilac-rgb) / 0.2), transparent 72%);
+}
 
-@media (max-width: 44rem) { .categories__grid { grid-template-columns: minmax(0, 1fr); } }
+/* The clip-path definitions carry no layout of their own. */
+.pillars__defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.pillars__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: clamp(2.5rem, 1.4rem + 3vw, 4rem);
+  text-align: center;
+}
+
+.pillars__eyebrow {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--tatvyra-purple);
+}
+
+.pillars__title {
+  max-width: 20ch;
+  font-family: var(--font-serif);
+  font-size: clamp(2.125rem, 1.2rem + 3vw, 3.5rem);
+  font-weight: 400;
+  line-height: 1.06;
+  letter-spacing: -0.015em;
+  color: var(--tatvyra-purple);
+}
+
+.pillars__intro {
+  max-width: 44ch;
+  font-family: var(--font-ui);
+  font-size: 16px;
+  line-height: 1.55;
+  color: rgb(var(--ink-rgb) / 0.7);
+}
+
+/* --- The scatter ----------------------------------------------------------
+   Four columns, but each pillar sets its own blob size and vertical offset, so
+   the row reads as a scattered arc rather than a grid. Blobs wider than their
+   column overlap their neighbours, which is what keeps the composition from
+   settling into four equal cards. */
+
+.pillars__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  align-items: start;
+}
+
+.pillars__item {
+  display: flex;
+  margin-top: var(--lift, 0);
+}
+
+.pillars__item > * { width: 100%; }
+
+@media (min-width: 62rem) {
+  .pillars__item--honey { --lift: 1.25rem; --figure-scale: 1.12; }
+  .pillars__item--moringa { --lift: 5.5rem; --figure-scale: 0.97; }
+  .pillars__item--spirulina { --lift: 0; --figure-scale: 1.16; }
+  .pillars__item--nut-butter { --lift: 6.5rem; --figure-scale: 1; }
+}
+
+/* --- One pillar ----------------------------------------------------------- */
+
+.pillar {
+  /* The blob's proportion, and the photograph's box within it. Frames are cut
+     to this same aspect, so the photograph fills the blob exactly. */
+  --blob-aspect: 0.82;
+  --stage-h: 100;
+  --stage-top: 0;
+  --stage-w: calc(var(--stage-h) * var(--src-aspect) / var(--blob-aspect));
+  --stage-left: calc((100 - var(--stage-w)) / 2);
+
+  /* Centre of the jar's opening, in figure-box percentages. */
+  --mouth-cx: calc((var(--stage-left) + (var(--lid-x) + var(--lid-w) / 2) * var(--stage-w)) * 1%);
+  --mouth-cy: calc((var(--stage-top) + (var(--lid-y) + var(--lid-h) / 2) * var(--stage-h)) * 1%);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1rem, 0.6rem + 1vw, 1.6rem);
+  text-align: center;
+}
+
+.pillar__figure {
+  position: relative;
+  display: block;
+  width: calc(var(--figure-scale, 1) * 100%);
+  margin-inline: auto;
+  aspect-ratio: var(--blob-aspect);
+}
+
+/* The blob. clip-path rather than border-radius, because a radius can only
+   ever make an ellipse and these need to be genuinely irregular. The shadow is
+   a filter so it follows the clipped silhouette. */
+.pillar__blob {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 84% 78% at 50% 40%,
+    var(--pillar-tint-hi),
+    var(--pillar-tint) 76%
+  );
+  -webkit-clip-path: var(--blob);
+  clip-path: var(--blob);
+  filter: drop-shadow(0 18px 26px rgb(var(--ink-rgb) / 0.18));
+  transition: translate var(--dur-slow) var(--ease-out);
+}
+
+.pillar__stage {
+  position: absolute;
+  left: calc(var(--stage-left) * 1%);
+  top: calc(var(--stage-top) * 1%);
+  width: calc(var(--stage-w) * 1%);
+  height: calc(var(--stage-h) * 1%);
+  transition: scale var(--dur-slow) var(--ease-out);
+}
+
+.pillar__photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.94) brightness(0.98);
+  transition: filter var(--dur-slow) var(--ease-out);
+}
+
+/* Vignette, so the jar carries the card and the scene falls back. */
+.pillar__wash {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(72% 58% at 50% 44%, transparent 40%, rgb(var(--ink-rgb) / 0.4) 100%),
+    linear-gradient(180deg, rgb(var(--ink-rgb) / 0.14), transparent 30%);
+  transition: opacity var(--dur-slow) var(--ease-out);
+}
+
+/* --- Packaging colour -----------------------------------------------------
+   The lid, the neck and the pieces are not brand surfaces — they continue the
+   photograph, standing in for each product's own cap, glass and contents. They
+   are the one place in this section that carries literal colour rather than a
+   palette mix, for the same reason .catcard sets a white name and a black
+   scrim over its photograph. Everything else here is Purple, Orange, Lilac,
+   Peach, Warm White and Ink. */
+
+.pillar {
+  /* Amber glass, seen where a cap has just come off. */
+  --neck-hi: #8a5f1c;
+  --neck-mid: #5e4114;
+  --neck-lo: #3a280f;
+  --neck-void: #0a0805;
+}
+
+/* --- The neck under the lid -----------------------------------------------
+   Moringa and spirulina were photographed sealed, so lifting the lid has to
+   put something in the cap's place: an amber collar with a dark opening, sized
+   a little larger than the cap so none of the photographed one survives. Honey
+   and nut butter were photographed open, so they set --mouth-open to 0 and
+   what the lid reveals is the real jar. */
+
+.pillar__mouth {
+  position: absolute;
+  left: calc((var(--stage-left) + (var(--lid-x) - var(--lid-w) * 0.02) * var(--stage-w)) * 1%);
+  top: calc((var(--stage-top) + (var(--lid-y) - var(--lid-h) * 0.02) * var(--stage-h)) * 1%);
+  width: calc(var(--lid-w) * 1.04 * var(--stage-w) * 1%);
+  height: calc(var(--lid-h) * 1.04 * var(--stage-h) * 1%);
+  border-radius:
+    50% 50% 50% 50%
+    / calc(var(--cap-round) * 1%) calc(var(--cap-round) * 1%)
+      calc(var(--cap-round-bot) * 1%) calc(var(--cap-round-bot) * 1%);
+  background: linear-gradient(
+    90deg,
+    var(--neck-lo) 0%,
+    var(--neck-mid) 24%,
+    var(--neck-hi) 46%,
+    var(--neck-mid) 70%,
+    var(--neck-lo) 100%
+  );
+  box-shadow: inset 0 -0.4em 0.6em -0.35em rgb(0 0 0 / 0.55);
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease);
+}
+
+/* The opening itself — nearly black, its rim catching the light coming up. */
+.pillar__mouth::before {
+  content: '';
+  position: absolute;
+  inset: 3% 8% auto 8%;
+  height: calc(var(--cap-face) * 1%);
+  border-radius: 50%;
+  background: radial-gradient(ellipse 88% 96% at 50% 38%, var(--neck-void), #1b1409 100%);
+  box-shadow:
+    inset 0 0.18em 0.1em -0.07em rgb(248 245 236 / 0.42),
+    inset 0 -0.12em 0.16em rgb(0 0 0 / 0.7),
+    0 0.04em 0.06em rgb(248 245 236 / 0.16);
+}
+
+/* Light coming up out of the open jar. */
+.pillar__glow {
+  position: absolute;
+  left: var(--mouth-cx);
+  top: var(--mouth-cy);
+  width: 50%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(var(--orange-rgb) / 0.3), transparent 66%);
+  opacity: 0;
+  scale: 0.5;
+  transition:
+    opacity var(--dur-slow) var(--ease-out),
+    scale var(--dur-slow) var(--ease-out);
+}
+
+/* --- The lid --------------------------------------------------------------
+   Drawn to each jar's own measured cap box and its own perspective, so a
+   side-on bottle gets a shallow ellipse and a jar shot from above a deep one. */
+
+.pillar__lid {
+  position: absolute;
+  z-index: 3;
+  left: calc((var(--stage-left) + var(--lid-x) * var(--stage-w)) * 1%);
+  top: calc((var(--stage-top) + var(--lid-y) * var(--stage-h)) * 1%);
+  width: calc(var(--lid-w) * var(--stage-w) * 1%);
+  height: calc(var(--lid-h) * var(--stage-h) * 1%);
+  border-radius:
+    50% 50% 50% 50%
+    / calc(var(--cap-round) * 1%) calc(var(--cap-round) * 1%)
+      calc(var(--cap-round-bot) * 1%) calc(var(--cap-round-bot) * 1%);
+  /* Knurling over cylindrical shading — a moulded cap, not a flat oval. The
+     face below covers the top of it, so the ribs only show on the skirt. */
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgb(0 0 0 / 0.13) 0 2px,
+      rgb(255 255 255 / 0.06) 2px 5px
+    ),
+    linear-gradient(
+      90deg,
+      var(--lid-lo) 0%,
+      var(--lid-mid) 20%,
+      var(--lid-hi) 42%,
+      var(--lid-mid) 68%,
+      var(--lid-lo) 100%
+    );
+  box-shadow:
+    inset 0 -0.4em 0.5em -0.35em rgb(0 0 0 / 0.5),
+    0 0.35em 0.6em -0.3em rgb(var(--ink-rgb) / 0.5);
+  transform-origin: 50% 135%;
+  transition:
+    translate var(--dur-slow) var(--ease-pop),
+    rotate var(--dur-slow) var(--ease-pop),
+    scale var(--dur-slow) var(--ease-pop),
+    filter var(--dur) var(--ease);
+}
+
+.pillar__lid-face {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: calc(var(--cap-face) * 1%);
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse 52% 60% at 34% 24%,
+    var(--lid-hi),
+    var(--lid-mid) 48%,
+    var(--lid-lo) 112%
+  );
+  box-shadow: inset 0 0.06em 0.09em rgb(255 255 255 / 0.2);
+}
+
+/* --- Pieces of the product drifting out ------------------------------------
+   Tablets, and only for the two bottles that hold tablets. They rise slowly out
+   of the opening, so they sit above the photograph but below the flying lid. */
+
+.pillar__pieces {
+  position: absolute;
+  z-index: 2;
+  left: var(--mouth-cx);
+  top: var(--mouth-cy);
+  width: 0;
+  height: 0;
+}
+
+.pillar__piece {
+  position: absolute;
+  left: calc(var(--piece-w) / -2);
+  top: calc(var(--piece-w) * var(--piece-ratio) / -2);
+  width: var(--piece-w);
+  height: calc(var(--piece-w) * var(--piece-ratio));
+  opacity: 0;
+}
+
+/* A tablet: a pressed disc, lit from above and darker at its lower edge. */
+.pillar__piece--tablet {
+  --piece-w: 0.95rem;
+  --piece-ratio: 0.58;
+  border-radius: 50%;
+  background: linear-gradient(180deg, var(--piece-hi), var(--piece-mid) 48%, var(--piece-lo));
+  box-shadow:
+    inset 0 0.06em 0.08em rgb(255 255 255 / 0.34),
+    inset 0 -0.07em 0.1em rgb(0 0 0 / 0.4);
+}
+
+/* --- Hand-drawn doodles ---------------------------------------------------
+   The two jars have nothing countable to tip out, so instead of pieces they get
+   marks drawn around the opening: an exclamation and a bee for the honey, a
+   star and an exclamation for the nut butter. Each is placed from the centre of
+   the jar's mouth using --dd-x/--dd-y, chosen to stay clear of the lid's flight
+   path, and each draws itself on before settling into a small hand-held wobble.
+   Each path is dashed by its own measured length (--len, set per path in the
+   component), which is what makes it draw itself on. */
+
+.pillar__doodle {
+  position: absolute;
+  z-index: 4;
+  left: calc(var(--mouth-cx) + var(--dd-x) * 1%);
+  top: calc(var(--mouth-cy) + var(--dd-y) * 1%);
+  width: calc(var(--dd-w) * 1%);
+  translate: -50% -50%;
+  color: var(--tatvyra-aubergine);
+  opacity: 0;
+  scale: 0.5;
+  rotate: 0deg;
+  transition:
+    opacity var(--dur) var(--ease),
+    scale var(--dur-slow) var(--ease-pop),
+    rotate var(--dur-slow) var(--ease-pop);
+}
+
+.pillar__doodle svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  filter: drop-shadow(0 1px 2px rgb(var(--ink-rgb) / 0.35));
+}
+
+/* Filled paths opt out of the fill reset below, or it would outrank their
+   own fill colour. */
+.pillar__doodle path {
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.pillar__doodle path:not(.pillar__doodle-fill) { fill: none; }
+
+.pillar__doodle--orange { color: var(--tatvyra-orange); }
+
+.pillar__doodle path:not(.pillar__doodle-trail) {
+  stroke-dasharray: var(--len);
+  stroke-dashoffset: var(--len);
+}
+
+/* The bee's flight trail carries a dash pattern of its own, so it fades in
+   rather than drawing on. */
+.pillar__doodle-trail {
+  stroke-dasharray: 3 3.6;
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease);
+}
+
+/* Fills arrive once the outline has been drawn, so a mark never appears as a
+   flat shape before its line. */
+.pillar__doodle-fill {
+  fill-opacity: 0;
+  transition: fill-opacity var(--dur) var(--ease);
+}
+
+.pillar__doodle-fill--body { fill: var(--tatvyra-orange); }
+.pillar__doodle-fill--wing { fill: var(--tatvyra-warm-white); }
+.pillar__doodle-fill--ink { fill: var(--tatvyra-aubergine); }
+
+@keyframes pillar-doodle-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes pillar-doodle-bob {
+  0%, 100% { translate: 0 0; rotate: -2.5deg; }
+  50% { translate: 0 -0.3rem; rotate: 2.5deg; }
+}
+
+@keyframes pillar-piece {
+  0% { opacity: 0; translate: 0 0.35rem; scale: 0.2; }
+  14% { opacity: 1; scale: var(--piece-s); }
+  74% { opacity: 1; }
+  100% {
+    opacity: 0;
+    translate: var(--piece-x) -7.5rem;
+    scale: var(--piece-s);
+    rotate: var(--piece-r);
+  }
+}
+
+/* --- Open: hover, keyboard focus, or scrolled to on a touch screen --------- */
+
+.pillar:is(:hover, :focus-visible, .is-open) .pillar__blob {
+  translate: 0 -0.45rem;
+  filter: drop-shadow(0 24px 34px rgb(var(--ink-rgb) / 0.24));
+}
+
+.pillar:is(:hover, :focus-visible, .is-open) .pillar__stage { scale: 1.04; }
+
+.pillar:is(:hover, :focus-visible, .is-open) .pillar__photo {
+  filter: saturate(1.06) brightness(1.04);
+}
+
+.pillar:is(:hover, :focus-visible, .is-open) .pillar__wash { opacity: 0.7; }
+
+.pillar:is(:hover, :focus-visible, .is-open) .pillar__mouth {
+  opacity: var(--mouth-open);
+}
+
+.pillar:is(:hover, :focus-visible, .is-open) .pillar__glow {
+  opacity: 1;
+  scale: 1;
+}
+
+.pillar:is(:hover, :focus-visible, .is-open) .pillar__lid {
+  translate: 9% -132%;
+  rotate: -14deg;
+  scale: 1.04;
+  filter: drop-shadow(0 0.7em 0.6em rgb(var(--ink-rgb) / 0.32));
+}
+
+.pillar:is(:hover, :focus-visible, .is-open) .pillar__piece {
+  animation: pillar-piece 3.4s var(--ease-out) infinite;
+  animation-delay: var(--piece-delay);
+}
+
+.pillar:is(:hover, :focus-visible, .is-open) .pillar__doodle {
+  opacity: 1;
+  scale: 1;
+  rotate: var(--dd-rot);
+  transition-delay: var(--dd-delay);
+}
+
+.pillar:is(:hover, :focus-visible, .is-open) .pillar__doodle svg {
+  animation: pillar-doodle-bob 2.8s var(--ease) var(--dd-delay) infinite;
+}
+
+.pillar:is(:hover, :focus-visible, .is-open) .pillar__doodle path:not(.pillar__doodle-trail) {
+  animation: pillar-doodle-draw 0.42s var(--ease-out) var(--dd-delay) forwards;
+}
+
+.pillar:is(:hover, :focus-visible, .is-open) .pillar__doodle-trail {
+  opacity: 0.8;
+  transition-delay: calc(var(--dd-delay) + 0.4s);
+}
+
+.pillar:is(:hover, :focus-visible, .is-open) .pillar__doodle-fill {
+  fill-opacity: 1;
+  transition-delay: calc(var(--dd-delay) + 0.28s);
+}
+
+.pillar:is(:hover, :focus-visible, .is-open) .pillar__cta {
+  opacity: 1;
+  translate: 0 0;
+}
+
+.pillar:is(:hover, :focus-visible, .is-open) .pillar__benefit {
+  color: var(--tatvyra-purple);
+}
+
+/* --- Caption -------------------------------------------------------------- */
+
+.pillar__caption {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pillar__name {
+  font-family: var(--font-serif);
+  font-size: clamp(1.15rem, 0.88rem + 0.85vw, 1.5rem);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  color: var(--tatvyra-purple);
+}
+
+.pillar__benefit {
+  font-family: var(--font-serif);
+  font-size: clamp(1.05rem, 0.85rem + 0.7vw, 1.35rem);
+  font-weight: 400;
+  line-height: 1.18;
+  color: var(--accent-ink);
+  transition: color var(--dur) var(--ease);
+}
+
+.pillar__note {
+  margin-top: 0.5rem;
+  max-width: 26ch;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgb(var(--ink-rgb) / 0.7);
+}
+
+.pillar__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.6rem;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--tatvyra-purple);
+  opacity: 0;
+  translate: 0 -0.35rem;
+  transition:
+    opacity var(--dur) var(--ease),
+    translate var(--dur) var(--ease);
+}
+
+.pillar__cta svg { color: var(--tatvyra-orange); }
+
+/* --- Closing line --------------------------------------------------------- */
+
+.pillars__outro {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 0.5rem + 1.5vw, 2rem);
+  margin-top: clamp(3rem, 1.6rem + 4vw, 5rem);
+}
+
+.pillars__outro::before,
+.pillars__outro::after {
+  content: '';
+  flex: 1;
+  max-width: 7rem;
+  height: 1px;
+  background: rgb(var(--ink-rgb) / 0.18);
+}
+
+.pillars__closer {
+  font-family: var(--font-serif);
+  font-size: clamp(1.35rem, 1rem + 1.4vw, 2.125rem);
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  text-align: center;
+  color: var(--tatvyra-purple);
+}
+
+/* --- Per range ------------------------------------------------------------
+   The blob tints are Lilac and Peach thinned into Warm White, the same way
+   --surface-lilac and --surface-peach are built. The lid and piece colours
+   continue each photograph, as noted above. */
+
+.pillar--honey {
+  --pillar-tint: color-mix(in srgb, var(--tatvyra-peach) 46%, var(--tatvyra-warm-white));
+  --pillar-tint-hi: color-mix(in srgb, var(--tatvyra-peach) 16%, var(--tatvyra-warm-white));
+  /* Gold metal lid. */
+  --lid-hi: #f2d68d;
+  --lid-mid: #d19f28;
+  --lid-lo: #8a6212;
+}
+
+.pillar--moringa {
+  --pillar-tint: color-mix(in srgb, var(--tatvyra-lilac) 42%, var(--tatvyra-warm-white));
+  --pillar-tint-hi: color-mix(in srgb, var(--tatvyra-lilac) 14%, var(--tatvyra-warm-white));
+  /* Black screw cap. */
+  --lid-hi: #3b4534;
+  --lid-mid: #191f14;
+  --lid-lo: #090c06;
+  /* Olive moringa tablet. */
+  --piece-hi: #b9b783;
+  --piece-mid: #8a8a4a;
+  --piece-lo: #55552a;
+}
+
+.pillar--spirulina {
+  --pillar-tint: color-mix(in srgb, var(--tatvyra-lilac) 58%, var(--tatvyra-warm-white));
+  --pillar-tint-hi: color-mix(in srgb, var(--tatvyra-lilac) 22%, var(--tatvyra-warm-white));
+  /* Black screw cap. */
+  --lid-hi: #3b4534;
+  --lid-mid: #191f14;
+  --lid-lo: #090c06;
+  /* Near-black green spirulina tablet. */
+  --piece-hi: #546a4c;
+  --piece-mid: #22331f;
+  --piece-lo: #101a0e;
+}
+
+.pillar--nut-butter {
+  --pillar-tint: color-mix(in srgb, var(--tatvyra-peach) 32%, var(--tatvyra-warm-white));
+  --pillar-tint-hi: color-mix(in srgb, var(--tatvyra-peach) 11%, var(--tatvyra-warm-white));
+  /* The lid is Aubergine in the new photography, so it comes straight from
+     the palette rather than needing a literal. */
+  --lid-hi: color-mix(in srgb, var(--tatvyra-aubergine) 62%, var(--tatvyra-lilac));
+  --lid-mid: var(--tatvyra-aubergine);
+  --lid-lo: color-mix(in srgb, var(--tatvyra-aubergine) 70%, #000);
+}
+
+/* --- Tablet: two columns, still scattered --------------------------------- */
+
+@media (max-width: 62rem) {
+  .pillars__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(2rem, 0.5rem + 4vw, 3.5rem) clamp(1rem, -0.5rem + 4vw, 2.5rem);
+  }
+
+  .pillars__item--moringa,
+  .pillars__item--nut-butter { --lift: 3.5rem; }
+  .pillars__item--honey,
+  .pillars__item--spirulina { --figure-scale: 1.04; }
+}
+
+/* --- Phone: one per row, alternating sides -------------------------------
+   Two columns would leave each jar too small to read the label, so below
+   tablet width the pillars run one per row and lean alternately left and
+   right — the same scattered rhythm, in a single column. */
+
+@media (max-width: 34rem) {
+  .pillars__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(2.5rem, 1rem + 6vw, 4rem);
+  }
+
+  .pillars__item {
+    --lift: 0;
+    --figure-scale: 1;
+  }
+
+  .pillar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: var(--phone-align, center);
+    text-align: var(--phone-text, center);
+  }
+
+  .pillar__figure { width: min(78%, 20rem); margin-inline: 0; }
+  .pillar__caption { align-items: var(--phone-align, center); }
+  .pillar__note { max-width: 30ch; }
+
+  .pillars__item:nth-child(odd) .pillar { --phone-align: start; --phone-text: left; }
+  .pillars__item:nth-child(even) .pillar { --phone-align: end; --phone-text: right; }
+
+  .pillars__outro::before,
+  .pillars__outro::after { max-width: 2.5rem; }
+}
+
+/* Under reduced motion the lid still lifts and the jar still opens — they just
+   arrive without the flight, and nothing loops. */
+@media (prefers-reduced-motion: reduce) {
+  .pillar:is(:hover, :focus-visible, .is-open) .pillar__blob { translate: none; }
+  .pillar:is(:hover, :focus-visible, .is-open) .pillar__piece { animation: none; }
+  .pillar:is(:hover, :focus-visible, .is-open) .pillar__doodle svg { animation: none; }
+  .pillar__doodle path { stroke-dashoffset: 0; }
+}
+
+/* --- Categories -----------------------------------------------------------
+   The category section from the Figma refresh (node 71:22). Fraunces carries
+   the headings, Poppins the UI, and the ranges sit on full-bleed photographs
+   under a corner scrim rather than in bordered panels. */
+
+.categories {
+  padding-block: clamp(3rem, 1.8rem + 4vw, 5rem) clamp(3.5rem, 2rem + 5vw, 6.25rem);
+  background: var(--tatvyra-warm-white);
+}
+
+.categories__header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: clamp(2rem, 1.2rem + 2.4vw, 3rem);
+}
+
+.categories__eyebrow {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--tatvyra-purple);
+}
+
+.categories__title-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: clamp(1.5rem, 0.5rem + 3vw, 4rem);
+}
+
+.categories__title {
+  max-width: 44rem;
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 1.2rem + 2.6vw, 3rem);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  color: var(--tatvyra-purple);
+}
+
+.categories__intro {
+  width: 25rem;
+  max-width: 100%;
+  font-family: var(--font-ui);
+  font-size: 16px;
+  line-height: 1.5;
+  color: rgb(var(--ink-rgb) / 0.7);
+}
+
+.categories__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2rem;
+}
+
+.categories__item { display: flex; }
+.categories__item > * { width: 100%; }
+
+/* --- Category card (photograph + corner scrim) ---------------------------- */
+
+.catcard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: clamp(24rem, 14rem + 26vw, 36.25rem);
+  padding: 2rem;
+  border-radius: 16px;
+  overflow: hidden;
+  isolation: isolate;
+  color: #fff;
+}
+
+.catcard__img {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: scale var(--dur-slow) var(--ease-out);
+}
+
+.catcard:hover .catcard__img { scale: 1.04; }
+
+/* The scrim runs to the bottom-left corner, which is where the type sits. */
+.catcard__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    228.86deg,
+    rgb(0 0 0 / 0) 44.444%,
+    rgb(0 0 0 / 0.702) 77.778%
+  );
+}
+
+.catcard__body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+/* Soft Peach, not Purple: these sit on a darkened photograph, which is the
+   one place the palette asks for its light accent instead of its primary. */
+.catcard__eyebrow {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--tatvyra-peach);
+}
+
+.catcard__name {
+  font-family: var(--font-serif);
+  font-size: clamp(1.75rem, 1.1rem + 2vw, 2.375rem);
+  font-weight: 600;
+  line-height: 1.05;
+  color: #fff;
+}
+
+.catcard__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.catcard__cta svg {
+  color: var(--tatvyra-peach);
+  transition: translate var(--dur) var(--ease);
+}
+
+.catcard:hover .catcard__cta svg { translate: 5px 0; }
+
+@media (max-width: 62rem) {
+  .categories__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .categories__title-row { flex-direction: column; align-items: flex-start; gap: var(--space-m); }
+  .categories__intro { width: 100%; max-width: 46ch; }
+}
+
+@media (max-width: 40rem) {
+  .categories__grid { grid-template-columns: minmax(0, 1fr); }
+  .catcard { height: clamp(20rem, 12rem + 40vw, 26rem); padding: 1.5rem; }
+}
+
+/* --- Shelf trust ----------------------------------------------------------
+   Four differentiators struck as seals on a grained purple ground.
+
+   The wash runs Aubergine through Purple into a Lilac-lifted corner, which is
+   the brand gradient rather than a new hue. The grain is the same pair of
+   inline feTurbulence tiles used elsewhere — one speckle darker than the
+   ground, one lighter — so the panel keeps a printed tooth instead of reading
+   as flat colour. */
+
+.shelf {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      86% 70% at 82% 88%,
+      color-mix(in srgb, var(--tatvyra-lilac) 28%, var(--tatvyra-purple)),
+      transparent 64%
+    ),
+    linear-gradient(
+      148deg,
+      var(--tatvyra-aubergine),
+      var(--tatvyra-purple) 52%,
+      color-mix(in srgb, var(--tatvyra-purple) 72%, var(--tatvyra-lilac))
+    );
+  color: var(--text-on-dark);
+}
+
+/* The grain: two speckle tiles, one darker than the ground and one lighter,
+   offset by seed so the grains interleave instead of stacking. Alpha is baked
+   into each tile, so they need no blend mode and never tint the type above. */
+.shelf::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.55;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.4' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.06 0 0 0 0 0.02 0 0 0 0 0.1 0 0 0 -1.7 0.9'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='h'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.4' numOctaves='3' seed='11' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 0.97 0 0 0 0 1 0 0 0 1.8 -0.9'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23h)'/%3E%3C/svg%3E");
+  background-size: 200px 200px, 200px 200px;
+}
+
+.shelf__inner { position: relative; }
+
+.shelf__header {
+  max-width: 44rem;
+  margin-inline: auto;
+  margin-bottom: clamp(2.5rem, 1.4rem + 3.4vw, 4.5rem);
+  text-align: center;
+}
+
+/* Soft Peach carries the accent on dark grounds — Gold and Orange both fall
+   under AA at this size. */
+.shelf__eyebrow {
+  margin-bottom: 0.75rem;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--tatvyra-peach);
+}
+
+.shelf__title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.75rem, 1.1rem + 2.2vw, 2.75rem);
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -0.012em;
+  color: var(--text-on-dark);
+}
+
+.shelf__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(2rem, 0.8rem + 3.4vw, 3.5rem) clamp(1.25rem, 0.4rem + 2.4vw, 2.5rem);
+}
+
+.shelf__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.shelf__seal {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: clamp(11rem, 7.5rem + 10.5vw, 15rem);
+  aspect-ratio: 1;
+}
+
+.shelf__rings {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transition: opacity var(--dur) var(--ease), translate var(--dur) var(--ease);
+}
+
+/* The deboss pair. Both are set against the purple rather than against white,
+   so the shadow is Aubergine and the light is Warm White. */
+.shelf__rings-shade { stroke: rgb(var(--ink-rgb) / 0.34); }
+.shelf__rings-lit { stroke: rgb(255 255 255 / 0.34); }
+
+.shelf__arc {
+  fill: rgb(255 255 255 / 0.5);
+  font-family: var(--font-ui);
+  font-size: 8.5px;
+  font-weight: 500;
+  letter-spacing: 2.4px;
+  text-transform: uppercase;
+}
+
+.shelf__item:hover .shelf__rings {
+  opacity: 0.85;
+  translate: 0 -3px;
+}
+
+.shelf__mark {
+  max-width: 70%;
+  font-family: var(--font-serif);
+  font-size: clamp(0.875rem, 0.72rem + 0.42vw, 1rem);
+  font-weight: 400;
+  line-height: 1.32;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-on-dark);
+}
+
+.shelf__body {
+  margin-top: clamp(1rem, 0.7rem + 0.9vw, 1.5rem);
+  max-width: 27ch;
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+  line-height: 1.6;
+  /* Near-full Warm White: the muted tint is mixed against Aubergine and
+     goes illegible over the wash where it lifts toward Lilac. */
+  color: rgb(248 245 236 / 0.88);
+}
+
+@media (max-width: 62rem) {
+  .shelf__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 34rem) {
+  .shelf__grid { grid-template-columns: minmax(0, 1fr); }
+  .shelf__body { max-width: 34ch; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shelf__item:hover .shelf__rings { translate: none; }
+}
 
 /* --- Clean label / standards --------------------------------------------- */
 
@@ -339,7 +1462,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
   gap: clamp(2rem, 1rem + 4vw, 5rem);
-  align-items: start;
+  align-items: stretch;
 }
 
 .story__copy { display: grid; gap: var(--space-s); }
@@ -348,38 +1471,73 @@
 .story__copy > p:not(.eyebrow):not(.story__lede) { color: var(--text-muted); max-width: 54ch; }
 .story__copy .btn { justify-self: start; margin-top: var(--space-xs); }
 
-.story__aside { display: grid; gap: var(--space-l); }
-
-.story__quote {
-  padding: var(--space-l);
-  background: var(--surface-lilac);
+/* One raised panel, not two loose blocks. On the sunken section ground the
+   tinted quote and the bare fact rows had nothing holding them, which is what
+   made the column read as floating. It now takes its column full height and
+   centres its content, so the leftover space reads as breathing room. */
+.story__aside {
+  display: grid;
+  align-content: center;
+  gap: clamp(1.25rem, 1rem + 0.8vw, 1.75rem);
+  padding: clamp(1.5rem, 1.1rem + 1.5vw, 2.25rem);
+  background: var(--surface-raised);
+  border: 1px solid var(--line);
   border-radius: var(--radius-image);
+  box-shadow: var(--shadow-soft);
+}
+
+/* Three depths down the column — sunken section, raised panel, tinted quote —
+   so the brand line reads as the thing the panel is built around. */
+.story__quote {
+  padding: clamp(1.15rem, 0.85rem + 1.1vw, 1.6rem);
+  background: var(--surface-lilac);
+  border-radius: var(--radius-m);
 }
 
 .story__quote .display { color: var(--tatvyra-aubergine); }
 
+/* Tied to the line above it by a rule and tight spacing. Sitting loose it read
+   as a heading for the facts below rather than as the quote’s attribution. */
 .story__quote footer {
-  margin-top: var(--space-s);
+  margin-top: 0.85rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid color-mix(in srgb, var(--tatvyra-aubergine) 20%, transparent);
   font-size: var(--step--2);
+  font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--tatvyra-aubergine) 66%, var(--tatvyra-lilac));
+  color: color-mix(in srgb, var(--tatvyra-aubergine) 72%, var(--tatvyra-lilac));
 }
 
 .story__facts { display: grid; gap: 0; }
 
+/* Label over value rather than beside it. Side by side, the value column was
+   narrow enough to orphan "Raw Honey" onto its own line, and stacking also
+   gives each fact a clear two-step read: what it is, then what it says. */
 .story__facts > div {
   display: grid;
-  grid-template-columns: minmax(0, 0.55fr) minmax(0, 1fr);
-  gap: var(--space-s);
-  padding-block: 0.85rem;
+  gap: 0.3rem;
+  padding-block: 0.9rem;
   border-top: 1px solid var(--line);
-  font-size: var(--step--1);
 }
 
-.story__facts > div:last-child { border-bottom: 1px solid var(--line); }
-.story__facts dt { letter-spacing: 0.1em; text-transform: uppercase; font-size: var(--step--2); color: var(--text-faint); }
-.story__facts dd { color: var(--text); }
+/* The panel edge already closes the list, so the outer rules would double it. */
+.story__facts > div:first-child { border-top: 0; padding-top: 0; }
+.story__facts > div:last-child { padding-bottom: 0; }
+
+.story__facts dt {
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: var(--step--2);
+  font-weight: 700;
+  color: var(--tatvyra-purple);
+}
+
+.story__facts dd {
+  font-size: var(--step-0);
+  line-height: 1.45;
+  color: var(--text);
+}
 
 @media (max-width: 62rem) {
   .story__inner { grid-template-columns: minmax(0, 1fr); }

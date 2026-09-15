@@ -1,32 +1,24 @@
 import { Link } from 'react-router-dom'
 
 /**
- * The official Tatvyra lockup, used as a supplied vector asset.
- * It is never redrawn, recoloured or set as live text.
+ * The Tatvyra lockup, used as a supplied asset. It is never redrawn,
+ * recoloured or set as live text.
  *
- * Clear space equal to the height of the leaf mark is applied as padding by
- * the `--logo-clear` custom property (the leaf mark is ~0.22 of the lockup
- * height in the full-lockup artwork).
+ * The brand lockup from the guidelines: Tatvyra Purple wordmark under the
+ * Feynman Foodcraft roundel with the Burnt Orange leaf mark. Vector, so it
+ * stays sharp at any size and carries the exact brand hexes.
  *
- * Minimum sizes from the guidelines: full lockup 120px wide.
+ * Minimum size from the guidelines: full lockup 120px wide.
  */
-export default function Logo({
-  variant = 'lockup',
-  width = 148,
-  to = '/',
-  className = '',
-}) {
-  const src =
-    variant === 'full' ? '/brand/tatvyra-logo-full.svg' : '/brand/tatvyra-logo.svg'
-
-  // Intrinsic ratios of the extracted artwork — never distort these.
-  const ratio = variant === 'full' ? 157.04 / 94.18 : 157.04 / 79.09
+export default function Logo({ width = 144, to = '/', className = '' }) {
+  // Intrinsic ratio of the trimmed artwork — never distort this.
+  const ratio = 157.04 / 79.09
   const safeWidth = Math.max(width, 120)
 
   const img = (
     <img
-      src={src}
-      alt="Tatvyra"
+      src="/brand/tatvyra-logo.svg"
+      alt="Tatvyra — Feynman Foodcraft Pvt. Ltd."
       width={safeWidth}
       height={Math.round(safeWidth / ratio)}
       style={{ width: `${safeWidth}px`, height: 'auto' }}

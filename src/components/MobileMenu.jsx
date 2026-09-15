@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { NavLink } from 'react-router-dom'
 import Logo from './Logo'
 import { CloseIcon, ArrowIcon } from './Icons'
-import { PRIMARY_NAV, SUPPORT_NAV } from '../lib/nav'
+import { SECTION_NAV, CATEGORY_NAV, SUPPORT_NAV } from '../lib/nav'
 import { useOverlay } from '../lib/useOverlay'
 
 export default function MobileMenu({ open, onClose }) {
@@ -34,11 +34,29 @@ export default function MobileMenu({ open, onClose }) {
 
         <nav className="drawer__nav" aria-label="Mobile">
           <ul>
-            {PRIMARY_NAV.map((item) => (
+            {SECTION_NAV.map((item) => (
               <li key={item.to}>
                 <NavLink
                   to={item.to}
                   end={item.to === '/shop'}
+                  className={({ isActive }) => `drawer__link ${isActive ? 'is-active' : ''}`}
+                  tabIndex={open ? 0 : -1}
+                >
+                  <span>{item.label}</span>
+                  <ArrowIcon />
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <nav className="drawer__nav drawer__nav--ranges" aria-label="Ranges">
+          <p className="drawer__label">Ranges</p>
+          <ul>
+            {CATEGORY_NAV.map((item) => (
+              <li key={item.to}>
+                <NavLink
+                  to={item.to}
                   className={({ isActive }) => `drawer__link ${isActive ? 'is-active' : ''}`}
                   tabIndex={open ? 0 : -1}
                 >

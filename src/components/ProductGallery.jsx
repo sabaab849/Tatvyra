@@ -24,8 +24,10 @@ export default function ProductGallery({ product, category }) {
 
   return (
     <div className="gallery">
+      {/* Portrait, because the packshots and the range photography are both
+          shot upright — a landscape frame cropped the lid off every jar. */}
       <figure className="gallery__main">
-        <div className="frame frame--4x3">
+        <div className="frame frame--4x5">
           <img
             src={images[active].src}
             alt={images[active].alt}

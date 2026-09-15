@@ -2,8 +2,11 @@ import { Link } from 'react-router-dom'
 
 /**
  * One button component for the whole site so weight, height and tracking stay
- * consistent. Variants: primary (purple), accent (burnt orange — accent use
- * only), outline, quiet, and on-dark counterparts.
+ * consistent. Variants: primary (purple), ink (near-black), accent (burnt
+ * orange — accent use only), outline, quiet, and on-dark counterparts.
+ *
+ * `icon` renders as a sibling of the label rather than inside it, so the
+ * button's own flex gap sets the spacing.
  */
 export default function Button({
   as,
@@ -13,6 +16,7 @@ export default function Button({
   size = 'md',
   full = false,
   className = '',
+  icon,
   children,
   ...rest
 }) {
@@ -30,6 +34,7 @@ export default function Button({
     return (
       <Link to={to} className={cls} {...rest}>
         <span className="btn__label">{children}</span>
+        {icon}
       </Link>
     )
   }
@@ -38,6 +43,7 @@ export default function Button({
     return (
       <a href={href} className={cls} {...rest}>
         <span className="btn__label">{children}</span>
+        {icon}
       </a>
     )
   }
@@ -46,6 +52,7 @@ export default function Button({
   return (
     <Tag className={cls} {...rest}>
       <span className="btn__label">{children}</span>
+      {icon}
     </Tag>
   )
 }

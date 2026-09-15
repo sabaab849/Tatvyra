@@ -218,44 +218,486 @@
 
 .pinfo__pending a { text-decoration: underline; text-underline-offset: 3px; }
 
-/* --- About ---------------------------------------------------------------- */
+/* --- About ----------------------------------------------------------------
+   The hero opens on its own photograph — the moringa range — rather than the
+   homepage banner, which made the two pages read as the same page. Copy on the
+   left; the photograph framed on the right, over an offset Lilac block. */
 
-.about__hero {
-  padding-block: clamp(3rem, 1.6rem + 5vw, 6rem);
+.about-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-block: clamp(2.5rem, 1.25rem + 4.5vw, 5.5rem) clamp(3.5rem, 2rem + 5vw, 6.5rem);
+  background: var(--surface);
+}
+
+/* A Lilac wash behind the photograph, so that side of the hero has depth
+   without a hard panel edge. It fades to transparent Lilac rather than to
+   transparent, which would grey the tint on its way out. */
+.about-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(
+    46% 72% at 80% 48%,
+    rgb(var(--lilac-rgb) / 0.42),
+    rgb(var(--lilac-rgb) / 0) 72%
+  );
+}
+
+.about-hero__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: clamp(2.5rem, 1rem + 5vw, 6rem);
+  align-items: center;
+}
+
+.about-hero__copy { max-width: 34rem; }
+
+.about-hero__title {
+  margin-top: var(--space-s);
+  font-size: clamp(2.75rem, 1.5rem + 3.6vw, 4.75rem);
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+}
+
+.about-hero__lede {
+  max-width: 38ch;
+  margin-top: var(--space-m);
+  font-family: var(--font-ui);
+  font-size: var(--step-1);
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+.about-hero__facts {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: var(--space-s);
+  margin-top: var(--space-l);
+}
+
+/* Value over label — the numeral is what the eye lands on. column-reverse
+   keeps <dt> first in the markup, where it belongs. */
+.about-hero__facts > div {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.3rem;
+  padding-inline: clamp(1rem, 0.5rem + 1.4vw, 1.75rem);
+  border-left: 1px solid rgb(var(--ink-rgb) / 0.16);
+}
+
+.about-hero__facts > div:first-child { padding-left: 0; border-left: 0; }
+
+.about-hero__facts dd {
+  font-family: var(--font-serif);
+  font-size: var(--step-3);
+  line-height: 1;
+  color: var(--tatvyra-purple);
+}
+
+.about-hero__facts dt {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* The photograph keeps its own 4:5, so nothing is cropped away. The Lilac
+   block behind it is offset down and towards the copy — the side with room;
+   pushed right it would run into the gutter. */
+.about-hero__media {
+  position: relative;
+  isolation: isolate;
+  justify-self: end;
+  width: min(100%, 30rem);
+}
+
+.about-hero__media::before {
+  --offset: clamp(0.75rem, 0.35rem + 1.4vw, 1.5rem);
+  content: '';
+  position: absolute;
+  inset: var(--offset) var(--offset) calc(var(--offset) * -1) calc(var(--offset) * -1);
+  z-index: -1;
+  border-radius: var(--radius-card);
+  background: color-mix(in srgb, var(--tatvyra-lilac) 60%, var(--tatvyra-warm-white));
+}
+
+.about-hero__photo {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-lift);
+}
+
+/* --- Shared About type ------------------------------------------------------
+   The same voice as the refreshed homepage sections: Poppins eyebrows,
+   Fraunces section headings, all in Purple. */
+
+.about-eyebrow {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tatvyra-purple);
+}
+
+.about-eyebrow--on-dark { color: var(--tatvyra-peach); }
+
+.about-heading {
+  margin-top: 0.75rem;
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 1.2rem + 2.6vw, 3rem);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  color: var(--tatvyra-purple);
+}
+
+.about-heading--on-dark { color: var(--text-on-dark); }
+
+/* --- Approach: one centred statement ---------------------------------------- */
+
+.about-intro {
+  padding-block: clamp(3.5rem, 2rem + 5vw, 6.5rem) clamp(0.5rem, 0.2rem + 1vw, 1.5rem);
+  background: var(--surface);
+}
+
+.about-intro__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 52rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.about-intro__inner::before {
+  content: '';
+  width: 2.75rem;
+  height: 2px;
+  margin-bottom: var(--space-m);
+  background: var(--tatvyra-orange);
+}
+
+.about-intro__statement {
+  margin-top: var(--space-s);
+  font-family: var(--font-serif);
+  font-size: clamp(1.6rem, 1rem + 2.1vw, 2.6rem);
+  font-weight: 400;
+  line-height: 1.22;
+  letter-spacing: -0.01em;
+  color: var(--tatvyra-purple);
+  text-wrap: balance;
+}
+
+/* --- Story: two photographs beside the words -------------------------------- */
+
+.about-story__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(2.5rem, 1rem + 5vw, 6rem);
+  align-items: center;
+}
+
+/* The second photograph is set over the corner of the first. Its Warm White
+   border makes the overlap read as a deliberate layer rather than a
+   collision. The padding is what the inset hangs into — percentages resolve
+   against width, so the composition holds its shape at any column size. */
+.about-story__media {
+  position: relative;
+  padding-right: 12%;
+  padding-bottom: 14%;
+}
+
+.about-story__photo {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-lift);
+}
+
+.about-story__photo--inset {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 46%;
+  border: 6px solid var(--tatvyra-warm-white);
+}
+
+.about-story__copy {
+  display: grid;
+  gap: var(--space-s);
+  align-content: center;
+}
+
+.about-story__copy > p:not(.about-eyebrow) {
+  max-width: 54ch;
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+
+.about-story__copy .btn { justify-self: start; margin-top: var(--space-xs); }
+
+.about-story__facts {
+  margin-block: var(--space-xs);
+  border-top: 1px solid var(--line);
+}
+
+.about-story__facts > div {
+  display: grid;
+  grid-template-columns: 10rem minmax(0, 1fr);
+  gap: var(--space-s);
+  padding-block: 0.8rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.about-story__facts dt {
+  padding-top: 0.15em;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.about-story__facts dd { color: var(--text); }
+
+.about-story__facts a {
+  color: var(--tatvyra-purple);
+  text-decoration: underline;
+  text-decoration-color: rgb(var(--ink-rgb) / 0.3);
+  text-underline-offset: 3px;
+  transition: text-decoration-color var(--dur) var(--ease);
+}
+
+.about-story__facts a:hover { text-decoration-color: var(--tatvyra-orange); }
+
+/* --- Ranges ------------------------------------------------------------------ */
+
+.about-ranges { background: var(--surface-sunken); }
+
+.about-head { margin-bottom: clamp(2rem, 1.2rem + 2.4vw, 3.25rem); }
+
+.about-head__row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: clamp(1.5rem, 0.5rem + 3vw, 4rem);
+}
+
+.about-head__intro {
+  max-width: 25rem;
+  font-family: var(--font-ui);
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+.about-ranges__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(1.25rem, 0.6rem + 1.8vw, 2rem);
+}
+
+.about-ranges__grid > li { display: flex; }
+.about-ranges__grid > li > * { width: 100%; }
+
+.about-range {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  color: inherit;
+}
+
+/* The photographs are cut to 0.82 for the homepage blobs; framing them at the
+   same ratio means nothing is cropped a second time. */
+.about-range__frame {
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 0.82;
+  margin-bottom: 0.85rem;
+  border-radius: var(--radius-card);
   background: var(--surface-lilac);
 }
 
-.about__hero-inner { max-width: 46rem; }
-.about__title { margin-top: 0.6rem; }
-.about__lede { margin-top: var(--space-m); color: var(--tatvyra-aubergine); font-style: italic; }
+.about-range__frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: scale var(--dur-slow) var(--ease-out);
+}
 
-.about__story-inner {
+.about-range:hover .about-range__frame img { scale: 1.04; }
+
+.about-range__number {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+}
+
+.about-range__number::after {
+  content: '';
+  width: 1.5rem;
+  height: 2px;
+  background: var(--tatvyra-orange);
+}
+
+.about-range__name {
+  font-family: var(--font-serif);
+  font-size: clamp(1.35rem, 1rem + 1vw, 1.75rem);
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--tatvyra-purple);
+}
+
+/* Takes the slack, so every card's Explore line sits on the same baseline
+   however long its description runs. */
+.about-range__desc {
+  flex: 1;
+  font-size: var(--step--1);
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.about-range__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.4rem;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--tatvyra-purple);
+}
+
+.about-range__cta svg {
+  color: var(--tatvyra-orange);
+  transition: translate var(--dur) var(--ease);
+}
+
+.about-range:hover .about-range__cta svg { translate: 5px 0; }
+
+/* --- Standards: the one dark band --------------------------------------------- */
+
+.about-marks__inner {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-  gap: clamp(2rem, 1rem + 4vw, 5rem);
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(2.5rem, 1rem + 5vw, 6rem);
   align-items: start;
 }
 
-.about__story-copy { display: grid; gap: var(--space-s); }
-.about__story-copy > p:not(.eyebrow) { color: var(--text-muted); max-width: 56ch; }
-.about__story-copy .btn { justify-self: start; margin-top: var(--space-xs); }
-
-.about__range-list {
+.about-marks__lead {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-l) clamp(1.5rem, 0.8rem + 2.4vw, 3rem);
-  margin-top: var(--space-xl);
+  gap: var(--space-s);
+  align-content: start;
 }
 
-.about__range-list > li { padding-top: var(--space-s); border-top: 2px solid var(--tatvyra-orange); }
-.about__range-number { font-size: var(--step--2); font-weight: 700; letter-spacing: 0.16em; color: var(--text-muted); }
-.about__range-name { margin-block: 0.4rem 0.5rem; }
-.about__range-list p { font-size: var(--step--1); color: var(--text-muted); line-height: 1.6; }
+.about-marks__lead > p:not(.about-eyebrow) {
+  max-width: 44ch;
+  line-height: 1.7;
+  color: var(--text-on-dark-muted);
+}
+
+.about-marks__fssai {
+  width: 8.5rem;
+  height: auto;
+  margin-top: var(--space-m);
+}
+
+.about-marks__list { border-top: 1px solid var(--line-on-dark); }
+
+.about-marks__list > div {
+  display: grid;
+  gap: 0.45rem;
+  padding-block: clamp(1rem, 0.8rem + 0.6vw, 1.35rem);
+  border-bottom: 1px solid var(--line-on-dark);
+}
+
+.about-marks__list dt {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-family: var(--font-ui);
+  font-size: var(--step-0);
+  font-weight: 600;
+  color: var(--text-on-dark);
+}
+
+.about-marks__list dt::before {
+  content: '';
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--tatvyra-orange);
+}
+
+.about-marks__list dd {
+  padding-left: 1.2rem;
+  font-size: var(--step--1);
+  line-height: 1.65;
+  color: var(--text-on-dark-muted);
+}
+
+/* --- Responsive -------------------------------------------------------------- */
 
 @media (max-width: 62rem) {
-  .about__story-inner { grid-template-columns: minmax(0, 1fr); }
-  .about__story-media { max-width: 28rem; }
-  .about__range-list { grid-template-columns: minmax(0, 1fr); }
+  /* Stacked: headline, then the photograph, left-aligned under it. */
+  .about-hero__inner { grid-template-columns: minmax(0, 1fr); }
+  .about-hero__media { justify-self: start; width: min(100%, 28rem); }
+  .about-hero::before {
+    background: radial-gradient(
+      70% 42% at 30% 80%,
+      rgb(var(--lilac-rgb) / 0.4),
+      rgb(var(--lilac-rgb) / 0) 72%
+    );
+  }
+
+  .about-story__inner { grid-template-columns: minmax(0, 1fr); }
+  .about-story__media { max-width: 34rem; }
+
+  .about-head__row { flex-direction: column; align-items: flex-start; gap: var(--space-s); }
+  .about-ranges__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  .about-marks__inner { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Phones: each range sets its photograph beside its words, so the four
+   ranges read as a list rather than four screens of photography. */
+@media (max-width: 34rem) {
+  .about-hero__facts dd { font-size: var(--step-2); }
+
+  .about-story__facts > div { grid-template-columns: minmax(0, 1fr); gap: 0.15rem; }
+
+  .about-ranges__grid { grid-template-columns: minmax(0, 1fr); }
+
+  .about-range {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+    column-gap: 1rem;
+    row-gap: 0.3rem;
+    align-items: start;
+  }
+
+  .about-range__frame { grid-row: 1 / span 4; margin-bottom: 0; }
 }
 
 /* --- Contact -------------------------------------------------------------- */
@@ -352,3 +794,308 @@
 .notfound__inner .lede { max-width: 46ch; }
 
 .notfound__actions { display: flex; flex-wrap: wrap; gap: var(--space-s); margin-top: var(--space-s); }
+
+/* --- Product spotlight ----------------------------------------------------
+   Ingredients-and-benefits block: copy left, the blob-masked photograph right,
+   then a full-width row of on-pack marks under a rule. The photograph ships
+   with its lilac backing shape and petals baked in and a transparent surround,
+   so it needs no mask or decoration of its own. */
+
+.spotlight {
+  padding-block: clamp(3rem, 1.8rem + 4vw, 5.5rem);
+  background: var(--surface);
+}
+
+.spotlight__top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.02fr);
+  align-items: center;
+  gap: clamp(2rem, 0.8rem + 4vw, 4.5rem);
+}
+
+/* The rule runs from the end of the label to the edge of the column. */
+.spotlight__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+  font-family: var(--font-ui);
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--tatvyra-purple);
+}
+
+.spotlight__eyebrow::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgb(var(--ink-rgb) / 0.18);
+}
+
+.spotlight__title {
+  margin-top: var(--space-m);
+  max-width: 12ch;
+  font-family: var(--font-serif);
+  font-size: clamp(1.875rem, 1.2rem + 2.4vw, 3rem);
+  font-weight: 600;
+  line-height: 1.06;
+  letter-spacing: -0.015em;
+  color: var(--tatvyra-purple);
+}
+
+.spotlight__intro {
+  margin-top: var(--space-s);
+  max-width: 44ch;
+  font-family: var(--font-ui);
+  font-size: var(--step-0);
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.spotlight__label {
+  margin-top: var(--space-l);
+  margin-bottom: var(--space-s);
+  font-family: var(--font-ui);
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--tatvyra-purple);
+}
+
+.spotlight__benefits {
+  display: grid;
+  gap: var(--space-m);
+}
+
+.spotlight__benefits li,
+.spotlight__marks li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: var(--space-s);
+}
+
+/* Lilac disc, purple glyph — the accent pairing the design uses throughout. */
+.spotlight__disc {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--tatvyra-lilac) 40%, var(--tatvyra-warm-white));
+  color: var(--tatvyra-purple);
+}
+
+.spotlight__benefit-title {
+  font-family: var(--font-serif);
+  font-size: var(--step-0);
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--tatvyra-purple);
+}
+
+.spotlight__benefit-body {
+  margin-top: 0.2rem;
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+.spotlight__media img {
+  width: 100%;
+  height: auto;
+}
+
+.spotlight__marks {
+  margin-top: clamp(2rem, 1.2rem + 2.6vw, 3.5rem);
+  padding-top: clamp(1.5rem, 1rem + 1.8vw, 2.5rem);
+  border-top: 1px solid rgb(var(--ink-rgb) / 0.14);
+}
+
+.spotlight__marks .spotlight__label { margin-top: 0; }
+
+/* Hairline dividers between the columns, as in the design. */
+.spotlight__marks ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+  gap: clamp(1.5rem, 0.8rem + 2.4vw, 3rem);
+}
+
+.spotlight__marks li + li {
+  padding-left: clamp(1.5rem, 0.8rem + 2.4vw, 3rem);
+  border-left: 1px solid rgb(var(--ink-rgb) / 0.14);
+  margin-left: calc(clamp(1.5rem, 0.8rem + 2.4vw, 3rem) * -0.5);
+}
+
+@media (max-width: 62rem) {
+  .spotlight__top { grid-template-columns: minmax(0, 1fr); }
+  .spotlight__media { order: -1; max-width: 34rem; margin-inline: auto; }
+  .spotlight__title { max-width: 18ch; }
+  .spotlight__marks ul { grid-template-columns: minmax(0, 1fr); }
+  .spotlight__marks li + li {
+    padding-left: 0;
+    margin-left: 0;
+    border-left: 0;
+    padding-top: var(--space-m);
+    border-top: 1px solid rgb(var(--ink-rgb) / 0.14);
+  }
+}
+
+/* --- Product campaign -----------------------------------------------------
+   The supplied three-panel board with a short lead-in above it. The artwork
+   carries its own sage ground and lettering, so the section paints nothing
+   behind it and the headline says something the panels do not. */
+
+.campaign {
+  padding-block: clamp(2.5rem, 1.5rem + 3.4vw, 4.5rem);
+  background: var(--surface);
+}
+
+.campaign__head {
+  max-width: 46rem;
+  margin-bottom: clamp(1.75rem, 1.2rem + 1.8vw, 2.75rem);
+}
+
+.campaign__eyebrow {
+  font-family: var(--font-ui);
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--tatvyra-purple);
+}
+
+.campaign__title {
+  margin-top: var(--space-s);
+  font-family: var(--font-serif);
+  font-size: clamp(1.75rem, 1.15rem + 2.2vw, 2.75rem);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  color: var(--tatvyra-purple);
+}
+
+.campaign__body {
+  margin-top: var(--space-s);
+  max-width: 52ch;
+  font-family: var(--font-ui);
+  font-size: var(--step-0);
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.campaign__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-card);
+}
+
+/* --- Product FAQ ----------------------------------------------------------
+   Native disclosure widgets: keyboard support, the right role and
+   find-in-page all come for free. */
+
+.faq {
+  padding-block: clamp(2.5rem, 1.5rem + 3.4vw, 4.5rem);
+  background: var(--surface-sunken);
+}
+
+.faq__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(1.5rem, 0.6rem + 3vw, 4rem);
+  align-items: start;
+}
+
+.faq__eyebrow {
+  font-family: var(--font-ui);
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--tatvyra-purple);
+}
+
+.faq__title {
+  margin-top: var(--space-s);
+  max-width: 14ch;
+  font-family: var(--font-serif);
+  font-size: clamp(1.625rem, 1.1rem + 1.9vw, 2.5rem);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  color: var(--tatvyra-purple);
+}
+
+.faq__item { border-top: 1px solid rgb(var(--ink-rgb) / 0.14); }
+.faq__item:last-child { border-bottom: 1px solid rgb(var(--ink-rgb) / 0.14); }
+
+.faq__item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-m);
+  padding-block: var(--space-m);
+  cursor: pointer;
+  list-style: none;
+  transition: color var(--dur-fast) var(--ease);
+}
+
+/* Safari still draws its own marker without this. */
+.faq__item summary::-webkit-details-marker { display: none; }
+
+.faq__q {
+  font-family: var(--font-serif);
+  font-size: var(--step-0);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--tatvyra-purple);
+}
+
+/* A plus that loses its upright stroke when the item opens. */
+.faq__sign {
+  position: relative;
+  flex: none;
+  width: 18px;
+  height: 18px;
+  color: var(--tatvyra-purple);
+}
+
+.faq__sign::before,
+.faq__sign::after {
+  content: '';
+  position: absolute;
+  inset: 50% 0 auto 0;
+  height: 1.5px;
+  border-radius: var(--radius-pill);
+  background: currentColor;
+  translate: 0 -50%;
+  transition: rotate var(--dur) var(--ease), opacity var(--dur) var(--ease);
+}
+
+.faq__sign::after { rotate: 90deg; }
+.faq__item[open] .faq__sign::after { rotate: 0deg; opacity: 0; }
+
+.faq__item summary:hover .faq__q { color: var(--tatvyra-aubergine); }
+
+.faq__a {
+  padding-bottom: var(--space-m);
+  max-width: 62ch;
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+  line-height: 1.65;
+  color: var(--text-muted);
+}
+
+@media (max-width: 62rem) {
+  .faq__inner { grid-template-columns: minmax(0, 1fr); }
+  .faq__title { max-width: 20ch; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq__sign::before,
+  .faq__sign::after { transition: none; }
+}

@@ -57,7 +57,7 @@ export default function CartDrawer() {
                       onClick={closeCart}
                       tabIndex={isOpen ? 0 : -1}
                     >
-                      <img src={category.image} alt="" loading="lazy" />
+                      <img src={line.product.image ?? category.image} alt="" loading="lazy" />
                     </Link>
                     <div className="cart__line-body">
                       <Link

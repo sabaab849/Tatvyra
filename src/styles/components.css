@@ -56,6 +56,17 @@
   --btn-line-hover: var(--tatvyra-aubergine);
 }
 
+/* The near-black pill from the hero artwork. Ink rather than Aubergine, which
+   still reads purple; the hover only lightens it, so no purple re-enters. */
+.btn--ink {
+  --btn-bg: var(--tatvyra-ink);
+  --btn-fg: var(--tatvyra-warm-white);
+  --btn-line: var(--tatvyra-ink);
+  --btn-bg-hover: color-mix(in srgb, var(--tatvyra-ink) 80%, var(--tatvyra-warm-white));
+  --btn-fg-hover: var(--tatvyra-warm-white);
+  --btn-line-hover: color-mix(in srgb, var(--tatvyra-ink) 80%, var(--tatvyra-warm-white));
+}
+
 /* Burnt orange stays an accent — used for a single CTA per view, never as a
    large surface. */
 .btn--accent {
@@ -125,9 +136,13 @@
 
 /* --- Announcement bar ----------------------------------------------------- */
 
+/* Light and quiet. It shares the navbar's cream rather than sitting a few
+   units off it — two near-identical lights stacked would read as a mistake —
+   and a hairline keeps the two bars distinct. */
 .announce {
-  background: var(--tatvyra-aubergine);
-  color: var(--text-on-dark);
+  background: var(--tatvyra-warm-white);
+  color: var(--tatvyra-purple);
+  border-bottom: 1px solid rgb(var(--ink-rgb) / 0.08);
 }
 
 .announce__inner {
@@ -139,56 +154,61 @@
 }
 
 .announce__item {
+  font-family: var(--font-ui);
   font-size: var(--step--2);
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--text-on-dark-muted);
+  color: rgb(var(--ink-rgb) / 0.7);
 }
 
+/* The brand line carries in full Purple rather than Orange — flat Orange on a
+   light ground is 2.9:1, well under AA for 11px uppercase. */
+/* Placed by column rather than by order: with the range list gone the first
+   column is empty, and auto-placement would slide these both leftwards. */
 .announce__item--center {
+  grid-column: 2;
   justify-self: center;
-  color: var(--tatvyra-peach);
-  font-weight: 700;
+  color: var(--tatvyra-purple);
+  font-weight: 600;
   letter-spacing: 0.22em;
 }
 
-.announce__item--end { justify-self: end; }
+.announce__item--end { grid-column: 3; justify-self: end; }
 
 @media (max-width: 62rem) {
   .announce__inner { grid-template-columns: minmax(0, 1fr); justify-items: center; }
+  .announce__item--center, .announce__item--end { grid-column: auto; }
   .announce__item:not(.announce__item--center) { display: none; }
 }
 
-/* --- Header --------------------------------------------------------------- */
+/* --- Header ---------------------------------------------------------------
+   The navbar from the Figma refresh (node 74:1042): Warm White ground, an ink
+   hairline, four Poppins links, the cart with its gold count badge, and the
+   Shop Now pill. Figma sets 80px gutters on a 1440 frame; the bar keeps the
+   site's .shell instead so it stays aligned with every section below it. */
 
 .header {
   position: sticky;
   top: 0;
   z-index: var(--z-header);
-  /* At rest the bar is opaque Warm White, but it keeps a hairline so it still
-     reads as a band against a Warm White page rather than dissolving into it. */
-  background: var(--surface);
-  border-bottom: 1px solid var(--line);
+  background: var(--tatvyra-warm-white);
+  border-bottom: 1px solid rgb(var(--ink-rgb) / 0.1);
   transition:
     border-color var(--dur) var(--ease),
     background-color var(--dur) var(--ease),
     box-shadow var(--dur) var(--ease);
 }
 
-/* Scrolled: the bar lifts off the page. The ground thins to a blur so content
-   passes beneath it as tint, and a stronger hairline plus a shallow lift keep
-   the bottom edge unambiguous. */
 .header--compact {
-  border-bottom-color: var(--line-strong);
+  border-bottom-color: rgb(var(--ink-rgb) / 0.16);
   box-shadow: var(--shadow-header);
 }
 
-/* The glass is applied only where it can actually be blurred. Without
-   backdrop-filter the bar keeps its opaque Warm White ground, so nav type is
-   never left floating over unblurred page content. */
+/* Glass only where it can actually be blurred; otherwise the cream stays
+   opaque rather than leaving the links over unblurred page content. */
 @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .header--compact {
-    background: var(--glass-bg);
+    background: color-mix(in srgb, var(--tatvyra-warm-white) 76%, transparent);
     -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
     backdrop-filter: blur(var(--glass-blur)) saturate(160%);
   }
@@ -205,38 +225,37 @@
 
 .header--compact .header__inner { min-height: var(--header-h-compact); }
 
-/* The lockup itself settles a little on scroll, which is what actually makes
-   the bar shorter — min-height alone cannot shrink past the logo. */
-.header__logo .logo__img { transition: width var(--dur) var(--ease); }
-.header--compact .header__logo .logo__img { width: 134px !important; }
+.header__lead { display: flex; align-items: center; gap: 0.62rem; }
 
-.header__lead { display: flex; align-items: center; gap: var(--space-s); }
-
-/* Clear space around the lockup equal to the leaf-mark height. */
-.logo { display: inline-flex; padding: 0.55rem 0.35rem; }
-.logo__img { transition: opacity var(--dur) var(--ease); }
+/* Clear space around the lockup, per the brand guidelines. */
+.logo { display: inline-flex; padding: 0.375rem 0.25rem; }
+.logo__img { transition: opacity var(--dur) var(--ease), width var(--dur) var(--ease); }
 .logo:hover .logo__img { opacity: 0.82; }
+
+/* The mauve dot that trails the lockup in the design. */
+.header__dot {
+  width: 7.42px;
+  height: 7.42px;
+  border-radius: var(--radius-pill);
+  background: var(--tatvyra-lilac);
+}
 
 .header__nav { justify-self: center; }
 
 .header__nav-list {
   display: flex;
   align-items: center;
-  gap: clamp(1.125rem, 0.35rem + 1.7vw, 2.25rem);
+  gap: clamp(1.25rem, 0.4rem + 1.9vw, 2.5rem);
 }
 
-/* A step above body size, and above the tracking that made the words drift
-   apart: at --step-0 the categories read as running text in a wide bar rather
-   than as navigation. Sized between --step-0 and --step-1 because --step-1
-   would crowd the lockup at the 68rem breakpoint. */
 .header__link {
   position: relative;
   display: inline-block;
-  padding-block: 0.6rem;
-  font-size: clamp(1rem, 0.92rem + 0.26vw, 1.15rem);
-  font-weight: 500;
-  letter-spacing: 0.004em;
-  color: var(--text);
+  padding-block: 0.5rem;
+  font-family: var(--font-ui);
+  font-size: 15px;
+  font-weight: 400;
+  color: rgb(var(--ink-rgb) / 0.7);
   white-space: nowrap;
   transition: color var(--dur-fast) var(--ease);
 }
@@ -257,9 +276,51 @@
 .header__link:hover { color: var(--tatvyra-purple); }
 .header__link:hover::after,
 .header__link.is-active::after { scale: 1 1; }
-.header__link.is-active { color: var(--tatvyra-purple); font-weight: 700; }
+.header__link.is-active { color: var(--tatvyra-purple); font-weight: 600; }
 
-.header__actions { display: flex; align-items: center; gap: 0.125rem; }
+.header__actions { display: flex; align-items: center; gap: 1.75rem; }
+
+.header__cart {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--tatvyra-purple);
+  cursor: pointer;
+  transition: opacity var(--dur-fast) var(--ease);
+}
+
+.header__cart:hover { opacity: 0.7; }
+
+.header__count {
+  display: grid;
+  place-items: center;
+  min-width: 20px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  background: var(--tatvyra-orange);
+  color: #fff;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.header__cta {
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 24px;
+  border-radius: var(--radius-pill);
+  background: var(--tatvyra-purple);
+  color: #fff;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background-color var(--dur) var(--ease), translate var(--dur) var(--ease);
+}
+
+.header__cta:hover { background: color-mix(in srgb, var(--tatvyra-purple) 82%, #fff); }
+.header__cta:active { translate: 0 1px; }
 
 .header__icon {
   position: relative;
@@ -269,50 +330,27 @@
   width: 44px;
   height: 44px;
   border-radius: var(--radius-pill);
-  color: var(--text);
-  transition: background-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
-}
-
-.header__icon:hover {
-  background: var(--surface-sunken);
   color: var(--tatvyra-purple);
+  transition: background-color var(--dur-fast) var(--ease);
 }
 
+.header__icon:hover { background: rgb(var(--ink-rgb) / 0.06); }
 .header__icon--menu { display: none; }
-
-.header__count {
-  position: absolute;
-  top: 4px;
-  right: 3px;
-  min-width: 17px;
-  height: 17px;
-  padding-inline: 4px;
-  display: grid;
-  place-items: center;
-  border-radius: var(--radius-pill);
-  background: var(--tatvyra-orange);
-  color: var(--tatvyra-aubergine);
-  font-size: 10px;
-  font-weight: 700;
-  line-height: 1;
-}
 
 @media (max-width: 68rem) {
   .header__nav { display: none; }
   .header__icon--menu { display: inline-flex; }
-  .header__icon--account { display: none; }
-  .header__inner { grid-template-columns: auto 1fr auto; }
   .header__lead { justify-self: start; }
 }
 
 @media (max-width: 48rem) {
-  .header__logo .logo__img { width: 134px !important; }
+  .header__dot { display: none; }
+  .header__actions { gap: var(--space-s); }
 }
 
 @media (max-width: 30rem) {
   .header__inner { gap: var(--space-2xs); }
-  .header__logo .logo__img,
-  .header--compact .header__logo .logo__img { width: 126px !important; }
+  .header__cta { display: none; }
 }
 
 /* --- Drawers & overlays --------------------------------------------------- */
@@ -351,6 +389,7 @@
   width: min(25rem, 92vw);
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
   background: var(--surface);
   box-shadow: var(--shadow-lift);
   transition: translate var(--dur-slow) var(--ease-out);
@@ -382,7 +421,10 @@
 
 .drawer__close:hover { background: var(--surface-sunken); }
 
-.drawer__nav { flex: 1; overflow-y: auto; padding-block: var(--space-s); }
+/* Not flex:1 — with a block above and below, each stretching to fill left a
+   gap between them. The panel scrolls instead, and the foot is pinned by its
+   own auto margin. */
+.drawer__nav { padding-block: var(--space-s); }
 
 .drawer__link {
   display: flex;
@@ -404,7 +446,7 @@
 .drawer__link:hover svg,
 .drawer__link.is-active svg { opacity: 1; }
 
-.drawer__foot { padding: var(--space-m); border-top: 1px solid var(--line); }
+.drawer__foot { margin-top: auto; padding: var(--space-m); border-top: 1px solid var(--line); }
 
 .drawer__support {
   display: flex;
@@ -422,6 +464,21 @@
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--tatvyra-purple);
+}
+
+/* The drawer keeps the ranges below the primary links now that the bar no
+   longer lists them. */
+.drawer__nav--ranges { margin-top: var(--space-m); }
+
+.drawer__label {
+  padding-inline: var(--space-m);
+  margin-bottom: var(--space-2xs);
+  font-family: var(--font-ui);
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
 }
 
 /* --- Search overlay ------------------------------------------------------- */
@@ -820,12 +877,6 @@
 }
 
 .pcard__view:hover { color: var(--tatvyra-aubergine); box-shadow: inset 0 -1px 0 0 var(--tatvyra-orange); }
-
-/* Two-up on a phone, a 4:3 crop leaves the product too small to read as the
-   hero of the card — square gives it presence without upscaling the source. */
-@media (max-width: 52rem) {
-  .pcard__media.frame--4x3 { aspect-ratio: 1 / 1; }
-}
 
 @media (max-width: 30rem) {
   .pcard__actions { flex-direction: column; align-items: stretch; gap: 0.5rem; }

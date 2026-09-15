@@ -23,5 +23,10 @@ dist-ssr
 *.sln
 *.sw?
 
+# Working source art — 28MB of PNGs that nothing imports. The served copies
+# are converted into public/images/, and OneDrive locking these is what kept
+# crashing the dev server (see server.watch.ignored in vite.config.js).
+product images/
+
 # Local build output and scratch
 .vite/

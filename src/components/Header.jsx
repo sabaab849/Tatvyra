@@ -2,15 +2,20 @@ import { useEffect, useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import Logo from './Logo'
 import MobileMenu from './MobileMenu'
-import SearchPanel from './SearchPanel'
 import { PRIMARY_NAV } from '../lib/nav'
 import { useCart } from '../context/useCart'
-import { SearchIcon, AccountIcon, BagIcon, MenuIcon } from './Icons'
+import { ShoppingBagIcon, MenuIcon } from './Icons'
 
+/**
+ * The navbar from the Figma refresh: lockup and its mauve dot, four links,
+ * a cart trigger with a gold count badge, and the Shop Now pill.
+ *
+ * The design is a 1440 desktop frame only, so the narrow layout below it is
+ * the drawer pattern the site already had — burger, lockup, cart.
+ */
 export default function Header() {
   const [compact, setCompact] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
-  const [searchOpen, setSearchOpen] = useState(false)
   const { count, openCart } = useCart()
   const location = useLocation()
 
@@ -19,7 +24,6 @@ export default function Header() {
   if (lastPath !== location.pathname) {
     setLastPath(location.pathname)
     setMenuOpen(false)
-    setSearchOpen(false)
   }
 
   // A single threshold, no scroll-linked animation — the bar just settles.
@@ -44,7 +48,8 @@ export default function Header() {
             >
               <MenuIcon />
             </button>
-            <Logo width={158} className="header__logo" />
+            <Logo width={128} className="header__logo" />
+            <span className="header__dot" aria-hidden="true" />
           </div>
 
           <nav className="header__nav" aria-label="Primary">
@@ -68,31 +73,21 @@ export default function Header() {
           <div className="header__actions">
             <button
               type="button"
-              className="header__icon"
-              onClick={() => setSearchOpen(true)}
-              aria-label="Search products"
-              aria-expanded={searchOpen}
-            >
-              <SearchIcon />
-            </button>
-            <NavLink to="/account" className="header__icon header__icon--account" aria-label="Account">
-              <AccountIcon />
-            </NavLink>
-            <button
-              type="button"
-              className="header__icon header__icon--bag"
+              className="header__cart"
               onClick={openCart}
               aria-label={`Cart, ${count} ${count === 1 ? 'item' : 'items'}`}
             >
-              <BagIcon />
-              {count > 0 && <span className="header__count" aria-hidden="true">{count}</span>}
+              <ShoppingBagIcon />
+              <span className="header__count" aria-hidden="true">{count}</span>
             </button>
+            <NavLink to="/shop" className="header__cta">
+              Shop Now
+            </NavLink>
           </div>
         </div>
       </header>
 
       <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
-      <SearchPanel open={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   )
 }

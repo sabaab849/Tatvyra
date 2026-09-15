@@ -19,7 +19,7 @@ export default function ProductCard({ product, priority = false }) {
 
   return (
     <article className="pcard">
-      <Link to={`/product/${product.slug}`} className="pcard__media frame frame--4x3" tabIndex={-1} aria-hidden="true">
+      <Link to={`/product/${product.slug}`} className="pcard__media frame frame--4x5" tabIndex={-1} aria-hidden="true">
         <img
           src={product.image ?? category.image}
           alt=""
