@@ -44,8 +44,8 @@ export default function About() {
 
   return (
     <div className="about">
-      <AboutBrand />
       <AboutFounder />
+      <AboutBrand />
 
       {/* The approach shares the philosophy's ground, so the leaf mark and the
           wash run on behind it. */}

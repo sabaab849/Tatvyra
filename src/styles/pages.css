@@ -222,11 +222,20 @@
 .pinfo__pending a { text-decoration: underline; text-underline-offset: 3px; }
 
 /* --- About ----------------------------------------------------------------
-   The page opens on "The brand": an index label and headline with the
-   positioning line set against them, then the five ranges as tall photographs
-   beside the story, divided by a single hairline. Everything sits on Warm
-   White; Purple carries the headings and Burnt Orange appears only as the
-   darker accent ink, since flat Orange fails AA at label size. */
+   The page opens on the founder's story, then "The brand": an index label and
+   headline with the positioning line set against them, then the five ranges as
+   tall photographs beside the story, divided by a single hairline. Everything
+   sits on Warm White; Purple carries the headings and Burnt Orange appears
+   only as the darker accent ink, since flat Orange fails AA at label size. */
+
+/* The first two sections share one ground and are held apart by their own
+   hairlines, so they sit closer than the shared section rhythm. The bands
+   below take the same measure, so the whole page steps evenly rather than
+   opening tight and loosening halfway down. The closing CTA is not a
+   .section, so it keeps the full band it has on every other page. */
+.about .section {
+  padding-block: clamp(2.25rem, 1.4rem + 2.4vw, 3.5rem);
+}
 
 .about-brand {
   /* The gap between the ranges and the story, and between the ranges' own
@@ -238,9 +247,10 @@
      it takes the same inset so the two share a left edge. */
   --brand-columns: minmax(0, 2.65fr) minmax(0, 1fr);
   --story-inset: clamp(1.5rem, 0.8rem + 2vw, 2.5rem);
-  /* The founder story follows on the same ground and opens on its own
-     hairline, so this closes short rather than adding a full section's air. */
-  padding-block: clamp(2.5rem, 1.5rem + 3.5vw, 5rem) clamp(2.5rem, 1.6rem + 2.5vw, 3.5rem);
+  /* Second on the page now, under the founder's story and on the same
+     ground: short at the top, and closing on a full break into the
+     philosophy band. */
+  padding-block: clamp(1.5rem, 1rem + 2vw, 2.5rem) clamp(2.5rem, 1.6rem + 2.8vw, 4rem);
   background: var(--surface);
 }
 
@@ -493,9 +503,9 @@
    type; Purple appears only in the eyebrow and the quotation marks below. */
 
 .about-founder {
-  /* Short at the top: it follows "The brand" on the same ground, and its own
-     hairline marks the break. */
-  padding-block: clamp(1.5rem, 1rem + 2vw, 2.5rem) clamp(2.5rem, 1.6rem + 2.8vw, 4rem);
+  /* It opens the page, so it takes the full opening band; "The brand"
+     follows on the same ground, which is why it closes short. */
+  padding-block: clamp(2.5rem, 1.5rem + 3.5vw, 5rem) clamp(2.5rem, 1.6rem + 2.5vw, 3.5rem);
   background: var(--surface);
 }
 
@@ -743,7 +753,7 @@
 /* No ground of its own: on the About page it is passed into AboutPhilosophy
    and sits on that section's ground, under the leaf mark and the wash. */
 .about-intro {
-  padding-block: clamp(2.5rem, 1.6rem + 2.8vw, 4rem) clamp(0.5rem, 0.2rem + 1vw, 1.5rem);
+  padding-block: clamp(2.5rem, 1.6rem + 2.8vw, 4rem) clamp(1.25rem, 0.4rem + 2.4vw, 3.5rem);
 }
 
 .about-intro__inner {
