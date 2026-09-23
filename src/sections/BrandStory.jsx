@@ -22,13 +22,13 @@ const RANGES = [
     slug: 'spirulina',
     tone: 'var(--tatvyra-purple)',
     lines: ['Plant-based.', 'Powder, tablet, capsule.'],
-    alt: 'A heap of deep green spirulina powder in a stoneware bowl.',
+    alt: 'A cone of deep green spirulina powder heaped on a wooden spoon, loose powder scattered around it.',
   },
   {
     slug: 'moringa',
     tone: 'var(--tatvyra-lilac)',
     lines: ['Nutrient-rich.', 'A traditional superfood.'],
-    alt: 'Bright green moringa leaf powder in a stoneware bowl, a wooden spoon resting in it.',
+    alt: 'Bright green moringa leaf powder filling a terracotta bowl, a small wooden scoop lying in it.',
   },
   {
     slug: 'nut-butters',
