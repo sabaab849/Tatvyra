@@ -232,22 +232,22 @@
 
 /* --- Brand philosophy -----------------------------------------------------
    The brand statement as an editorial spread (BrandPhilosophy): the headline
-   set large on the left, the four clean-label standards placed as loose
-   typography on the right, and one lavender form between them — cut as a flat
-   object rather than blurred as a glow, on Warm White with a paper grain.
+   set large on the left, the four clean-label standards set as lines of type
+   on the right. The section carries no illustration — the interaction is the
+   typography itself, and how a line behaves is in .kt in components.css.
 
-   Brand colours only: the form is Lilac and Purple mixed into Warm White, the
-   headline Purple, and what is not in the jar is left in a muted Ink. Type is
-   the site's one sans throughout.
+   Brand colours only: the headline Purple, what is not in the jar left in a
+   muted Ink, the standards in that same muted Ink until one becomes active and
+   Purple runs across it. Type is the site's one sans throughout.
 
-   Choosing a standard quietens the others, brings up its line and sends the
-   form leaning its way. Nothing it does changes the height of anything: the
-   standards are placed on the canvas, and each line is always in place. */
+   Choosing a standard quietens the others and brings up its line. Nothing it
+   does changes the height of anything: each line is always in place. */
 
 .philosophy {
   /* Ink speckle with its alpha baked in, as the shelf's grain is. */
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' seed='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.16 0 0 0 0 0.13 0 0 0 0 0.09 0 0 0 -1.9 1.05'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E");
-  /* One long, organic easing for everything that moves here. */
+  /* One long, organic easing for everything that moves here and is not on a
+     spring. */
   --settle: 680ms cubic-bezier(0.22, 0.68, 0.24, 1);
 
   position: relative;
@@ -267,62 +267,6 @@
   background-image: var(--grain);
   background-size: 180px 180px;
   opacity: 0.22;
-}
-
-/* --- The form -------------------------------------------------------------
-   Two flat shapes, the deeper one behind, sitting across the seam between the
-   headline and the standards. Its path is set as a CSS `d`, which animates,
-   with the same path on the attribute so a browser that cannot animate it
-   still draws the right shape. */
-
-.philosophy__form {
-  position: absolute;
-  z-index: -1;
-  top: 49%;
-  left: 45%;
-  width: clamp(18rem, 2rem + 21vw, 28rem);
-  aspect-ratio: 1;
-  translate: -50% -50%;
-  pointer-events: none;
-}
-
-/* The lit object sits over the drawn form and fades in once its scene is
-   running, so nothing blinks while three.js loads. */
-.philosophy__canvas-gl {
-  position: absolute;
-  inset: -12%;
-  width: 124%;
-  height: 124%;
-  opacity: 0;
-  transition: opacity 900ms var(--ease-out);
-}
-
-.philosophy__canvas-gl.is-live { opacity: 1; }
-
-/* With the object lit, the drawn form gives way to it entirely: the two
-   are the same form, and the flat one’s edges read as stray geometry
-   around the lit body. */
-.philosophy__form:has(.is-live) svg { opacity: 0; transition: opacity 900ms var(--ease-out); }
-
-.philosophy__form svg {
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
-
-.philosophy__shape {
-  fill: color-mix(in srgb, var(--tatvyra-lilac) 46%, var(--tatvyra-warm-white));
-  transform-box: fill-box;
-  transform-origin: center;
-  transition:
-    d var(--settle),
-    translate var(--settle),
-    scale var(--settle);
-}
-
-/* Offset behind the form, as a second run of ink sits under the first. */
-.philosophy__shape--under {
-  fill: color-mix(in srgb, var(--tatvyra-purple) 16%, var(--tatvyra-warm-white));
 }
 
 /* --- The spread ----------------------------------------------------------- */
@@ -354,19 +298,22 @@
   font-size: clamp(2.75rem, 1.1rem + 5.2vw, 5.25rem);
   font-weight: var(--type-body-weight);
   line-height: 1.02;
-  letter-spacing: -0.035em;
   color: var(--tatvyra-purple);
-  text-wrap: balance;
 }
 
-.philosophy__line { display: block; }
+/* Each line is kinetic type, so its tracking is set through --kt-track and the
+   block display has to win over .kt's inline-block. */
+.philosophy__line {
+  display: block;
+  --kt-track: -0.035em;
+}
 
 /* What is not in the jar, in a quieter tone and stepped in — the contrast is
    drawn rather than italic, since the site carries one face. */
 .philosophy__line.is-unsaid {
   margin-left: 0.14em;
   font-size: 0.86em;
-  letter-spacing: -0.02em;
+  --kt-track: -0.02em;
   color: color-mix(in srgb, var(--tatvyra-purple) 62%, var(--tatvyra-ink));
   opacity: 0.6;
 }
@@ -379,47 +326,46 @@
 }
 
 /* --- The standards --------------------------------------------------------
-   Placed on a canvas of their own, each at its own point, so the four read as
-   typography set on a page rather than four cards in a row. */
-
-.philosophy__canvas { position: relative; }
+   Four lines of type, each on its own row: the numeral in a narrow first
+   column, the line and what it says in the second. The button takes both
+   columns as a subgrid, so the spoken line sits under the standard's first
+   letter rather than under its numeral. */
 
 .philosophy__claims {
-  position: relative;
-  aspect-ratio: 5 / 6;
+  display: grid;
+  gap: clamp(1.25rem, 0.8rem + 1.6vw, 2.25rem);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .philosophy__claim {
-  position: absolute;
-  left: var(--x);
-  top: var(--y);
-  width: 46%;
-  transition: opacity var(--settle), translate var(--settle);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: clamp(0.75rem, 0.5rem + 1vw, 1.5rem);
+  transition: opacity var(--settle);
 }
 
 /* The standards that are not speaking stand back, but stay readable. */
-/* Quieter, but never below the contrast small type needs — they sit over
-   the lavender form on a phone. */
 .philosophy__claims:has(.is-active) .philosophy__claim:not(.is-active) { opacity: 0.72; }
 
 .philosophy__claim-button {
   display: grid;
-  justify-items: start;
-  gap: 0.15rem;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  align-items: baseline;
   width: 100%;
   padding: 0;
   border: 0;
   background: none;
   text-align: left;
   cursor: pointer;
-  transition: translate var(--settle);
 }
 
-.philosophy__claim-button:hover { translate: 0.35rem 0; }
-.philosophy__claim-button:focus-visible { outline: 2px solid var(--focus); outline-offset: 0.6rem; }
+.philosophy__claim-button:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 0.6rem;
+}
 
 .philosophy__claim-index {
   font-size: var(--step--2);
@@ -429,34 +375,25 @@
   transition: color var(--settle);
 }
 
-.philosophy__claim-word {
-  font-size: clamp(2.25rem, 0.9rem + 4.2vw, 4.25rem);
+/* The line itself. Ink until it is chosen; the Purple copy behind the mask is
+   what the wipe brings in, so the colour arrives as ink rather than as a fade. */
+.philosophy__claim-line {
+  --kt-track: -0.035em;
+  font-size: clamp(1.75rem, 0.8rem + 2.9vw, 3.25rem);
   font-weight: var(--type-body-weight);
-  line-height: 0.96;
-  letter-spacing: -0.04em;
-  color: var(--tatvyra-purple);
-  transition: color var(--settle);
-}
-
-.philosophy__claim-label {
-  font-size: var(--step--2);
-  font-weight: var(--type-label-weight);
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  line-height: 1.5;
-  color: var(--text);
-  transition: color var(--settle);
+  line-height: 1.04;
+  color: var(--text-muted);
 }
 
 /* Orange is a mark here, never small text on this ground: the chosen
    standard takes the accent ink instead. */
 .philosophy__claim.is-active .philosophy__claim-index { color: var(--accent-ink); }
-.philosophy__claim.is-active .philosophy__claim-label { color: var(--tatvyra-purple); }
 
 /* The line a standard says, always in place so nothing shifts when it speaks. */
 .philosophy__says {
-  margin-top: 0.55rem;
-  max-width: 22ch;
+  grid-column: 2;
+  margin-top: 0.4rem;
+  max-width: 34ch;
   font-size: var(--step--1);
   line-height: 1.5;
   color: var(--text-muted);
@@ -468,57 +405,26 @@
 .philosophy__claim.is-active .philosophy__says { opacity: 1; translate: 0 0; }
 
 /* --- Narrow ---------------------------------------------------------------
-   One column: the headline, then the form with the standards set over it in
-   two staggered columns, so it still reads as a composition. */
+   One column: the headline, then the standards under it, still one line to a
+   row. */
 
 @media (max-width: 62rem) {
-  .philosophy__inner { grid-template-columns: minmax(0, 1fr); row-gap: clamp(2.5rem, 1rem + 6vw, 4rem); }
-
-  /* On a phone the form stops floating and takes a row of its own, between
-     the paragraph and the standards, so no type is set over it. */
-  .philosophy__form {
-    position: relative;
-    z-index: auto;
-    inset: auto;
-    width: min(20rem, 62vw);
-    margin-inline: auto;
-    translate: none;
+  .philosophy__inner {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: clamp(2.5rem, 1rem + 6vw, 4rem);
   }
-
-  .philosophy__claims {
-    position: static;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: clamp(1.75rem, 1rem + 4vw, 3rem) var(--space-l);
-    aspect-ratio: auto;
-  }
-
-  .philosophy__claim {
-    position: static;
-    width: auto;
-  }
-
-  /* The second column sits lower, so the four do not line up as a grid. */
-  .philosophy__claim:nth-child(even) { margin-top: clamp(1.25rem, 4vw, 2.5rem); }
-
-  .philosophy__says { min-height: 3em; }
 }
 
 @media (max-width: 30rem) {
   .philosophy__eyebrow { letter-spacing: 0.22em; }
-  .philosophy__claim-label { letter-spacing: 0.16em; }
+  .philosophy__says { min-height: 3em; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .philosophy__shape,
   .philosophy__claim,
-  .philosophy__claim-button,
   .philosophy__says,
-  .philosophy__claim-index,
-  .philosophy__claim-word,
-  .philosophy__claim-label { transition: none; }
+  .philosophy__claim-index { transition: none; }
 
-  .philosophy__claim-button:hover { translate: none; }
   .philosophy__says { translate: none; }
 }
 
@@ -885,6 +791,85 @@
   100% { opacity: 0; translate: var(--mote-x) -5.5rem; }
 }
 
+/* --- Hand-drawn marks -----------------------------------------------------
+   The two open jars carry marks drawn around the opening: an exclamation and a
+   bee over the honey, a star and an exclamation over the nut butter. Each is
+   placed from the centre of the jar's mouth using --dd-x/--dd-y, chosen to stay
+   clear of the lid's flight path, and each draws itself on before settling into
+   a small hand-held wobble. Each path is dashed by its own measured length
+   (--len, set per path in the component), which is what makes it draw on. */
+
+.pillar__doodle {
+  position: absolute;
+  z-index: 4;
+  left: calc(var(--mouth-cx) + var(--dd-x) * 1%);
+  top: calc(var(--mouth-cy) + var(--dd-y) * 1%);
+  width: calc(var(--dd-w) * 1%);
+  translate: -50% -50%;
+  pointer-events: none;
+  color: var(--tatvyra-aubergine);
+  opacity: 0;
+  scale: 0.6;
+  rotate: 0deg;
+  transition:
+    opacity var(--open-dur) var(--open-ease),
+    scale var(--open-dur) var(--open-ease),
+    rotate var(--open-dur) var(--open-ease);
+}
+
+.pillar__doodle svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  filter: drop-shadow(0 1px 2px rgb(var(--ink-rgb) / 0.35));
+}
+
+/* Filled paths opt out of the fill reset below, or it would outrank their
+   own fill colour. */
+.pillar__doodle path {
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.pillar__doodle path:not(.pillar__doodle-fill) { fill: none; }
+
+.pillar__doodle--orange { color: var(--tatvyra-orange); }
+
+.pillar__doodle path:not(.pillar__doodle-trail) {
+  stroke-dasharray: var(--len);
+  stroke-dashoffset: var(--len);
+}
+
+/* The bee's flight trail carries a dash pattern of its own, so it fades in
+   rather than drawing on. */
+.pillar__doodle-trail {
+  stroke-dasharray: 3 3.6;
+  opacity: 0;
+  transition: opacity var(--open-dur) var(--open-ease);
+}
+
+/* Fills arrive once the outline has been drawn, so a mark never appears as a
+   flat shape before its line. */
+.pillar__doodle-fill {
+  fill-opacity: 0;
+  transition: fill-opacity var(--open-dur) var(--open-ease);
+}
+
+.pillar__doodle-fill--body { fill: var(--tatvyra-orange); }
+.pillar__doodle-fill--wing { fill: var(--tatvyra-warm-white); }
+.pillar__doodle-fill--ink { fill: var(--tatvyra-aubergine); }
+
+@keyframes pillar-doodle-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes pillar-doodle-bob {
+  0%, 100% { translate: 0 0; rotate: -2.5deg; }
+  50% { translate: 0 -0.3rem; rotate: 2.5deg; }
+}
+
 /* Once lifted, the lid hangs in the air with the smallest float. It moves on
    transform, which composes with the translate that lifted it. */
 @keyframes pillar-lid-float {
@@ -929,6 +914,33 @@
 .pillar:is(:hover, :focus-visible, .is-open) .pillar__mote {
   animation: pillar-mote 4.5s cubic-bezier(0.33, 0, 0.25, 1) infinite;
   animation-delay: calc(var(--mote-delay) + 450ms);
+}
+
+/* The marks come on after the lid has started to clear, then hold their wobble
+   for as long as the jar is open. */
+.pillar:is(:hover, :focus-visible, .is-open) .pillar__doodle {
+  opacity: 1;
+  scale: 1;
+  rotate: var(--dd-rot);
+  transition-delay: var(--dd-delay);
+}
+
+.pillar:is(:hover, :focus-visible, .is-open) .pillar__doodle svg {
+  animation: pillar-doodle-bob 2.8s var(--ease) var(--dd-delay) infinite;
+}
+
+.pillar:is(:hover, :focus-visible, .is-open) .pillar__doodle path:not(.pillar__doodle-trail) {
+  animation: pillar-doodle-draw 0.42s var(--ease-out) var(--dd-delay) forwards;
+}
+
+.pillar:is(:hover, :focus-visible, .is-open) .pillar__doodle-trail {
+  opacity: 0.8;
+  transition-delay: calc(var(--dd-delay) + 0.4s);
+}
+
+.pillar:is(:hover, :focus-visible, .is-open) .pillar__doodle-fill {
+  fill-opacity: 1;
+  transition-delay: calc(var(--dd-delay) + 0.28s);
 }
 
 .pillar:is(:hover, :focus-visible, .is-open) .pillar__cta {
@@ -1121,6 +1133,8 @@
   .pillar:is(:hover, :focus-visible, .is-open) .pillar__blob { translate: none; }
   .pillar:is(:hover, :focus-visible, .is-open) .pillar__lid { animation: none; }
   .pillar:is(:hover, :focus-visible, .is-open) .pillar__mote { animation: none; }
+  .pillar:is(:hover, :focus-visible, .is-open) .pillar__doodle svg { animation: none; }
+  .pillar__doodle path { stroke-dashoffset: 0; }
 }
 
 /* --- Categories -----------------------------------------------------------

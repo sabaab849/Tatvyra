@@ -1171,3 +1171,70 @@
   .footer__bottom { flex-direction: column; align-items: flex-start; }
   .footer__legal { flex-direction: column; align-items: flex-start; }
 }
+
+/* --- Kinetic type ---------------------------------------------------------
+   A line of type that moves like a material — see components/KineticText.jsx.
+   The component writes four custom properties from its springs and this file
+   spends them: --kt-stretch loosens the tracking under the pointer, --kt-lag
+   gives the line weight as the page moves, --kt-pull leans each letter towards
+   the cursor, and --kt-wipe carries the ink mask across a line as it becomes
+   active. Nothing here sets a colour of its own: the ink layer takes Purple
+   unless the caller says otherwise. */
+
+.kt {
+  /* The mask's own edge is ragged, like ink running into paper rather than a
+     ruled sweep. It is stretched over the line at 130%, so the last letter is
+     clear of the edge by the time the wipe finishes. */
+  --kt-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath fill='white' d='M0 0h78c9 12-6 20 2 31 8 11-7 19 1 30 8 11-6 20 3 39H0z'/%3E%3C/svg%3E");
+
+  position: relative;
+  display: inline-block;
+  letter-spacing: calc(var(--kt-track, 0em) + var(--kt-stretch, 0) * 0.05em);
+  translate: 0 var(--kt-lag, 0px);
+}
+
+.kt__defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.kt__body { position: relative; display: block; }
+
+/* The filter is only referenced while the line is actually moving, so still
+   type is drawn as plain text. */
+.kt.is-liquid .kt__body { filter: var(--kt-filter); }
+
+.kt__layer { display: block; }
+
+.kt__l {
+  display: inline-block;
+  translate: 0 calc(var(--kt-pull, 0) * -0.12em);
+}
+
+/* The second copy of the line, revealed behind the ink mask. */
+.kt__ink {
+  position: absolute;
+  inset: 0;
+  color: var(--kt-ink, var(--tatvyra-purple));
+  -webkit-mask-image: var(--kt-mask);
+  mask-image: var(--kt-mask);
+  -webkit-mask-size: 130% 100%;
+  mask-size: 130% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  /* Offset in pixels, off the line's own measured width (--kt-w), rather than
+     in per cent: a percentage mask-position is resolved against the difference
+     between the image and the box, which runs backwards for an image wider
+     than its box. At 0 the mask's ragged edge sits just left of the first
+     letter; at 1 it is clear of the last. */
+  -webkit-mask-position: calc((var(--kt-wipe, 0) - 1) * 1.12 * var(--kt-w, 0px)) 0;
+  mask-position: calc((var(--kt-wipe, 0) - 1) * 1.12 * var(--kt-w, 0px)) 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kt { letter-spacing: var(--kt-track, 0em); translate: none; }
+  .kt__l { translate: none; }
+  .kt.is-liquid .kt__body { filter: none; }
+}

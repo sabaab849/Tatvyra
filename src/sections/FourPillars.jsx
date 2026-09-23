@@ -38,6 +38,12 @@ import { ArrowIcon } from '../components/Icons'
  * (mouth: 0). The tablet bottles were photographed sealed, so the drawn cap
  * hides the real one and a drawn neck takes its place (mouth: 1).
  *
+ * `doodles` are the hand-drawn marks that come on around the opening — the
+ * bee over the honey, the star over the nut butter. `w` is the mark's width as
+ * a percentage of the figure, `dx`/`dy` its offset from the centre of the jar's
+ * mouth, and both are chosen to keep clear of the lid's flight path, which goes
+ * up and slightly to the right.
+ *
  * `blob` is a clip path in objectBoundingBox units, so one path fits any card
  * width. Each is a different irregular shape, and each was checked against its
  * cap — a blob that pinches in too early clips the cap off.
@@ -55,6 +61,10 @@ const PILLARS = [
     crop: { zoom: 1.06, capTop: 7.8 },
     lid: { x: 0.258, y: 0.118, w: 0.502, h: 0.238 },
     cap: { round: 25, roundBot: 21, face: 50 },
+    doodles: [
+      { art: 'bang', w: 10, dx: -30, dy: -6, rot: -5, d: 260 },
+      { art: 'bee', w: 40, dx: 18, dy: -6, rot: -4, d: 700 },
+    ],
     mouth: 0,
     blob: 'M0.9650,0.3303C0.9986,0.4378 0.9615,0.5853 0.9125,0.6919C0.8636,0.7985 0.7711,0.9352 0.6714,0.9697C0.5718,1.0042 0.4189,0.9495 0.3144,0.8989C0.2099,0.8484 0.0845,0.7658 0.0444,0.6663C0.0043,0.5668 0.0233,0.3992 0.0738,0.3018C0.1244,0.2044 0.2412,0.1245 0.3474,0.0820C0.4536,0.0395 0.6080,0.0053 0.7109,0.0466C0.8138,0.0880 0.9314,0.2227 0.9650,0.3303Z',
   },
@@ -100,10 +110,70 @@ const PILLARS = [
     crop: { zoom: 1, capTop: 20.3 },
     lid: { x: 0.162, y: 0.203, w: 0.556, h: 0.205 },
     cap: { round: 35.9, roundBot: 30, face: 71.9 },
+    doodles: [
+      { art: 'star', w: 17, dx: -16, dy: -8, rot: -9, d: 260 },
+      { art: 'bang', w: 10, dx: 31, dy: -2, rot: 6, d: 620 },
+    ],
     mouth: 0,
     blob: 'M0.7485,0.1129C0.8443,0.1688 0.9592,0.2920 0.9788,0.3957C0.9983,0.4993 0.9281,0.6362 0.8660,0.7350C0.8040,0.8338 0.7103,0.9611 0.6065,0.9885C0.5027,1.0160 0.3336,0.9653 0.2434,0.8997C0.1531,0.8341 0.0926,0.7064 0.0652,0.5948C0.0379,0.4831 0.0228,0.3189 0.0793,0.2298C0.1358,0.1408 0.2926,0.0798 0.4042,0.0603C0.5157,0.0408 0.6528,0.0570 0.7485,0.1129Z',
   },
 ]
+
+/**
+ * Hand-drawn marks. Stroke-only or lightly filled, deliberately a little
+ * off-symmetric so they read as drawn rather than plotted. `len` is the path's
+ * measured length in its own viewBox units, which is what lets each stroke draw
+ * itself on: CSS dashes it by exactly that much and animates the offset to
+ * nought. (pathLength cannot do this job — its scaling is not applied to a
+ * dasharray that comes from a stylesheet.) A path flagged `trail` keeps a dash
+ * pattern of its own, so it fades in instead of drawing.
+ *
+ * `ink` is the line colour: Aubergine by default, which reads as the sketch
+ * line, or Burnt Orange for the two marks that are pure accent.
+ */
+const DOODLE_ART = {
+  bang: {
+    box: '0 0 20 46',
+    ink: 'orange',
+    paths: [
+      { d: 'M10.4 5.5c1.7 8.2 1.9 16.4.9 24.6', w: 4, len: 26 },
+      { d: 'M9.7 37.2c.15 1.4.25 2.2.3 2.4', w: 4.4, len: 4 },
+    ],
+  },
+  star: {
+    box: '0 0 36 36',
+    ink: 'orange',
+    paths: [
+      { d: 'M18.4 3.2c1.4 3.8 2.9 7.6 4.4 11.3 3.9.4 7.9.7 11.8 1-3.1 2.6-6.3 5.1-9.4 7.6 1 3.9 2.1 7.7 3.1 11.6-3.4-2.2-6.8-4.4-10.2-6.5-3.3 2.2-6.6 4.4-9.9 6.6.9-3.9 1.9-7.8 2.8-11.7-3.2-2.4-6.3-4.9-9.5-7.3 3.9-.4 7.9-.8 11.8-1.2 1.6-3.8 3.3-7.6 5.1-11.4Z', w: 3.1, len: 122 },
+    ],
+  },
+  /* Faces left, so the trail streams back to the right over the honey's own
+     blob rather than reaching across to the bottle beside it. */
+  bee: {
+    box: '0 0 104 50',
+    paths: [
+      { d: 'M43.00,22.00C45.97,14.43 37.33,5.42 28.84,3.88C28.28,12.48 34.94,23.05 43.00,22.00Z', w: 1.7, len: 53, fill: 'wing' },
+      { d: 'M44.00,20.50C50.57,14.46 46.55,0.93 39.04,-5.02C34.31,3.31 35.65,17.36 44.00,20.50Z', w: 1.7, len: 59, fill: 'wing' },
+      { d: 'M46.00,20.50C54.18,18.62 56.95,5.89 53.42,-2.33C45.72,2.24 40.49,14.17 46.00,20.50Z', w: 1.7, len: 55, fill: 'wing' },
+      { d: 'M47.50,22.00C54.19,23.71 60.54,15.58 60.70,8.33C53.46,8.74 45.56,15.37 47.50,22.00Z', w: 1.7, len: 44, fill: 'wing' },
+      { d: 'M24.4 20.2c-2.2-3.4-4.8-5.4-7-5-2.6.5-3.4 3.6-1.3 4.9 1.8 1.1 3.5-.4 2.8-2', w: 1.5, len: 22 },
+      { d: 'M53.31,26.67C55.06,32.03 50.51,38.31 43.15,40.70C35.80,43.09 28.43,40.68 26.69,35.33C24.94,29.97 29.49,23.69 36.85,21.30C44.20,18.91 51.57,21.32 53.31,26.67Z', w: 2, len: 78, fill: 'body' },
+      { d: 'M31.74,23.93C32.54,26.40 30.89,29.15 28.05,30.07C25.22,30.99 22.27,29.74 21.46,27.27C20.66,24.80 22.31,22.05 25.15,21.13C27.98,20.21 30.93,21.46 31.74,23.93Z', w: 1.8, len: 33, fill: 'ink' },
+      { d: 'M35 22.4c-2.3 5.6-2.6 11.2-.9 16.8', w: 2, len: 19 },
+      { d: 'M42.6 21.2c-2.4 5.8-2.6 11.6-.7 17.4', w: 2, len: 19 },
+      { d: 'M49.4 23.4c-2 5-2.1 10-.5 15', w: 1.8, len: 17 },
+      { d: 'M56.6 39.6c6.6 3.6 13.1 3.9 19.5.9 6.4-3 11.9-2.2 16.4 2.4 2.9 3 6 3.6 9.3 1.8', w: 1.8, len: 50, trail: true },
+    ],
+  },
+}
+
+/** One class per path, covering its dash behaviour and its fill. */
+function doodlePathClass(path) {
+  const names = []
+  if (path.trail) names.push('pillar__doodle-trail')
+  if (path.fill) names.push('pillar__doodle-fill', `pillar__doodle-fill--${path.fill}`)
+  return names.join(' ') || undefined
+}
 
 /**
  * Motes of light rising out of the open jar: few, small and slow, each on its
@@ -230,6 +300,38 @@ export default function FourPillars() {
                       />
                     ))}
                   </span>
+
+                  {pillar.doodles?.map((doodle, n) => (
+                    <span
+                      key={`${doodle.art}-${n}`}
+                      className={[
+                        'pillar__doodle',
+                        DOODLE_ART[doodle.art].ink === 'orange' && 'pillar__doodle--orange',
+                      ]
+                        .filter(Boolean)
+                        .join(' ')}
+                      aria-hidden="true"
+                      style={{
+                        '--dd-w': doodle.w,
+                        '--dd-x': doodle.dx,
+                        '--dd-y': doodle.dy,
+                        '--dd-rot': `${doodle.rot}deg`,
+                        '--dd-delay': `${doodle.d}ms`,
+                      }}
+                    >
+                      <svg viewBox={DOODLE_ART[doodle.art].box} fill="none">
+                        {DOODLE_ART[doodle.art].paths.map((path) => (
+                          <path
+                            key={path.d}
+                            className={doodlePathClass(path)}
+                            style={{ '--len': path.len }}
+                            strokeWidth={path.w}
+                            d={path.d}
+                          />
+                        ))}
+                      </svg>
+                    </span>
+                  ))}
 
                   <span className="pillar__lid" aria-hidden="true">
                     <span className="pillar__lid-face" />
