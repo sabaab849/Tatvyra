@@ -232,29 +232,28 @@
 
 /* --- Brand philosophy -----------------------------------------------------
    The brand statement as an editorial spread (BrandPhilosophy): the headline
-   on the left; the brand and its four clean-label standards on the right;
-   between them a ruled axis carrying a turning seal. It sits under soft
-   washes of Lilac and Purple with a paper grain — brand colours faded to
-   their own transparent, so no new hue is made. Type is the site's one sans
-   throughout, the headline set large and light, as the origin map's is.
+   set large on the left, the four clean-label standards placed as loose
+   typography on the right, and one lavender form between them — cut as a flat
+   object rather than blurred as a glow, on Warm White with a paper grain.
 
-   The scroll work reads two numbers the section is handed (useScrollScrub):
-   --p, its passage through the viewport, 0 → 1, and --ink, how far the
-   headline has been written in. Everything scrubbed is a calc() of those, so
-   nothing can fall out of step with the scroll, and a still page shows a
-   finished section. */
+   Brand colours only: the form is Lilac and Purple mixed into Warm White, the
+   headline Purple, and what is not in the jar is left in a muted Ink. Type is
+   the site's one sans throughout.
+
+   Choosing a standard quietens the others, brings up its line and sends the
+   form leaning its way. Nothing it does changes the height of anything: the
+   standards are placed on the canvas, and each line is always in place. */
 
 .philosophy {
-  --p: 0.5;
-  --ink: 1;
   /* Ink speckle with its alpha baked in, as the shelf's grain is. */
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' seed='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.16 0 0 0 0 0.13 0 0 0 0 0.09 0 0 0 -1.9 1.05'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E");
-  --hairline: color-mix(in srgb, var(--tatvyra-purple) 26%, transparent);
+  /* One long, organic easing for everything that moves here. */
+  --settle: 680ms cubic-bezier(0.22, 0.68, 0.24, 1);
 
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  padding-block: clamp(3rem, 2rem + 3.6vw, 5.5rem);
+  padding-block: clamp(2.75rem, 1.5rem + 3.1vw, 4.75rem) clamp(1.75rem, 1rem + 1.9vw, 2.75rem);
   border-top: 1px solid rgb(var(--ink-rgb) / 0.08);
   background: var(--tatvyra-warm-white);
 }
@@ -263,445 +262,264 @@
   content: '';
   position: absolute;
   inset: 0;
-  z-index: -1;
+  z-index: 3;
   pointer-events: none;
   background-image: var(--grain);
   background-size: 180px 180px;
   opacity: 0.22;
 }
 
-/* --- The washes -----------------------------------------------------------
-   A Lilac orb behind the axis, a paler disc over the right-hand page, a
-   Purple haze in the low corner and a Lilac arc across the high one. Each
-   drifts a little against the scroll. Faded out at the section's top and
-   bottom edges, so neither neighbour meets a cut-off haze. */
+/* --- The form -------------------------------------------------------------
+   Two flat shapes, the deeper one behind, sitting across the seam between the
+   headline and the standards. Its path is set as a CSS `d`, which animates,
+   with the same path on the attribute so a browser that cannot animate it
+   still draws the right shape. */
 
-.philosophy__wash {
+.philosophy__form {
   position: absolute;
-  inset: 0;
-  z-index: -2;
-  pointer-events: none;
-  /* Ink for the opaque stops: the mask reads alpha only. */
-  mask-image: linear-gradient(
-    to bottom,
-    transparent,
-    var(--tatvyra-ink) 10%,
-    var(--tatvyra-ink) 80%,
-    transparent
-  );
-}
-
-.philosophy__wash > span {
-  position: absolute;
+  z-index: -1;
+  top: 49%;
+  left: 45%;
+  width: clamp(18rem, 2rem + 21vw, 28rem);
   aspect-ratio: 1;
-  border-radius: 50%;
+  translate: -50% -50%;
+  pointer-events: none;
 }
 
-.philosophy__orb {
-  top: 52%;
-  left: 47%;
-  width: min(46vw, 42rem);
-  translate: -64% calc(-50% + (0.5 - var(--p)) * 8rem);
-  scale: calc(0.93 + var(--p) * 0.12);
-  background:
-    radial-gradient(
-      circle at 32% 74%,
-      color-mix(in srgb, var(--tatvyra-purple) 20%, transparent),
-      color-mix(in srgb, var(--tatvyra-purple) 0%, transparent) 60%
-    ),
-    radial-gradient(
-      circle at 40% 46%,
-      rgb(var(--lilac-rgb) / 0.66),
-      rgb(var(--lilac-rgb) / 0.34) 52%,
-      rgb(var(--lilac-rgb) / 0.12) 70.5%,
-      rgb(var(--lilac-rgb) / 0) 71%
-    );
+/* The lit object sits over the drawn form and fades in once its scene is
+   running, so nothing blinks while three.js loads. */
+.philosophy__canvas-gl {
+  position: absolute;
+  inset: -12%;
+  width: 124%;
+  height: 124%;
+  opacity: 0;
+  transition: opacity 900ms var(--ease-out);
 }
 
-.philosophy__moon {
-  top: 50%;
-  left: 60%;
-  width: min(52vw, 48rem);
-  translate: -50% calc(-50% + (var(--p) - 0.5) * 5rem);
-  background: radial-gradient(
-    circle at 36% 32%,
-    color-mix(in srgb, var(--tatvyra-warm-white) 50%, transparent),
-    color-mix(in srgb, var(--tatvyra-warm-white) 12%, transparent) 70%
-  );
-  box-shadow: inset 0 0 0 1px rgb(var(--lilac-rgb) / 0.22);
+.philosophy__canvas-gl.is-live { opacity: 1; }
+
+/* With the object lit, the drawn form gives way to it entirely: the two
+   are the same form, and the flat one’s edges read as stray geometry
+   around the lit body. */
+.philosophy__form:has(.is-live) svg { opacity: 0; transition: opacity 900ms var(--ease-out); }
+
+.philosophy__form svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
 }
 
-.philosophy__haze--low {
-  bottom: -32%;
-  left: -14%;
-  width: min(62vw, 54rem);
-  translate: calc((0.5 - var(--p)) * 3rem) calc((var(--p) - 0.5) * -4rem);
-  background: radial-gradient(
-    circle at 44% 50%,
-    color-mix(in srgb, var(--tatvyra-purple) 52%, var(--tatvyra-lilac)),
-    rgb(var(--lilac-rgb) / 0.45) 34%,
-    rgb(var(--lilac-rgb) / 0) 66%
-  );
-  opacity: 0.7;
+.philosophy__shape {
+  fill: color-mix(in srgb, var(--tatvyra-lilac) 46%, var(--tatvyra-warm-white));
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    d var(--settle),
+    translate var(--settle),
+    scale var(--settle);
 }
 
-.philosophy__haze--high {
-  top: -74%;
-  right: -28%;
-  width: min(80vw, 70rem);
-  translate: calc((var(--p) - 0.5) * 3rem) calc((0.5 - var(--p)) * 3rem);
-  background: radial-gradient(
-    circle at 50% 50%,
-    rgb(var(--lilac-rgb) / 0) 46%,
-    rgb(var(--lilac-rgb) / 0.42) 60%,
-    color-mix(in srgb, var(--tatvyra-purple) 16%, transparent) 66%,
-    rgb(var(--lilac-rgb) / 0) 71%
-  );
+/* Offset behind the form, as a second run of ink sits under the first. */
+.philosophy__shape--under {
+  fill: color-mix(in srgb, var(--tatvyra-purple) 16%, var(--tatvyra-warm-white));
 }
 
 /* --- The spread ----------------------------------------------------------- */
 
 .philosophy__inner {
+  position: relative;
+  z-index: 1;
   display: grid;
-  grid-template-columns: minmax(0, 1.08fr) auto minmax(0, 1fr);
-  column-gap: clamp(1.5rem, 0.4rem + 2.6vw, 3.75rem);
-}
-
-.philosophy__lead,
-.philosophy__body {
-  display: flex;
-  flex-direction: column;
+  grid-template-columns: minmax(0, 47fr) minmax(0, 53fr);
+  align-items: center;
+  gap: clamp(2rem, 1rem + 4vw, 5rem);
 }
 
 .philosophy__lead {
-  justify-content: space-between;
-  gap: var(--space-xl);
+  display: grid;
+  justify-items: start;
+  gap: clamp(1.5rem, 1rem + 1.6vw, 2.5rem);
 }
 
 .philosophy__eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 1.1rem;
   font-size: var(--step--2);
   font-weight: var(--type-label-weight);
-  letter-spacing: 0.24em;
+  letter-spacing: 0.32em;
   text-transform: uppercase;
   color: var(--tatvyra-purple);
 }
 
-.philosophy__eyebrow::after {
-  content: '';
-  flex: 0 1 clamp(3rem, 1rem + 5vw, 7rem);
-  min-width: 1.5rem;
-  height: 1px;
-  background: color-mix(in srgb, var(--tatvyra-purple) 50%, transparent);
-}
-
 .philosophy__title {
-  margin-top: clamp(1.5rem, 0.8rem + 2vw, 2.75rem);
-  font-size: clamp(2.75rem, 1rem + 5.2vw, 6.25rem);
-  font-weight: var(--weight-regular);
-  line-height: 0.98;
-  letter-spacing: -0.045em;
+  font-size: clamp(2.75rem, 1.1rem + 5.2vw, 5.25rem);
+  font-weight: var(--type-body-weight);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  color: var(--tatvyra-purple);
+  text-wrap: balance;
 }
 
 .philosophy__line { display: block; }
 
-/* What is in it is written in Purple, deepening to Aubergine on its second
-   line; what is not stays muted Ink (still 3:1 at this size). */
-.philosophy__line.is-said { --word-ink: var(--tatvyra-purple); }
-
-.philosophy__line.is-said + .philosophy__line.is-said {
-  --word-ink: color-mix(in srgb, var(--tatvyra-aubergine) 84%, var(--tatvyra-purple));
-}
-
+/* What is not in the jar, in a quieter tone and stepped in — the contrast is
+   drawn rather than italic, since the site carries one face. */
 .philosophy__line.is-unsaid {
-  --word-ink: color-mix(in srgb, var(--tatvyra-ink) 55%, var(--tatvyra-warm-white));
-}
-
-/* Each word takes its share of --ink in turn — 0 until the pen reaches it, 1
-   once it has passed, overlapping its neighbours by two words — and comes
-   up from a faint underdrawing into its ink and into focus. */
-.philosophy__word {
-  --w: clamp(0, (var(--ink) * (var(--words) + 2) - var(--i)) / 2, 1);
-  display: inline-block;
-  color: color-mix(
-    in srgb,
-    var(--word-ink) calc(var(--w) * 100%),
-    color-mix(in srgb, var(--tatvyra-ink) 12%, transparent)
-  );
-  translate: 0 calc((1 - var(--w)) * 0.06em);
-  filter: blur(calc((1 - var(--w)) * 1.5px));
-}
-
-.philosophy__signoff {
-  font-size: var(--step--1);
-  font-weight: var(--type-label-weight);
-  line-height: 1.95;
-  letter-spacing: 0.34em;
-  text-transform: uppercase;
-  color: var(--tatvyra-purple);
-}
-
-.philosophy__signoff span { display: block; }
-
-/* --- The axis --------------------------------------------------------------
-   A hairline drawn down the spine as the section rises, broken by the seal,
-   which turns with the scroll. */
-
-.philosophy__axis {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: clamp(8rem, 4.5rem + 5vw, 11rem);
-}
-
-.philosophy__rule {
-  flex: 1;
-  width: 1px;
-  transform-origin: top;
-  scale: 1 var(--draw);
-}
-
-.philosophy__rule:first-child {
-  --draw: clamp(0, (var(--p) - 0.1) / 0.2, 1);
-  background: linear-gradient(to bottom, transparent, var(--hairline) 35%);
-}
-
-.philosophy__rule:last-child {
-  --draw: clamp(0, (var(--p) - 0.24) / 0.2, 1);
-  background: linear-gradient(to bottom, var(--hairline) 65%, transparent);
-}
-
-.philosophy__seal {
-  position: relative;
-  display: grid;
-  flex: none;
-  place-items: center;
-  width: 100%;
-  aspect-ratio: 1;
-}
-
-.philosophy__seal--axis { margin-block: var(--space-s); }
-
-.philosophy__ring {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  rotate: calc(var(--p) * var(--turn, 270deg));
-}
-
-.philosophy__ring text {
-  font-size: 8.4px;
-  font-weight: var(--type-label-weight);
-  fill: var(--tatvyra-purple);
-}
-
-.philosophy__seal-dot {
-  width: 5px;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: var(--tatvyra-aubergine);
-}
-
-/* --- The standards ----------------------------------------------------------- */
-
-.philosophy__body {
-  gap: clamp(2rem, 1.2rem + 2vw, 3rem);
-  padding-top: clamp(2.25rem, 1.2rem + 2.8vw, 4rem);
+  margin-left: 0.14em;
+  font-size: 0.86em;
+  letter-spacing: -0.02em;
+  color: color-mix(in srgb, var(--tatvyra-purple) 62%, var(--tatvyra-ink));
+  opacity: 0.6;
 }
 
 .philosophy__text {
-  max-width: 46ch;
-  font-size: clamp(1rem, 0.92rem + 0.25vw, 1.125rem);
-  line-height: 1.7;
-  color: rgb(var(--ink-rgb) / 0.7);
+  max-width: 44ch;
+  font-size: var(--step-0);
+  line-height: 1.75;
+  color: var(--text-muted);
 }
 
+/* --- The standards --------------------------------------------------------
+   Placed on a canvas of their own, each at its own point, so the four read as
+   typography set on a page rather than four cards in a row. */
+
+.philosophy__canvas { position: relative; }
+
 .philosophy__claims {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(1.25rem, 0.8rem + 1vw, 1.75rem) clamp(1rem, 0.4rem + 1.6vw, 2rem);
-  max-width: 34rem;
+  position: relative;
+  aspect-ratio: 5 / 6;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .philosophy__claim {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  font-size: var(--step-0);
-  line-height: 1.35;
-  color: rgb(var(--ink-rgb) / 0.82);
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: 46%;
+  transition: opacity var(--settle), translate var(--settle);
 }
 
-/* A Lilac disc lit from the upper left, rimmed in Lilac. */
-.philosophy__chip {
+/* The standards that are not speaking stand back, but stay readable. */
+/* Quieter, but never below the contrast small type needs — they sit over
+   the lavender form on a phone. */
+.philosophy__claims:has(.is-active) .philosophy__claim:not(.is-active) { opacity: 0.72; }
+
+.philosophy__claim-button {
   display: grid;
-  flex: none;
-  place-items: center;
-  width: clamp(3.5rem, 2.8rem + 1.6vw, 4.25rem);
-  aspect-ratio: 1;
-  border-radius: 50%;
-  color: var(--tatvyra-aubergine);
-  background: radial-gradient(
-    circle at 34% 28%,
-    color-mix(in srgb, var(--tatvyra-lilac) 18%, var(--tatvyra-warm-white)),
-    color-mix(in srgb, var(--tatvyra-lilac) 50%, var(--tatvyra-warm-white))
-  );
-  box-shadow:
-    inset 0 0 0 1px rgb(var(--lilac-rgb) / 0.6),
-    0 12px 24px -16px color-mix(in srgb, var(--tatvyra-purple) 50%, transparent);
+  justify-items: start;
+  gap: 0.15rem;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  transition: translate var(--settle);
 }
 
-.philosophy__chip svg {
-  width: 44%;
-  height: auto;
-}
+.philosophy__claim-button:hover { translate: 0.35rem 0; }
+.philosophy__claim-button:focus-visible { outline: 2px solid var(--focus); outline-offset: 0.6rem; }
 
-/* Each icon draws its own strokes in as its standard arrives. Every stroke
-   in these icons is shorter than the dash, so one value covers them all. */
-.philosophy__chip :is(path, circle) {
-  stroke-dasharray: 70;
-  stroke-dashoffset: 70;
-  transition: stroke-dashoffset 1.5s var(--ease-out) calc(0.3s + var(--n) * 0.11s);
-}
-
-.philosophy__claim.is-visible .philosophy__chip :is(path, circle) { stroke-dashoffset: 0; }
-
-.philosophy__close {
-  display: flex;
-  align-items: center;
-  gap: var(--space-m);
-  margin-top: auto;
-}
-
-.philosophy__signoff--close {
-  flex: 1;
-  padding-top: var(--space-m);
-  border-top: 1px solid var(--hairline);
-}
-
-/* The FSSAI seal turns against the axis seal. Its outer rule is the seal's
-   edge; the mark at its heart holds still. */
-.philosophy__seal--fssai {
-  --turn: -200deg;
-  width: clamp(8.5rem, 6rem + 5vw, 11.25rem);
-}
-
-.philosophy__seal--fssai::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tatvyra-purple) 40%, transparent);
-}
-
-.philosophy__fssai {
-  width: 44%;
-  aspect-ratio: 600 / 291;
-  background: var(--tatvyra-aubergine);
-  -webkit-mask: url('/images/fssai-mark.webp') center / contain no-repeat;
-  mask: url('/images/fssai-mark.webp') center / contain no-repeat;
-}
-
-/* --- The rail -----------------------------------------------------------------
-   The brand line set upright in the right-hand margin, sliding gently
-   against the scroll. Only where the margin has room for it. */
-
-.philosophy__rail {
-  position: absolute;
-  top: 50%;
-  right: max(1rem, calc((100% - var(--page-max)) / 2 - 0.25rem));
-  display: none;
-  align-items: center;
-  gap: 1.25rem;
-  writing-mode: vertical-rl;
-  translate: 0 calc(-50% + (0.5 - var(--p)) * 5rem);
-  font-size: 11px;
+.philosophy__claim-index {
+  font-size: var(--step--2);
   font-weight: var(--type-label-weight);
-  letter-spacing: 0.4em;
+  letter-spacing: 0.3em;
+  color: color-mix(in srgb, var(--tatvyra-purple) 62%, var(--tatvyra-warm-white));
+  transition: color var(--settle);
+}
+
+.philosophy__claim-word {
+  font-size: clamp(2.25rem, 0.9rem + 4.2vw, 4.25rem);
+  font-weight: var(--type-body-weight);
+  line-height: 0.96;
+  letter-spacing: -0.04em;
+  color: var(--tatvyra-purple);
+  transition: color var(--settle);
+}
+
+.philosophy__claim-label {
+  font-size: var(--step--2);
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  white-space: nowrap;
-  color: color-mix(in srgb, var(--tatvyra-purple) 72%, transparent);
+  line-height: 1.5;
+  color: var(--text);
+  transition: color var(--settle);
 }
 
-.philosophy__rail::before,
-.philosophy__rail::after {
-  content: '';
-  width: 1px;
-  height: clamp(3rem, 7vh, 5.5rem);
-  background: var(--hairline);
+/* Orange is a mark here, never small text on this ground: the chosen
+   standard takes the accent ink instead. */
+.philosophy__claim.is-active .philosophy__claim-index { color: var(--accent-ink); }
+.philosophy__claim.is-active .philosophy__claim-label { color: var(--tatvyra-purple); }
+
+/* The line a standard says, always in place so nothing shifts when it speaks. */
+.philosophy__says {
+  margin-top: 0.55rem;
+  max-width: 22ch;
+  font-size: var(--step--1);
+  line-height: 1.5;
+  color: var(--text-muted);
+  opacity: 0;
+  translate: 0 -0.35rem;
+  transition: opacity var(--settle), translate var(--settle);
 }
 
-.philosophy__rail span { color: var(--tatvyra-purple); }
+.philosophy__claim.is-active .philosophy__says { opacity: 1; translate: 0 0; }
 
-@media (min-width: 80rem) {
-  .philosophy__rail { display: flex; }
-}
-
-/* --- Narrow ------------------------------------------------------------------
-   One column. The axis turns on its side between the headline and the
-   standards: a hairline either side of the seal, drawn from the left. */
+/* --- Narrow ---------------------------------------------------------------
+   One column: the headline, then the form with the standards set over it in
+   two staggered columns, so it still reads as a composition. */
 
 @media (max-width: 62rem) {
-  .philosophy__inner {
-    grid-template-columns: minmax(0, 1fr);
-    row-gap: var(--space-xl);
+  .philosophy__inner { grid-template-columns: minmax(0, 1fr); row-gap: clamp(2.5rem, 1rem + 6vw, 4rem); }
+
+  /* On a phone the form stops floating and takes a row of its own, between
+     the paragraph and the standards, so no type is set over it. */
+  .philosophy__form {
+    position: relative;
+    z-index: auto;
+    inset: auto;
+    width: min(20rem, 62vw);
+    margin-inline: auto;
+    translate: none;
   }
 
-  .philosophy__lead { gap: var(--space-l); }
-
-  .philosophy__axis {
-    flex-direction: row;
-    width: 100%;
+  .philosophy__claims {
+    position: static;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1.75rem, 1rem + 4vw, 3rem) var(--space-l);
+    aspect-ratio: auto;
   }
 
-  .philosophy__rule {
+  .philosophy__claim {
+    position: static;
     width: auto;
-    height: 1px;
-    transform-origin: left;
-    scale: var(--draw) 1;
   }
 
-  .philosophy__rule:first-child {
-    background: linear-gradient(to right, transparent, var(--hairline) 35%);
-  }
+  /* The second column sits lower, so the four do not line up as a grid. */
+  .philosophy__claim:nth-child(even) { margin-top: clamp(1.25rem, 4vw, 2.5rem); }
 
-  .philosophy__rule:last-child {
-    background: linear-gradient(to right, var(--hairline) 65%, transparent);
-  }
-
-  .philosophy__seal--axis {
-    width: 7.25rem;
-    margin: 0 var(--space-m);
-  }
-
-  .philosophy__body { padding-top: 0; }
-
-  .philosophy__orb {
-    top: 36%;
-    left: 50%;
-    width: 92vw;
-    translate: -50% calc(-50% + (0.5 - var(--p)) * 6rem);
-  }
-
-  .philosophy__moon {
-    top: 70%;
-    width: 110vw;
-  }
+  .philosophy__says { min-height: 3em; }
 }
 
 @media (max-width: 30rem) {
-  /* Tracked a little closer, so the eyebrow and its rule hold one line. */
-  .philosophy__eyebrow { letter-spacing: 0.16em; }
+  .philosophy__eyebrow { letter-spacing: 0.22em; }
+  .philosophy__claim-label { letter-spacing: 0.16em; }
 }
 
-@media (max-width: 26rem) {
-  .philosophy__claims { grid-template-columns: minmax(0, 1fr); }
+@media (prefers-reduced-motion: reduce) {
+  .philosophy__shape,
+  .philosophy__claim,
+  .philosophy__claim-button,
+  .philosophy__says,
+  .philosophy__claim-index,
+  .philosophy__claim-word,
+  .philosophy__claim-label { transition: none; }
 
-  .philosophy__seal--fssai { width: 7.5rem; }
+  .philosophy__claim-button:hover { translate: none; }
+  .philosophy__says { translate: none; }
 }
 
 /* --- Four pillars ---------------------------------------------------------
@@ -725,7 +543,7 @@
 .pillars {
   position: relative;
   isolation: isolate;
-  padding-block: clamp(2.75rem, 1.8rem + 3.4vw, 4.75rem) clamp(2.5rem, 1.6rem + 3vw, 4.25rem);
+  padding-block: clamp(2rem, 1.3rem + 2.2vw, 3.25rem) clamp(1.75rem, 1.1rem + 1.9vw, 2.75rem);
   background: var(--tatvyra-warm-white);
 }
 
@@ -815,8 +633,13 @@
   /* The blob's proportion, and the photograph's box within it. Frames are cut
      to this same aspect, so the photograph fills the blob exactly. */
   --blob-aspect: 0.82;
-  --stage-h: 100;
-  --stage-top: 0;
+
+  /* The photograph is cropped by its own zoom and hung by its cap, both set
+     per pillar: the jars read at about one size, and each one's base stays
+     clear of its blob's curve. The lid, the neck, the glow and the motes are
+     all measured off this stage, so they follow the crop. */
+  --stage-h: calc(100 * var(--zoom, 1));
+  --stage-top: calc(var(--cap-top) - var(--lid-y) * var(--stage-h));
   --stage-w: calc(var(--stage-h) * var(--src-aspect) / var(--blob-aspect));
   --stage-left: calc((100 - var(--stage-w)) / 2);
 
@@ -1066,7 +889,7 @@
    transform, which composes with the translate that lifted it. */
 @keyframes pillar-lid-float {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10%); }
+  50% { transform: translateY(-6%); }
 }
 
 /* --- Open: hover, keyboard focus, or scrolled to on a touch screen ---------
@@ -1097,8 +920,8 @@
 }
 
 .pillar:is(:hover, :focus-visible, .is-open) .pillar__lid {
-  translate: 5% -118%;
-  rotate: -7deg;
+  translate: 4% -112%;
+  rotate: -5deg;
   filter: drop-shadow(0 0.9em 0.8em rgb(var(--ink-rgb) / 0.28));
   animation: pillar-lid-float 5s ease-in-out var(--open-dur) infinite;
 }
@@ -1113,47 +936,55 @@
   translate: 0 0;
 }
 
-.pillar:is(:hover, :focus-visible, .is-open) .pillar__benefit {
-  color: var(--tatvyra-purple);
-}
-
 /* --- Caption -------------------------------------------------------------- */
 
+/* Led by its number and its one word, with the name carrying the line and
+   everything else quiet around it. */
 .pillar__caption {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.pillar__name {
-  font-size: clamp(1.15rem, 0.88rem + 0.85vw, 1.5rem);
-  font-weight: var(--type-product-weight);
-  line-height: 1.12;
-  letter-spacing: var(--product-tracking);
-  color: var(--tatvyra-purple);
+.pillar__meta {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  font-size: 11px;
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
 }
 
-.pillar__benefit {
-  font-size: clamp(1.05rem, 0.85rem + 0.7vw, 1.35rem);
-  font-weight: 400;
-  line-height: 1.18;
-  color: var(--accent-ink);
-  transition: color var(--dur) var(--ease);
+.pillar__index {
+  font-variant-numeric: tabular-nums;
+  color: rgb(var(--ink-rgb) / 0.38);
+}
+
+.pillar__benefit { color: var(--tatvyra-purple); }
+
+.pillar__name {
+  margin-top: 0.45rem;
+  font-size: clamp(1.05rem, 0.85rem + 0.6vw, 1.3rem);
+  font-weight: var(--type-product-weight);
+  line-height: 1.15;
+  letter-spacing: var(--product-tracking);
+  color: var(--text);
 }
 
 .pillar__note {
-  margin-top: 0.5rem;
+  margin-top: 0.35rem;
   max-width: 26ch;
   font-size: 13px;
-  line-height: 1.5;
-  color: rgb(var(--ink-rgb) / 0.7);
+  line-height: 1.55;
+  color: var(--text-muted);
 }
 
 .pillar__cta {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  margin-top: 0.6rem;
+  margin-top: 0.7rem;
   font-size: 13px;
   font-weight: var(--type-button-weight);
   letter-spacing: 0.02em;
@@ -1173,7 +1004,7 @@
   display: flex;
   align-items: center;
   gap: clamp(1rem, 0.5rem + 1.5vw, 2rem);
-  margin-top: clamp(2rem, 1.2rem + 2.6vw, 3.25rem);
+  margin-top: clamp(1.5rem, 1rem + 1.8vw, 2.5rem);
 }
 
 .pillars__outro::before,
@@ -1298,7 +1129,7 @@
    panels. */
 
 .categories {
-  padding-block: clamp(2.5rem, 1.6rem + 2.8vw, 4rem) clamp(2.75rem, 1.7rem + 3.2vw, 4.5rem);
+  padding-block: clamp(1.75rem, 1.1rem + 1.7vw, 2.5rem) clamp(2.25rem, 1.3rem + 2.3vw, 3.5rem);
   background: var(--tatvyra-warm-white);
 }
 
@@ -1460,6 +1291,8 @@
   --grain-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.4' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.06 0 0 0 0 0.02 0 0 0 0 0.1 0 0 0 -1.7 0.9'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)'/%3E%3C/svg%3E");
   --grain-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='h'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.4' numOctaves='3' seed='11' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 0.97 0 0 0 0 1 0 0 0 1.8 -0.9'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23h)'/%3E%3C/svg%3E");
 
+  /* Closer than the shared section rhythm, as on the rest of the homepage. */
+  padding-block: clamp(2rem, 1.2rem + 2vw, 3rem) clamp(2.25rem, 1.5rem + 2.6vw, 3.75rem);
   position: relative;
   isolation: isolate;
   overflow: hidden;

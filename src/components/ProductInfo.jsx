@@ -97,6 +97,22 @@ export default function ProductInfo({ product, category }) {
           )}
         </section>
 
+        {/* What this SKU's label says and does not say, where that copy was
+            supplied — the same pair layout as the on-pack marks below. */}
+        {product.claims && (
+          <section className="pinfo__block">
+            <h2 className="pinfo__block-title">Clean label</h2>
+            <dl className="pinfo__marks">
+              {product.claims.map((claim) => (
+                <div key={claim.label}>
+                  <dt>{claim.label}</dt>
+                  <dd>{claim.body}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+        )}
+
         {/* The range's own lines about its ingredient, where the range has
             them — the same block and list as the benefits above. */}
         {category.highlights && (

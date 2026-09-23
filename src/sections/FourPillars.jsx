@@ -13,6 +13,14 @@ import { ArrowIcon } from '../components/Icons'
  *
  *   lid  — the cap's box, measured off the cropped photograph in
  *          public/images/pillars/ as fractions of that image.
+ *   crop — zoom, and where the cap's top edge sits in the blob (capTop, in
+ *          blob percent). The four jars were shot at different distances, so
+ *          each is zoomed until it reads at about the same size as the others
+ *          — and since the photograph always has to cover the blob, the zoom
+ *          also sets how far down the jar falls. capTop then hangs the
+ *          photograph so each jar's base stays clear of the blob's own curve,
+ *          which cuts in at a different height on each shape. Everything else
+ *          on the blob is measured off this stage, so the lid follows the crop.
  *   cap  — how round the cap's ellipse reads, which differs per shot: the two
  *          jars were photographed from above (a deep ellipse, `round` ~34%) and
  *          the two tablet bottles almost side on (a shallow one, ~15-21%).
@@ -44,6 +52,7 @@ const PILLARS = [
     image: '/images/pillars/honey.webp',
     alt: 'An open jar of Tatvyra multifloral honey on a wooden table, honeycomb and chamomile flowers around it.',
     srcAspect: 0.82,
+    crop: { zoom: 1.06, capTop: 7.8 },
     lid: { x: 0.258, y: 0.118, w: 0.502, h: 0.238 },
     cap: { round: 25, roundBot: 21, face: 50 },
     mouth: 0,
@@ -58,6 +67,7 @@ const PILLARS = [
     image: '/images/pillars/moringa.webp',
     alt: 'A sealed amber bottle of Tatvyra moringa tablets on a wooden board, fresh moringa leaves and a bowl of green powder around it.',
     srcAspect: 0.8198,
+    crop: { zoom: 1, capTop: 16.79 },
     lid: { x: 0.2937, y: 0.1679, w: 0.4, h: 0.1444 },
     cap: { round: 19.6, roundBot: 14.8, face: 39.2 },
     mouth: 1,
@@ -72,6 +82,7 @@ const PILLARS = [
     image: '/images/pillars/spirulina.webp',
     alt: 'A sealed amber bottle of Tatvyra spirulina tablets on a wooden board beside loose tablets and a bowl of green powder.',
     srcAspect: 0.8203,
+    crop: { zoom: 1.08, capTop: 14.5 },
     lid: { x: 0.3087, y: 0.1974, w: 0.3624, h: 0.1016 },
     cap: { round: 18.4, roundBot: 10.5, face: 36.8 },
     mouth: 1,
@@ -86,6 +97,7 @@ const PILLARS = [
     image: '/images/pillars/nut-butter.webp',
     alt: 'An open jar of Tatvyra organic premium peanut butter on a green checked cloth, its purple lid, peanuts and buttered toast beside it.',
     srcAspect: 0.82,
+    crop: { zoom: 1, capTop: 20.3 },
     lid: { x: 0.162, y: 0.203, w: 0.556, h: 0.205 },
     cap: { round: 35.9, roundBot: 30, face: 71.9 },
     mouth: 0,
@@ -176,6 +188,8 @@ export default function FourPillars() {
                 className={`pillar pillar--${pillar.slug}`}
                 style={{
                   '--src-aspect': pillar.srcAspect,
+                  '--zoom': pillar.crop.zoom,
+                  '--cap-top': pillar.crop.capTop,
                   '--lid-x': pillar.lid.x,
                   '--lid-y': pillar.lid.y,
                   '--lid-w': pillar.lid.w,
@@ -223,8 +237,11 @@ export default function FourPillars() {
                 </span>
 
                 <span className="pillar__caption">
-                  <span className="pillar__name">{pillar.name}.</span>
-                  <span className="pillar__benefit">{pillar.benefit}.</span>
+                  <span className="pillar__meta">
+                    <span className="pillar__index">{String(index + 1).padStart(2, '0')}</span>
+                    <span className="pillar__benefit">{pillar.benefit}</span>
+                  </span>
+                  <span className="pillar__name">{pillar.name}</span>
                   <span className="pillar__note">{pillar.note}</span>
                   <span className="pillar__cta">
                     Explore

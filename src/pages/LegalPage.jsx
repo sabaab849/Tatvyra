@@ -25,8 +25,8 @@ function Block({ block }) {
       </p>
     )
   }
-  // Copy still to come from Tatvyra, set apart so it can't read as policy.
-  if (block.type === 'pending') return <p className="legal__pending">{block.text}</p>
+  // A heading within a policy — "Order Cancellation" under Refunds.
+  if (block.type === 'head') return <h3 className="legal__subhead">{block.text}</h3>
   return <p>{block.text}</p>
 }
 

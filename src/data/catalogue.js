@@ -40,6 +40,18 @@ export const CATEGORIES = [
     image: '/images/cat-moringa.webp',
     imageAlt: 'Finely milled Tatvyra moringa leaf powder in an open tin with a wooden scoop.',
     accent: 'lilac',
+    /* About the ingredient itself, as supplied for the moringa range, so it is
+       held once here and every moringa product page shows the same four lines,
+       beside that SKU's own catalogue benefits. */
+    highlights: {
+      title: 'Why moringa',
+      points: [
+        'Moringa has 100+ bioactive plant compounds in a single leaf',
+        'Rich in iron, calcium, and vitamin C for daily vitality',
+        'High in antioxidants (flavonoids, polyphenols)',
+        'Traditional Ayurvedic use for immunity and vitality',
+      ],
+    },
   },
   {
     slug: 'spirulina',
@@ -57,8 +69,8 @@ export const CATEGORIES = [
     highlights: {
       title: 'Why spirulina',
       points: [
-        'Among the most protein-dense whole foods available',
-        'Rich in B-vitamins for everyday energy metabolism',
+        'Spirulina is among the most protein-dense whole foods available',
+        'Rich in B vitamins for everyday energy metabolism',
         'High in phycocyanin and chlorophyll antioxidant pigments',
         'A genuine, vegan-friendly plant protein source',
       ],
@@ -101,6 +113,26 @@ export const PRODUCTS = [
       },
     ],
     descriptor: 'Peanuts, milled creamy. Nothing hydrogenated, nothing added.',
+    /* What the label says and does not say, as supplied for this SKU, set
+       verbatim. The product page lists them under the catalogue benefits. */
+    claims: [
+      {
+        label: 'Single Ingredient',
+        body: 'Often made with 100% roasted peanuts and no other additives.',
+      },
+      {
+        label: 'No Added Oils',
+        body: 'Contains zero palm oil or hydrogenated vegetable oils.',
+      },
+      {
+        label: 'Zero Refined Sugar',
+        body: 'Free from added sugars, corn syrup, or artificial sweeteners.',
+      },
+      {
+        label: 'No Preservatives',
+        body: 'Contains no chemical preservatives, stabilizers, or emulsifiers',
+      },
+    ],
     sizes: ['250g', '500g', '1000g'],
     benefits: [
       'High-protein (~25g/100g)',
@@ -217,6 +249,10 @@ export const PRODUCTS = [
       ],
     },
     descriptor: 'Cocoa and peanuts, in creamy or crunchy.',
+    // The supplied product description, verbatim. The product page sets it in
+    // place of the descriptor; cards and page metadata keep the short line.
+    description:
+      'An indulgent blend of roasted peanuts and rich chocolate, finished with a satisfying crunch. This spread brings together nutty depth and cocoa sweetness in one jar, perfect for spreading on toast, pairing with fruit, or enjoying as a treat on its own.',
     sizes: ['250g', '500g', '1000g'],
     benefits: [
       'Protein-rich indulgence',
@@ -413,6 +449,10 @@ export const PRODUCTS = [
       },
     ],
     descriptor: 'Moringa leaf, milled fine. Stir it into whatever you already drink.',
+    // The supplied product description, verbatim. The story below breaks the
+    // same copy into its stages; this is the paragraph as written.
+    description:
+      'Made from carefully dried and finely milled moringa leaves, this powder is a simple way to add a nutrient-dense boost to your daily routine. Stir it into smoothies, juices, soups, or baked goods for an earthy, slightly grassy flavour. Each batch is processed to preserve the natural color and nutrient profile of the leaf, giving you a versatile everyday superfood in one convenient jar.',
     sizes: ['100g pouch'],
     benefits: [
       '100+ Bioactive plant compounds',
@@ -683,6 +723,11 @@ export const PRODUCTS = [
       },
     ],
     descriptor: 'The leaf powder, encapsulated. No taste, no measuring.',
+    // The supplied product description, verbatim, as the tablets and the
+    // effervescent carry theirs. The journey band below draws its stages from
+    // this copy rather than repeating the paragraph.
+    description:
+      'For those who want the benefits of moringa without the taste, these easy-to-swallow capsules deliver pure, finely ground moringa leaf powder in a convenient daily dose. No mixing, no mess—just a quick addition to your morning or evening routine. Ideal for on-the-go lifestyles and travel.',
     /* The "from leaf to daily ritual" band on the product page. Every line is
        taken from the copy supplied for this SKU: no nutritional, medical,
        dosage, sourcing or process claim goes beyond it, and the drying stage
@@ -692,8 +737,6 @@ export const PRODUCTS = [
     journey: {
       eyebrow: 'Moringa Capsules',
       title: 'From leaf to daily ritual.',
-      intro:
-        'For those who want the benefits of moringa without the taste, these easy-to-swallow capsules deliver pure, finely ground moringa leaf powder in a convenient daily dose. No mixing, no mess—just a quick addition to your morning or evening routine. Ideal for on-the-go lifestyles and travel.',
       stages: [
         {
           title: 'Moringa leaves',

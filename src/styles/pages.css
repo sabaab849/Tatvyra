@@ -1248,16 +1248,18 @@
   color: var(--text);
 }
 
-/* Copy still to be supplied: quieter than the policy text and held off it by
-   a Lilac rule, so a placeholder is never mistaken for a commitment. */
-.legal__body .legal__pending {
-  margin-top: var(--space-m);
-  padding: 0.35rem 0 0.35rem var(--space-s);
-  border-left: 2px solid var(--tatvyra-lilac);
-  font-size: var(--step--1);
-  line-height: 1.6;
-  color: var(--text-muted);
+/* A heading inside a policy: smaller than the policy's own title, and set
+   closer to the paragraph it opens than to the one it follows. */
+.legal__subhead {
+  margin: var(--space-l) 0 0.4rem;
+  font-size: var(--step-0);
+  font-weight: var(--weight-bold);
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: var(--text);
 }
+
+.legal__section h2 + .legal__subhead { margin-top: var(--space-m); }
 
 .legal__section {
   margin-top: clamp(2.25rem, 1.6rem + 2vw, 3.25rem);
