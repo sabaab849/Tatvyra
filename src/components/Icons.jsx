@@ -143,3 +143,121 @@ export const LeafMarkIcon = (p) => (
     <path d="M7.7 17.5c2.6-3.7 5.7-6.6 9.3-8.7" />
   </svg>
 )
+
+/* No preservatives — a laboratory flask, a line of liquid in it. */
+export const FlaskIcon = (p) => (
+  <svg {...mark} {...p}>
+    <path d="M9.4 3.6h5.2" />
+    <path d="M10.3 3.6v5.3l-5 8.7a2 2 0 0 0 1.7 3h10a2 2 0 0 0 1.7-3l-5-8.7V3.6" />
+    <path d="M7.5 14.6h9" />
+  </svg>
+)
+
+/* No added sugar — a sugar cube. */
+export const SugarCubeIcon = (p) => (
+  <svg {...mark} {...p}>
+    <path d="M12 3.4 19.4 7.7v8.6L12 20.6l-7.4-4.3V7.7z" />
+    <path d="M4.6 7.7 12 12l7.4-4.3M12 12v8.6" />
+  </svg>
+)
+
+/* A certified process — a shield carrying a tick. */
+export const ShieldCheckIcon = (p) => (
+  <svg {...mark} {...p}>
+    <path d="M12 3 19 5.6v5.3c0 4.5-3 7.9-7 9.6-4-1.7-7-5.1-7-9.6V5.6z" />
+    <path d="m8.9 11.9 2.2 2.2 4.1-4.3" />
+  </svg>
+)
+
+/* Immunity — a shield carrying a cross. */
+export const ShieldCrossIcon = (p) => (
+  <svg {...mark} {...p}>
+    <path d="M12 3 19 5.6v5.3c0 4.5-3 7.9-7 9.6-4-1.7-7-5.1-7-9.6V5.6z" />
+    <path d="M12 8.6v6.2M8.9 11.7h6.2" />
+  </svg>
+)
+
+/* Topical use — a plaster, its pad dotted. */
+export const PlasterIcon = (p) => (
+  <svg {...mark} {...p}>
+    <g transform="rotate(-45 12 12)">
+      <rect x="2.2" y="8" width="19.6" height="8" rx="4" />
+      <path d="M9.2 8v8M14.8 8v8" />
+      <path d="M11 10.9h.01M13 10.9h.01M11 13.1h.01M13 13.1h.01" />
+    </g>
+  </svg>
+)
+
+/* Antioxidants — three bonded atoms. */
+export const MoleculeIcon = (p) => (
+  <svg {...mark} {...p}>
+    <circle cx="12" cy="4.9" r="2.1" />
+    <circle cx="5.2" cy="17.6" r="2.1" />
+    <circle cx="18.8" cy="17.6" r="2.1" />
+    <path d="M12 7v5M12 12l-5.1 4.2M12 12l5.1 4.2" />
+  </svg>
+)
+
+/* Cough and cold — a pair of lungs. */
+export const LungsIcon = (p) => (
+  <svg {...mark} {...p}>
+    <path d="M12 3.5v8.2M12 11.7c-.9 1.3-2 2-3.3 2.2M12 11.7c.9 1.3 2 2 3.3 2.2" />
+    <path d="M8.6 7.2c-2.7.2-5 4.5-5.1 9.2-.05 2.2 1 3.4 2.8 3.4 1.5 0 2.7-.6 3.5-1.6.5-.7.7-1.6.7-2.5V8.9c0-1-.8-1.8-1.9-1.7z" />
+    <path d="M15.4 7.2c2.7.2 5 4.5 5.1 9.2.05 2.2-1 3.4-2.8 3.4-1.5 0-2.7-.6-3.5-1.6-.5-.7-.7-1.6-.7-2.5V8.9c0-1 .8-1.8 1.9-1.7z" />
+  </svg>
+)
+
+/* Plant protein — a flexed arm, fist raised, the biceps creased. */
+export const ArmIcon = (p) => (
+  <svg {...mark} {...p}>
+    <path d="M6.2 20.4c-1.8 0-2.9-1.3-2.9-3.3 0-3.7 1.6-7.1 3.6-10.2l1.1-1.8c.4-.7 1.3-.9 2-.4l1 .7c.6.5.7 1.3.2 1.9l-1 1.2.3 3.2c1.3-1.2 3-1.7 4.8-1.3 1.9.4 3.3 1.8 3.9 3.5 1.2 0 2.1.9 2.1 2.1v1c0 1.9-1.5 3.4-3.4 3.4z" />
+    <path d="M12.4 14.3c1.4.1 2.5.9 3 2.1" />
+  </svg>
+)
+
+/* Healthy fats — a heart. */
+export const HeartIcon = (p) => (
+  <svg {...mark} {...p}>
+    <path d="M12 19.6c-4.6-3-7.6-6.1-7.6-9.5A4.1 4.1 0 0 1 8.5 6c1.5 0 2.8.8 3.5 2 .7-1.2 2-2 3.5-2a4.1 4.1 0 0 1 4.1 4.1c0 3.4-3 6.5-7.6 9.5z" />
+  </svg>
+)
+
+/* Liver — the organ in outline, with its lobe line. */
+export const LiverIcon = (p) => (
+  <svg {...mark} {...p}>
+    <path d="M3.4 8.6c0-2 1.6-3.3 3.6-3.2 3.6.2 7.3 1 10.8.3 2-.4 3.3 1 3.1 2.9-.3 3.6-2.8 6.1-6.2 7.8-2.3 1.2-4.2 2.3-5.7 3.9-.5.5-1.3.3-1.4-.4-.7-3.9-4.2-6.3-4.2-11.3z" />
+    <path d="M12.6 5.9c-.4 2.6-1.8 4.8-4 6.5" />
+  </svg>
+)
+
+/* --- Brand facts ----------------------------------------------------------
+   The homepage brand card's three rows: company, ranges, standards. */
+
+/* Company — an office tower beside a lower block, its windows lit. */
+export const BuildingIcon = (p) => (
+  <svg {...mark} {...p}>
+    <path d="M3.6 20.4h16.8" />
+    <path d="M9.4 20.4V4.6c0-.6.4-1 1-1h7c.6 0 1 .4 1 1v15.8" />
+    <path d="M9.4 9.4H6.4c-.6 0-1 .4-1 1v10" />
+    <path d="M12.2 7h.9M14.9 7h.9M12.2 10.4h.9M14.9 10.4h.9M12.2 13.8h.9M14.9 13.8h.9M7.2 13h.4M7.2 16.2h.4" />
+    <path d="M12.9 20.4v-2.9h2.3v2.9" />
+  </svg>
+)
+
+/* Ranges — two leaves from one stem. */
+export const LeavesIcon = (p) => (
+  <svg {...mark} {...p}>
+    <path d="M11.3 19.4C5.9 18.8 3.7 14.6 4.5 8.5c5.3.7 7.8 4.5 6.8 10.9z" />
+    <path d="M12.7 19.4c5.4-.6 7.6-4.8 6.8-10.9-5.3.7-7.8 4.5-6.8 10.9z" />
+    <path d="M11.3 19.4 7.3 12.2M12.7 19.4l4-7.2M12 19.4v1.8" />
+  </svg>
+)
+
+/* Standards — a seal on two ribbon tails. */
+export const SealIcon = (p) => (
+  <svg {...mark} {...p}>
+    <circle cx="12" cy="9.4" r="5.9" />
+    <circle cx="12" cy="9.4" r="3.2" />
+    <path d="M8.7 14.3 7.3 20.5l2.4-1 1.6 2 .9-5.4M15.3 14.3l1.4 6.2-2.4-1-1.6 2-.9-5.4" />
+  </svg>
+)

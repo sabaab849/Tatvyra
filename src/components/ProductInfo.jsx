@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import Button from './Button'
 import QuantitySelector from './QuantitySelector'
 import { MARKS } from '../data/brand'
-import { priceFor } from '../data/catalogue'
+import { benefitsFor, priceFor } from '../data/catalogue'
 import { formatINR } from '../lib/money'
 import { useCart } from '../context/useCart'
 
@@ -16,6 +16,7 @@ export default function ProductInfo({ product, category }) {
   const [size, setSize] = useState(product.sizes[0])
   const [quantity, setQuantity] = useState(1)
   const price = formatINR(priceFor(product, size))
+  const benefits = benefitsFor(product)
   const { addItem } = useCart()
 
   return (
@@ -26,7 +27,13 @@ export default function ProductInfo({ product, category }) {
       </p>
 
       <h1 className="display display--m pinfo__name">{product.name}</h1>
-      <p className="pinfo__descriptor">{product.descriptor}</p>
+      {/* A full product description, where one is supplied, takes the short
+          descriptor's place; cards keep the short line. */}
+      {product.description ? (
+        <p className="pinfo__descriptor pinfo__descriptor--long">{product.description}</p>
+      ) : (
+        <p className="pinfo__descriptor">{product.description ?? product.descriptor}</p>
+      )}
 
       <div className="pinfo__price">
         {price ? (
@@ -81,12 +88,27 @@ export default function ProductInfo({ product, category }) {
         <section className="pinfo__block">
           <h2 className="pinfo__block-title">Key benefits</h2>
           <ul className="pinfo__benefits">
-            {product.benefits.map((benefit) => (
+            {benefits.items.map((benefit) => (
               <li key={benefit}>{benefit}</li>
             ))}
           </ul>
-          <p className="pinfo__source">As stated in the Tatvyra product catalogue.</p>
+          {benefits.fromCatalogue && (
+            <p className="pinfo__source">As stated in the Tatvyra product catalogue.</p>
+          )}
         </section>
+
+        {/* The range's own lines about its ingredient, where the range has
+            them — the same block and list as the benefits above. */}
+        {category.highlights && (
+          <section className="pinfo__block">
+            <h2 className="pinfo__block-title">{category.highlights.title}</h2>
+            <ul className="pinfo__benefits">
+              {category.highlights.points.map((point) => (
+                <li key={point}>{point}</li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         <section className="pinfo__block">
           <h2 className="pinfo__block-title">On-pack marks</h2>

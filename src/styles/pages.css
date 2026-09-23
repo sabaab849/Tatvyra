@@ -133,6 +133,9 @@
 
 .pinfo__name { margin-top: var(--space-s); }
 .pinfo__descriptor { margin-top: var(--space-s); font-size: var(--step-1); color: var(--text-muted); max-width: 44ch; }
+/* A paragraph rather than a line: one step down, so it reads as copy and the
+   price keeps its place in the hierarchy. */
+.pinfo__descriptor--long { font-size: var(--step-0); line-height: 1.65; max-width: 50ch; }
 
 .pinfo__price { margin-top: var(--space-m); display: grid; gap: 0.25rem; }
 .pinfo__price-value { font-size: var(--step-2); font-weight: 700; }
@@ -219,131 +222,504 @@
 .pinfo__pending a { text-decoration: underline; text-underline-offset: 3px; }
 
 /* --- About ----------------------------------------------------------------
-   The hero opens on its own photograph — the moringa range — rather than the
-   homepage banner, which made the two pages read as the same page. Copy on the
-   left; the photograph framed on the right, over an offset Lilac block. */
+   The page opens on "The brand": an index label and headline with the
+   positioning line set against them, then the five ranges as tall photographs
+   beside the story, divided by a single hairline. Everything sits on Warm
+   White; Purple carries the headings and Burnt Orange appears only as the
+   darker accent ink, since flat Orange fails AA at label size. */
 
-.about-hero {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  padding-block: clamp(2.5rem, 1.25rem + 4.5vw, 5.5rem) clamp(3.5rem, 2rem + 5vw, 6.5rem);
+.about-brand {
+  /* The gap between the ranges and the story, and between the ranges' own
+     columns — shared with the name row, which lines up under both. */
+  --brand-gap: clamp(2rem, 1rem + 2.6vw, 3.5rem);
+  --range-gap: clamp(0.75rem, 0.4rem + 0.9vw, 1.25rem);
+  /* Photographs and story, and the head above them, on one pair of columns;
+     the story's text sits this far inside its hairline, and the intro above
+     it takes the same inset so the two share a left edge. */
+  --brand-columns: minmax(0, 2.65fr) minmax(0, 1fr);
+  --story-inset: clamp(1.5rem, 0.8rem + 2vw, 2.5rem);
+  /* The founder story follows on the same ground and opens on its own
+     hairline, so this closes short rather than adding a full section's air. */
+  padding-block: clamp(2.5rem, 1.5rem + 3.5vw, 5rem) clamp(2.5rem, 1.6rem + 2.5vw, 3.5rem);
   background: var(--surface);
 }
 
-/* A Lilac wash behind the photograph, so that side of the hero has depth
-   without a hard panel edge. It fades to transparent Lilac rather than to
-   transparent, which would grey the tint on its way out. */
-.about-hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: radial-gradient(
-    46% 72% at 80% 48%,
-    rgb(var(--lilac-rgb) / 0.42),
-    rgb(var(--lilac-rgb) / 0) 72%
-  );
-}
-
-.about-hero__inner {
+.about-brand__head {
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-  gap: clamp(2.5rem, 1rem + 5vw, 6rem);
+  grid-template-columns: var(--brand-columns);
+  align-items: end;
+  gap: var(--space-m) var(--brand-gap);
+}
+
+/* "01 / The brand", trailed by a short rule. */
+.about-brand__index {
+  display: flex;
   align-items: center;
-}
-
-.about-hero__copy { max-width: 34rem; }
-
-.about-hero__title {
-  margin-top: var(--space-s);
-  font-size: clamp(2.75rem, 1.5rem + 3.6vw, 4.75rem);
-  letter-spacing: -0.035em;
-  line-height: 0.95;
-}
-
-.about-hero__lede {
-  max-width: 38ch;
-  margin-top: var(--space-m);
-  font-family: var(--font-ui);
-  font-size: var(--step-1);
-  line-height: 1.55;
-  color: var(--text-muted);
-}
-
-.about-hero__facts {
-  display: flex;
-  flex-wrap: wrap;
-  row-gap: var(--space-s);
-  margin-top: var(--space-l);
-}
-
-/* Value over label — the numeral is what the eye lands on. column-reverse
-   keeps <dt> first in the markup, where it belongs. */
-.about-hero__facts > div {
-  display: flex;
-  flex-direction: column-reverse;
-  gap: 0.3rem;
-  padding-inline: clamp(1rem, 0.5rem + 1.4vw, 1.75rem);
-  border-left: 1px solid rgb(var(--ink-rgb) / 0.16);
-}
-
-.about-hero__facts > div:first-child { padding-left: 0; border-left: 0; }
-
-.about-hero__facts dd {
-  font-family: var(--font-serif);
-  font-size: var(--step-3);
-  line-height: 1;
-  color: var(--tatvyra-purple);
-}
-
-.about-hero__facts dt {
-  font-family: var(--font-ui);
+  /* The label holds its line; the rule after it is what gives way. */
+  white-space: nowrap;
   font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--text-muted);
 }
 
-/* The photograph keeps its own 4:5, so nothing is cropped away. The Lilac
-   block behind it is offset down and towards the copy — the side with room;
-   pushed right it would run into the gutter. */
-.about-hero__media {
+.about-brand__index::after {
+  content: '';
+  flex: 0 1 17rem;
+  margin-left: var(--space-m);
+  height: 1px;
+  background: rgb(var(--ink-rgb) / 0.18);
+}
+
+.about-brand__index-no { color: var(--tatvyra-purple); }
+
+.about-brand__title {
+  margin-top: clamp(1rem, 0.6rem + 1.2vw, 1.75rem);
+  font-size: clamp(2.375rem, 1.35rem + 3.3vw, 4rem);
+  line-height: 1;
+}
+
+/* Inset as the story column is, its hairline included (here left clear), so
+   the intro starts on the same line as "The story" below it. */
+.about-brand__intro {
+  padding-left: var(--story-inset);
+  border-left: 1px solid transparent;
+  font-size: var(--step-0);
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.about-brand__body {
+  display: grid;
+  grid-template-columns: var(--brand-columns);
+  gap: var(--brand-gap);
+  margin-top: clamp(2rem, 1.2rem + 2.4vw, 3rem);
+}
+
+.about-brand__ranges {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  column-gap: var(--range-gap);
+  /* The story column beside this is taller, and stretches the grid to match;
+     without this the three shared rows would share out that extra height. */
+  align-content: start;
+}
+
+/* Each column spans three shared rows — photograph, name, list — so when a
+   name wraps ("ACV / Effervescent" does in narrow columns) the row grows for
+   every column and the lists below still start on one line. */
+.about-brand__range {
+  display: grid;
+  grid-row: span 3;
+  grid-template-rows: subgrid;
+  row-gap: 0;
+}
+
+/* Tall frames at the photographs' own proportion, so nothing is cropped. */
+.about-brand__frame {
+  overflow: hidden;
+  aspect-ratio: 190 / 431;
+  border-radius: var(--radius-card);
+  background: var(--surface-sunken);
+}
+
+.about-brand__frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.about-brand__name {
+  margin-top: var(--space-m);
+  font-size: 11px;
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.about-brand__name--purple { color: var(--tatvyra-purple); }
+.about-brand__name--accent { color: var(--accent-ink); }
+
+.about-brand__name a { transition: opacity var(--dur-fast) var(--ease); }
+.about-brand__name a:hover { opacity: 0.7; }
+
+/* The short hairline under each range name. It opens the list rather than
+   closing the name, so it sits on the shared row line in every column. */
+.about-brand__products::before {
+  content: '';
+  display: block;
+  width: min(100%, 6rem);
+  height: 1px;
+  margin-bottom: var(--space-s);
+  background: rgb(var(--ink-rgb) / 0.18);
+}
+
+.about-brand__products {
+  margin-top: 0.75rem;
+  font-size: var(--step--1);
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.about-brand__products li + li { margin-top: 0.3rem; }
+
+.about-brand__products a { transition: color var(--dur-fast) var(--ease); }
+.about-brand__products a:hover { color: var(--tatvyra-purple); }
+
+/* The story, set off from the photographs by one vertical hairline. */
+.about-brand__story {
+  padding-left: var(--story-inset);
+  border-left: 1px solid rgb(var(--ink-rgb) / 0.14);
+  font-size: var(--step--1);
+  line-height: 1.65;
+  color: var(--text-muted);
+}
+
+.about-brand__kicker,
+.about-brand__note {
+  font-size: 12px;
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.about-brand__kicker { color: var(--text-muted); }
+.about-brand__note { color: var(--text); }
+
+.about-brand__story-title {
+  margin-top: var(--space-s);
+  font-size: clamp(1.375rem, 1.1rem + 0.8vw, 1.75rem);
+  font-weight: var(--type-heading-weight);
+  line-height: 1.15;
+  letter-spacing: var(--heading-tracking);
+  color: var(--tatvyra-purple);
+}
+
+.about-brand__story p:not(.about-brand__kicker):not(.about-brand__note) { margin-top: var(--space-s); }
+
+/* "The name", as a ruled row under the photographs. The rule runs the full
+   width; the right padding is the story column and its gap, so the row's own
+   five columns fall exactly under the five photographs: the label under the
+   first, each paragraph across two. */
+.about-brand__naming {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  column-gap: var(--range-gap);
+  align-items: baseline;
+  margin-top: clamp(2rem, 1.2rem + 2.4vw, 3rem);
+  padding-top: clamp(1.5rem, 1rem + 1.5vw, 2.25rem);
+  padding-right: calc((100% - var(--brand-gap)) / 3.65 + var(--brand-gap));
+  border-top: 1px solid rgb(var(--ink-rgb) / 0.14);
+  font-size: var(--step--1);
+  line-height: 1.65;
+  color: var(--text-muted);
+}
+
+.about-brand__naming p:nth-child(2) { grid-column: 2 / span 2; }
+.about-brand__naming p:nth-child(3) { grid-column: 4 / span 2; }
+
+/* Below this the story no longer fits beside the photographs, so it drops
+   under them and the vertical hairline turns horizontal. */
+@media (max-width: 75rem) {
+  /* No story column to line up with any more: the intro keeps a column of
+     its own beside the headline, at a reading measure. */
+  .about-brand__head {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 22rem);
+    column-gap: clamp(2rem, 1rem + 4vw, 5rem);
+  }
+
+  .about-brand__intro {
+    max-width: 34ch;
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .about-brand__body { grid-template-columns: minmax(0, 1fr); }
+  .about-brand__story {
+    max-width: 44rem;
+    padding-left: 0;
+    padding-top: var(--space-l);
+    border-left: 0;
+    border-top: 1px solid rgb(var(--ink-rgb) / 0.14);
+  }
+
+  /* Under the story now, at the story's measure: the label over the two
+     paragraphs side by side. */
+  .about-brand__naming {
+    max-width: 44rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--space-l);
+    row-gap: var(--space-s);
+    padding-right: 0;
+  }
+
+  .about-brand__naming .about-brand__note { grid-column: 1 / -1; }
+  .about-brand__naming p:nth-child(2),
+  .about-brand__naming p:nth-child(3) { grid-column: auto; }
+}
+
+@media (max-width: 40rem) {
+  .about-brand__naming { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 62rem) {
+  .about-brand__head { grid-template-columns: minmax(0, 1fr); align-items: start; }
+  .about-brand__intro { max-width: 46ch; }
+}
+
+/* Too narrow for five columns: the ranges become a strip that scrolls
+   sideways inside itself, bleeding to the screen edge. */
+@media (max-width: 52rem) {
+  .about-brand__ranges {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: min(12.5rem, 46vw);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    margin-inline: calc(var(--gutter) * -1);
+    padding-inline: var(--gutter);
+    padding-bottom: var(--space-s);
+  }
+
+  .about-brand__range { scroll-snap-align: start; }
+}
+
+/* --- Founder story ---------------------------------------------------------
+   Typography carries the whole section: no photograph, no cards, no icons.
+   An asymmetric grid — the headline in the narrower left column, the story set
+   wider on the right — opens under a single hairline. Charcoal carries the
+   type; Purple appears only in the eyebrow and the quotation marks below. */
+
+.about-founder {
+  /* Short at the top: it follows "The brand" on the same ground, and its own
+     hairline marks the break. */
+  padding-block: clamp(1.5rem, 1rem + 2vw, 2.5rem) clamp(2.5rem, 1.6rem + 2.8vw, 4rem);
+  background: var(--surface);
+}
+
+/* One grid for the story and the quotation, so the quote always lands on the
+   story column's left edge. */
+.about-founder__grid,
+.about-philosophy__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  column-gap: clamp(2rem, 0.5rem + 6vw, 7.5rem);
+  border-top: 1px solid rgb(var(--ink-rgb) / 0.14);
+}
+
+.about-founder__grid { padding-top: clamp(2rem, 1.3rem + 2.2vw, 3.25rem); }
+
+.about-founder__eyebrow {
+  font-size: 12px;
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--tatvyra-purple);
+}
+
+.about-founder__title {
+  margin-top: var(--space-m);
+  font-size: clamp(2rem, 1.2rem + 2.4vw, 3.25rem);
+  font-weight: var(--type-heading-weight);
+  line-height: 1.08;
+  letter-spacing: var(--heading-tracking);
+  color: var(--text);
+}
+
+.about-founder__body {
+  max-width: 38rem;
+  font-size: var(--step-1);
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+
+.about-founder__body p + p { margin-top: var(--space-m); }
+
+/* The sign-off, under a short rule rather than a full-width one. Scoped to
+   the body so it outranks the paragraph spacing above. */
+.about-founder__body .about-founder__sign {
+  display: grid;
+  gap: 0.4rem;
+  margin-top: clamp(2rem, 1.4rem + 1.8vw, 3rem);
+}
+
+.about-founder__sign::before {
+  content: '';
+  width: 2.5rem;
+  height: 1px;
+  margin-bottom: var(--space-m);
+  background: rgb(var(--ink-rgb) / 0.3);
+}
+
+.about-founder__name {
+  font-size: 13px;
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.about-founder__role {
+  font-size: var(--step--1);
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+/* --- Founder's philosophy ---------------------------------------------------
+   The quote on its own ground: the leaf mark large and faint off the left
+   edge, a thin Purple arc and a Purple wash in the far corner, and the brand
+   line set small against a rule at the right. The approach statement that
+   follows is passed in as children and sits on the same ground, so the mark
+   and the wash run on behind it and fade out at its foot. */
+
+.about-philosophy {
   position: relative;
   isolation: isolate;
-  justify-self: end;
-  width: min(100%, 30rem);
+  overflow: clip;
 }
 
-.about-hero__media::before {
-  --offset: clamp(0.75rem, 0.35rem + 1.4vw, 1.5rem);
+.about-philosophy__art {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  /* The wash is strongest near the foot, so the whole layer fades out over
+     the last stretch rather than meeting the next section as an edge. Ink
+     for the opaque stop, as in the trust marquee: the mask reads alpha only. */
+  mask-image: linear-gradient(to bottom, var(--tatvyra-ink) calc(100% - 3rem), transparent);
+}
+
+.about-philosophy__leaf {
+  --leaf-w: clamp(19rem, 38vw, 36rem);
+  position: absolute;
+  top: 0.75rem;
+  left: calc(var(--leaf-w) * -0.14);
+  width: var(--leaf-w);
+  height: auto;
+  fill: color-mix(in srgb, var(--tatvyra-purple) 6%, transparent);
+}
+
+/* The arc and the wash share one scale, so they keep their relationship as
+   the viewport changes. Both sit mostly off the page. */
+.about-philosophy__art::before,
+.about-philosophy__art::after {
+  --arc: clamp(20rem, 43vw, 40rem);
   content: '';
   position: absolute;
-  inset: var(--offset) var(--offset) calc(var(--offset) * -1) calc(var(--offset) * -1);
-  z-index: -1;
-  border-radius: var(--radius-card);
-  background: color-mix(in srgb, var(--tatvyra-lilac) 60%, var(--tatvyra-warm-white));
+  aspect-ratio: 1;
+  border-radius: 50%;
 }
 
-.about-hero__photo {
+.about-philosophy__art::before {
+  top: calc(var(--arc) * 0.23);
+  right: calc(var(--arc) * -0.57);
+  width: var(--arc);
+  border: 1px solid color-mix(in srgb, var(--tatvyra-purple) 45%, transparent);
+}
+
+.about-philosophy__art::after {
+  top: calc(var(--arc) * 0.27);
+  right: calc(var(--arc) * -0.47);
+  width: calc(var(--arc) * 0.87);
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--tatvyra-purple) 20%, transparent),
+    color-mix(in srgb, var(--tatvyra-purple) 15%, transparent) 50%,
+    transparent
+  );
+}
+
+.about-philosophy__section { padding-bottom: 1.25rem; }
+
+.about-philosophy__inner {
+  padding-top: clamp(1.5rem, 1rem + 1.2vw, 2.125rem);
+  border-top-color: var(--line-strong);
+}
+
+/* The quote and the brand line share the story column: the quote sits low
+   on its left edge, the brand line high against the right. */
+.about-philosophy__row {
+  grid-column: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-l);
+}
+
+.about-philosophy__quote {
+  margin: clamp(1.75rem, -0.25rem + 5vw, 4.5rem) 0 0;
+  font-size: clamp(1.875rem, 1.1rem + 2.6vw, 3.5rem);
+  font-weight: var(--type-body-weight);
+  line-height: 1.08;
+  letter-spacing: var(--display-tracking);
+  color: var(--text);
+  text-wrap: balance;
+}
+
+.about-philosophy__mark { color: var(--tatvyra-purple); }
+
+/* The opening mark hangs into the margin, so the words themselves start on the
+   story column's edge. */
+.about-philosophy__mark:first-child { margin-left: -0.35em; }
+
+/* min-content sets the measure to the longest word, so the line breaks where
+   the words do, one or two to a line. */
+.about-philosophy__tagline {
+  flex: none;
+  display: grid;
+  width: min-content;
+  padding: 0.25rem 0 0.125rem 1.0625rem;
+  border-left: 1px solid var(--line-strong);
+  font-size: 10px;
+  line-height: 1.7;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.about-philosophy__brand::before {
+  content: '';
   display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 4 / 5;
-  object-fit: cover;
-  border-radius: var(--radius-card);
-  box-shadow: var(--shadow-lift);
+  width: 1.875rem;
+  height: 1px;
+  margin-block: 0.6875rem 0.875rem;
+  background: var(--line-strong);
+}
+
+@media (max-width: 62rem) {
+  .about-founder__grid,
+  .about-philosophy__inner { grid-template-columns: minmax(0, 1fr); }
+
+  .about-founder__body { max-width: 42rem; margin-top: var(--space-l); }
+
+  .about-philosophy__row {
+    grid-column: auto;
+    flex-direction: column;
+  }
+
+  /* In one column the quote and the brand line fill the left, so the leaf mark
+     crosses to the free space on the right and bleeds off that edge instead.
+     The arc and the wash would land on the same spot, so they are dropped. */
+  .about-philosophy__leaf {
+    --leaf-w: 19rem;
+    top: 6.5rem;
+    left: auto;
+    right: calc(var(--leaf-w) * -0.26);
+  }
+
+  .about-philosophy__art::before,
+  .about-philosophy__art::after { display: none; }
 }
 
 /* --- Shared About type ------------------------------------------------------
-   The same voice as the refreshed homepage sections: Poppins eyebrows,
-   Fraunces section headings, all in Purple. */
+   The same voice as the refreshed homepage sections: label-weight eyebrows
+   and heading-weight section titles, all in Purple. */
 
 .about-eyebrow {
-  font-family: var(--font-ui);
   font-size: 13px;
-  font-weight: 600;
+  font-weight: var(--type-label-weight);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--tatvyra-purple);
@@ -353,11 +729,10 @@
 
 .about-heading {
   margin-top: 0.75rem;
-  font-family: var(--font-serif);
   font-size: clamp(2rem, 1.2rem + 2.6vw, 3rem);
-  font-weight: 400;
+  font-weight: var(--type-heading-weight);
   line-height: 1.08;
-  letter-spacing: -0.01em;
+  letter-spacing: var(--heading-tracking);
   color: var(--tatvyra-purple);
 }
 
@@ -365,9 +740,10 @@
 
 /* --- Approach: one centred statement ---------------------------------------- */
 
+/* No ground of its own: on the About page it is passed into AboutPhilosophy
+   and sits on that section's ground, under the leaf mark and the wash. */
 .about-intro {
-  padding-block: clamp(3.5rem, 2rem + 5vw, 6.5rem) clamp(0.5rem, 0.2rem + 1vw, 1.5rem);
-  background: var(--surface);
+  padding-block: clamp(2.5rem, 1.6rem + 2.8vw, 4rem) clamp(0.5rem, 0.2rem + 1vw, 1.5rem);
 }
 
 .about-intro__inner {
@@ -389,7 +765,6 @@
 
 .about-intro__statement {
   margin-top: var(--space-s);
-  font-family: var(--font-serif);
   font-size: clamp(1.6rem, 1rem + 2.1vw, 2.6rem);
   font-weight: 400;
   line-height: 1.22;
@@ -464,9 +839,8 @@
 
 .about-story__facts dt {
   padding-top: 0.15em;
-  font-family: var(--font-ui);
   font-size: 12px;
-  font-weight: 600;
+  font-weight: var(--type-label-weight);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--text-muted);
@@ -499,7 +873,6 @@
 
 .about-head__intro {
   max-width: 25rem;
-  font-family: var(--font-ui);
   font-size: 16px;
   line-height: 1.55;
   color: var(--text-muted);
@@ -545,7 +918,6 @@
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  font-family: var(--font-ui);
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.12em;
@@ -560,9 +932,9 @@
 }
 
 .about-range__name {
-  font-family: var(--font-serif);
   font-size: clamp(1.35rem, 1rem + 1vw, 1.75rem);
-  font-weight: 600;
+  font-weight: var(--type-product-weight);
+  letter-spacing: var(--product-tracking);
   line-height: 1.1;
   color: var(--tatvyra-purple);
 }
@@ -581,9 +953,8 @@
   align-items: center;
   gap: 0.4rem;
   margin-top: 0.4rem;
-  font-family: var(--font-ui);
   font-size: 13px;
-  font-weight: 600;
+  font-weight: var(--type-button-weight);
   letter-spacing: 0.02em;
   color: var(--tatvyra-purple);
 }
@@ -635,7 +1006,6 @@
   display: flex;
   align-items: center;
   gap: 0.7rem;
-  font-family: var(--font-ui);
   font-size: var(--step-0);
   font-weight: 600;
   color: var(--text-on-dark);
@@ -660,17 +1030,6 @@
 /* --- Responsive -------------------------------------------------------------- */
 
 @media (max-width: 62rem) {
-  /* Stacked: headline, then the photograph, left-aligned under it. */
-  .about-hero__inner { grid-template-columns: minmax(0, 1fr); }
-  .about-hero__media { justify-self: start; width: min(100%, 28rem); }
-  .about-hero::before {
-    background: radial-gradient(
-      70% 42% at 30% 80%,
-      rgb(var(--lilac-rgb) / 0.4),
-      rgb(var(--lilac-rgb) / 0) 72%
-    );
-  }
-
   .about-story__inner { grid-template-columns: minmax(0, 1fr); }
   .about-story__media { max-width: 34rem; }
 
@@ -683,8 +1042,6 @@
 /* Phones: each range sets its photograph beside its words, so the four
    ranges read as a list rather than four screens of photography. */
 @media (max-width: 34rem) {
-  .about-hero__facts dd { font-size: var(--step-2); }
-
   .about-story__facts > div { grid-template-columns: minmax(0, 1fr); gap: 0.15rem; }
 
   .about-ranges__grid { grid-template-columns: minmax(0, 1fr); }
@@ -711,7 +1068,6 @@
 }
 
 .contact__subtitle {
-  font-family: var(--font-display);
   font-size: var(--step-2);
   font-weight: 700;
   letter-spacing: -0.012em;
@@ -782,6 +1138,176 @@
 .info__body p { color: var(--text-muted); }
 .info__body p a { color: var(--tatvyra-purple); text-decoration: underline; text-underline-offset: 3px; }
 
+/* --- Legal pages -------------------------------------------------------------
+   Long-form policy text: a sticky contents column beside one reading column
+   held to a comfortable measure. Body copy is full Ink rather than the muted
+   tone used for marketing copy — this is text people read closely. */
+
+.legal__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+  gap: clamp(2rem, 1rem + 4vw, 5.5rem);
+  align-items: start;
+  padding-block: var(--section-y-tight) var(--section-y);
+}
+
+.legal__aside {
+  position: sticky;
+  top: calc(var(--header-h-compact) + var(--space-l));
+  display: grid;
+  gap: var(--space-l);
+}
+
+.legal__aside-title {
+  font-size: var(--step--2);
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--tatvyra-purple);
+}
+
+/* The rail is one hairline; the hovered entry takes it over in Purple. */
+.legal__toc ol {
+  display: grid;
+  margin: var(--space-s) 0 0;
+  padding: 0;
+  list-style: none;
+  border-left: 1px solid var(--line);
+}
+
+.legal__toc a {
+  display: block;
+  margin-left: -1px;
+  padding: 0.45rem 0 0.45rem var(--space-s);
+  border-left: 1px solid transparent;
+  font-size: var(--step--1);
+  line-height: 1.4;
+  color: var(--text-muted);
+  transition: color var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
+}
+
+.legal__toc a:hover,
+.legal__toc a:focus-visible {
+  color: var(--tatvyra-purple);
+  border-left-color: var(--tatvyra-purple);
+}
+
+.legal__contact {
+  padding-top: var(--space-l);
+  border-top: 1px solid var(--line);
+}
+
+.legal__contact ul {
+  display: grid;
+  gap: 0.35rem;
+  margin: var(--space-s) 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--step--1);
+}
+
+.legal__contact a {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: var(--line-strong);
+  text-underline-offset: 3px;
+  transition: color var(--dur-fast) var(--ease);
+}
+
+.legal__contact a:hover { color: var(--tatvyra-purple); }
+
+.legal__body { max-width: 68ch; }
+
+.legal__body p,
+.legal__list li {
+  font-size: var(--step-0);
+  line-height: 1.75;
+  color: var(--text);
+}
+
+.legal__body p + p { margin-top: var(--space-s); }
+
+/* The opening paragraph reads as the lead-in to everything below it. */
+.legal__intro > p:first-child {
+  font-size: var(--step-1);
+  line-height: 1.65;
+}
+
+.legal__body .legal__note {
+  margin-top: var(--space-l);
+  padding: var(--space-m);
+  background: var(--surface-sunken);
+  border-radius: var(--radius-image);
+  font-size: var(--step--1);
+  line-height: 1.65;
+  color: var(--text-muted);
+}
+
+.legal__note-label {
+  font-weight: var(--weight-bold);
+  color: var(--text);
+}
+
+/* Copy still to be supplied: quieter than the policy text and held off it by
+   a Lilac rule, so a placeholder is never mistaken for a commitment. */
+.legal__body .legal__pending {
+  margin-top: var(--space-m);
+  padding: 0.35rem 0 0.35rem var(--space-s);
+  border-left: 2px solid var(--tatvyra-lilac);
+  font-size: var(--step--1);
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.legal__section {
+  margin-top: clamp(2.25rem, 1.6rem + 2vw, 3.25rem);
+  padding-top: clamp(1.75rem, 1.2rem + 1.6vw, 2.5rem);
+  border-top: 1px solid var(--line);
+  /* Clears the sticky header when a contents link jumps here. */
+  scroll-margin-top: calc(var(--header-h-compact) + var(--space-l));
+}
+
+.legal__section h2 {
+  margin-bottom: var(--space-s);
+  font-size: var(--step-2);
+  font-weight: var(--type-heading-weight);
+  line-height: 1.2;
+  letter-spacing: var(--heading-tracking);
+  color: var(--tatvyra-purple);
+}
+
+/* Numbered (1), (2), (3), as the policy writes them. */
+.legal__list {
+  counter-reset: legal;
+  display: grid;
+  gap: var(--space-2xs);
+  margin: var(--space-s) 0;
+  padding: 0;
+  list-style: none;
+}
+
+.legal__list li {
+  counter-increment: legal;
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+}
+
+.legal__list li::before {
+  content: '(' counter(legal) ')';
+  font-weight: var(--type-label-weight);
+  color: var(--tatvyra-purple);
+}
+
+@media (max-width: 62rem) {
+  .legal__layout { grid-template-columns: minmax(0, 1fr); }
+  /* Four short sections don't need a contents list pushing the text down, so
+     the side column dissolves: contents drop, and the contact block follows
+     the policy instead of leading it. */
+  .legal__aside { display: contents; }
+  .legal__toc { display: none; }
+  .legal__contact { order: 2; }
+}
+
 .notfound__inner {
   display: grid;
   gap: var(--space-m);
@@ -802,7 +1328,7 @@
    so it needs no mask or decoration of its own. */
 
 .spotlight {
-  padding-block: clamp(3rem, 1.8rem + 4vw, 5.5rem);
+  padding-block: clamp(2.5rem, 1.6rem + 2.8vw, 4rem);
   background: var(--surface);
 }
 
@@ -818,9 +1344,8 @@
   display: flex;
   align-items: center;
   gap: var(--space-s);
-  font-family: var(--font-ui);
   font-size: var(--step--2);
-  font-weight: 600;
+  font-weight: var(--type-label-weight);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--tatvyra-purple);
@@ -836,18 +1361,23 @@
 .spotlight__title {
   margin-top: var(--space-m);
   max-width: 12ch;
-  font-family: var(--font-serif);
   font-size: clamp(1.875rem, 1.2rem + 2.4vw, 3rem);
-  font-weight: 600;
+  font-weight: var(--type-heading-weight);
   line-height: 1.06;
-  letter-spacing: -0.015em;
+  letter-spacing: var(--heading-tracking);
   color: var(--tatvyra-purple);
 }
+
+/* No eyebrow above it: the headline opens the column. */
+.spotlight__title:first-child { margin-top: 0; }
+
+/* Set line by line as supplied, so the column's measure never re-breaks it. */
+.spotlight__title--lines { max-width: none; }
+.spotlight__title--lines span { display: block; }
 
 .spotlight__intro {
   margin-top: var(--space-s);
   max-width: 44ch;
-  font-family: var(--font-ui);
   font-size: var(--step-0);
   line-height: 1.6;
   color: var(--text-muted);
@@ -856,9 +1386,8 @@
 .spotlight__label {
   margin-top: var(--space-l);
   margin-bottom: var(--space-s);
-  font-family: var(--font-ui);
   font-size: var(--step--2);
-  font-weight: 600;
+  font-weight: var(--type-label-weight);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--tatvyra-purple);
@@ -889,7 +1418,6 @@
 }
 
 .spotlight__benefit-title {
-  font-family: var(--font-serif);
   font-size: var(--step-0);
   font-weight: 600;
   line-height: 1.25;
@@ -898,7 +1426,6 @@
 
 .spotlight__benefit-body {
   margin-top: 0.2rem;
-  font-family: var(--font-ui);
   font-size: var(--step--1);
   line-height: 1.55;
   color: var(--text-muted);
@@ -918,9 +1445,11 @@
 .spotlight__marks .spotlight__label { margin-top: 0; }
 
 /* Hairline dividers between the columns, as in the design. */
+/* Narrow enough that up to four marks share one row at every width above the
+   single-column break: a wrapped row would carry a divider at its start. */
 .spotlight__marks ul {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(12rem, 100%), 1fr));
   gap: clamp(1.5rem, 0.8rem + 2.4vw, 3rem);
 }
 
@@ -932,7 +1461,8 @@
 
 @media (max-width: 62rem) {
   .spotlight__top { grid-template-columns: minmax(0, 1fr); }
-  .spotlight__media { order: -1; max-width: 34rem; margin-inline: auto; }
+  /* A set width, so the frame holds the photograph's space before it loads. */
+  .spotlight__media { order: -1; width: 100%; max-width: 34rem; margin-inline: auto; }
   .spotlight__title { max-width: 18ch; }
   .spotlight__marks ul { grid-template-columns: minmax(0, 1fr); }
   .spotlight__marks li + li {
@@ -960,9 +1490,8 @@
 }
 
 .campaign__eyebrow {
-  font-family: var(--font-ui);
   font-size: var(--step--2);
-  font-weight: 600;
+  font-weight: var(--type-label-weight);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--tatvyra-purple);
@@ -970,18 +1499,16 @@
 
 .campaign__title {
   margin-top: var(--space-s);
-  font-family: var(--font-serif);
   font-size: clamp(1.75rem, 1.15rem + 2.2vw, 2.75rem);
-  font-weight: 600;
+  font-weight: var(--type-heading-weight);
   line-height: 1.08;
-  letter-spacing: -0.015em;
+  letter-spacing: var(--heading-tracking);
   color: var(--tatvyra-purple);
 }
 
 .campaign__body {
   margin-top: var(--space-s);
   max-width: 52ch;
-  font-family: var(--font-ui);
   font-size: var(--step-0);
   line-height: 1.6;
   color: var(--text-muted);
@@ -992,6 +1519,95 @@
   width: 100%;
   height: auto;
   border-radius: var(--radius-card);
+}
+
+/* --- FAQ page -------------------------------------------------------------
+   The policy pages' layout — contents rail, contact block, reading column —
+   holding topic groups of the product FAQ's questions. Only the group
+   headings, the answers' lists and links, and the closing prompt are its own. */
+
+.faqpage__body { max-width: 52rem; }
+
+.faqpage__group {
+  /* Clears the sticky header when a topic link jumps here. */
+  scroll-margin-top: calc(var(--header-h-compact) + var(--space-l));
+}
+
+.faqpage__group + .faqpage__group { margin-top: clamp(2.5rem, 1.8rem + 2vw, 3.5rem); }
+
+.faqpage__group-title {
+  margin-bottom: var(--space-s);
+  font-size: var(--step-2);
+  font-weight: var(--type-heading-weight);
+  line-height: 1.2;
+  letter-spacing: var(--heading-tracking);
+  color: var(--tatvyra-purple);
+}
+
+.faqpage__a {
+  display: grid;
+  gap: var(--space-xs);
+}
+
+/* The benefits list's Burnt Orange bullets. */
+.faqpage__list {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.faqpage__list li {
+  position: relative;
+  padding-left: 1.1rem;
+}
+
+.faqpage__list li::before {
+  content: '';
+  position: absolute;
+  top: 0.62em;
+  left: 0.15rem;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--tatvyra-orange);
+}
+
+.faqpage__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs) var(--space-m);
+  margin-top: 0.25rem;
+}
+
+.faqpage__outro {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-s);
+  margin-top: clamp(3rem, 2rem + 3vw, 4.5rem);
+  padding: clamp(1.5rem, 1rem + 1.5vw, 2.25rem);
+  background: var(--surface-sunken);
+  border-radius: var(--radius-image);
+}
+
+.faqpage__outro-title {
+  font-size: var(--step-1);
+  font-weight: var(--type-heading-weight);
+  letter-spacing: var(--heading-tracking);
+  color: var(--tatvyra-purple);
+}
+
+.faqpage__outro-body {
+  font-size: var(--step-0);
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.faqpage__outro-body a {
+  color: var(--tatvyra-purple);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 /* --- Product FAQ ----------------------------------------------------------
@@ -1011,9 +1627,8 @@
 }
 
 .faq__eyebrow {
-  font-family: var(--font-ui);
   font-size: var(--step--2);
-  font-weight: 600;
+  font-weight: var(--type-label-weight);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--tatvyra-purple);
@@ -1022,11 +1637,10 @@
 .faq__title {
   margin-top: var(--space-s);
   max-width: 14ch;
-  font-family: var(--font-serif);
   font-size: clamp(1.625rem, 1.1rem + 1.9vw, 2.5rem);
-  font-weight: 600;
+  font-weight: var(--type-heading-weight);
   line-height: 1.08;
-  letter-spacing: -0.015em;
+  letter-spacing: var(--heading-tracking);
   color: var(--tatvyra-purple);
 }
 
@@ -1048,7 +1662,6 @@
 .faq__item summary::-webkit-details-marker { display: none; }
 
 .faq__q {
-  font-family: var(--font-serif);
   font-size: var(--step-0);
   font-weight: 600;
   line-height: 1.3;
@@ -1084,7 +1697,6 @@
 .faq__a {
   padding-bottom: var(--space-m);
   max-width: 62ch;
-  font-family: var(--font-ui);
   font-size: var(--step--1);
   line-height: 1.65;
   color: var(--text-muted);
@@ -1093,6 +1705,591 @@
 @media (max-width: 62rem) {
   .faq__inner { grid-template-columns: minmax(0, 1fr); }
   .faq__title { max-width: 20ch; }
+}
+
+/* --- Product story ---------------------------------------------------------
+   A process sequence for one SKU, arranged from the supplied editorial
+   reference. Only the arrangement is new: colour, weights, tracking, rules and
+   radii are the site's own, and the family is inherited from <body> like
+   everywhere else, so nothing here declares a font. */
+
+.pstory {
+  /* One gap drives both the stage columns and the arrows that sit in them. */
+  --pstory-gap: clamp(2.25rem, 1.1rem + 3vw, 4.25rem);
+  padding-block: clamp(2.5rem, 1.6rem + 2.8vw, 4rem);
+  background: var(--surface);
+}
+
+/* The spotlight eyebrow, with its rule held short as the reference draws it. */
+.pstory__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+  max-width: 26rem;
+  font-size: var(--step--2);
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--tatvyra-purple);
+}
+
+.pstory__eyebrow::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgb(var(--ink-rgb) / 0.18);
+}
+
+.pstory__lead {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: var(--space-m) clamp(2rem, 1rem + 4vw, 5rem);
+  align-items: center;
+  margin-top: var(--space-m);
+}
+
+.pstory__title {
+  max-width: 13ch;
+  font-size: clamp(2.25rem, 1.3rem + 3.6vw, 4rem);
+  font-weight: var(--type-display-weight);
+  line-height: 1.02;
+  letter-spacing: var(--display-tracking);
+  color: var(--tatvyra-purple);
+}
+
+.pstory__intro {
+  max-width: 30ch;
+  font-size: var(--step-1);
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.pstory__stages {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-xl) var(--pstory-gap);
+  margin: clamp(2.5rem, 1.5rem + 3vw, 4rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pstory__media { position: relative; }
+
+.pstory__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 5 / 7;
+  object-fit: cover;
+  border-radius: var(--radius-image);
+  background: var(--surface-sunken);
+}
+
+/* Centred in the column gap, on the photographs' midline. */
+.pstory__arrow {
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  display: grid;
+  place-items: center;
+  width: var(--pstory-gap);
+  translate: 0 -50%;
+  color: rgb(var(--ink-rgb) / 0.5);
+}
+
+.pstory__index {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-top: var(--space-m);
+  font-size: var(--step--2);
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.1em;
+  color: var(--tatvyra-purple);
+}
+
+.pstory__index::after {
+  content: '';
+  width: 1.5rem;
+  height: 1px;
+  background: rgb(var(--ink-rgb) / 0.3);
+}
+
+.pstory__label {
+  margin-top: var(--space-s);
+  font-size: var(--step--1);
+  font-weight: var(--type-label-weight);
+  line-height: 1.35;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.pstory__body {
+  margin-top: var(--space-2xs);
+  max-width: 26ch;
+  font-size: var(--step-0);
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+.pstory__body--wide { max-width: 36ch; }
+
+/* Label, a hairline, then the value: the reference's spec block. */
+.pstory__specs {
+  display: grid;
+  gap: 0.4rem;
+  margin: var(--space-s) 0 0;
+}
+
+.pstory__specs div {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: baseline;
+}
+
+.pstory__specs dt {
+  min-width: 5rem;
+  padding-right: var(--space-s);
+  border-right: 1px solid rgb(var(--ink-rgb) / 0.18);
+  font-size: var(--step--2);
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.pstory__specs dd {
+  margin: 0;
+  padding-left: var(--space-s);
+  font-size: var(--step--1);
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+/* The rule runs the full width; the feature image sits right on it and only the
+   routine column steps down from it, as in the reference. */
+.pstory__foot {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--space-l) clamp(2rem, 1rem + 4vw, 5rem);
+  align-items: start;
+  margin-top: clamp(2.5rem, 1.5rem + 3vw, 4rem);
+  border-top: 1px solid rgb(var(--ink-rgb) / 0.14);
+}
+
+.pstory__routine { padding-top: clamp(1.25rem, 0.8rem + 1.4vw, 2rem); }
+.pstory__routine .pstory__index { margin-top: 0; }
+
+.pstory__uses {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: var(--space-l) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pstory__uses li {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: var(--space-s);
+  padding-inline: var(--space-xs);
+  text-align: center;
+}
+
+.pstory__uses li + li { border-left: 1px solid rgb(var(--ink-rgb) / 0.14); }
+
+.pstory__use-img {
+  width: min(100%, 8.5rem);
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.pstory__use-label {
+  font-size: var(--step--2);
+  font-weight: var(--type-label-weight);
+  line-height: 1.4;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.pstory__feature {
+  position: relative;
+  margin: 0;
+}
+
+/* Held at the photograph's own ratio so cover never trims the clear ground on
+   its right, which is where the line of copy sits. */
+.pstory__feature-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 574 / 272;
+  object-fit: cover;
+  border-radius: 0 0 var(--radius-image) var(--radius-image);
+}
+
+/* Anchored in the clear corner below the spoon handle. Centred on the right,
+   as the reference sets its much shorter slogan, a full sentence ran into the
+   bowl of the spoon. */
+.pstory__quote {
+  position: absolute;
+  right: clamp(1rem, 0.4rem + 1.6vw, 1.75rem);
+  bottom: clamp(0.9rem, 0.5rem + 1vw, 1.4rem);
+  max-width: 30%;
+  font-size: var(--step--1);
+  line-height: 1.55;
+  color: var(--text);
+}
+
+.pstory__quote::after {
+  content: '';
+  display: block;
+  width: 3rem;
+  height: 1px;
+  margin-top: var(--space-s);
+  background: rgb(var(--ink-rgb) / 0.4);
+}
+
+/* A short editorial marker under a stage label, in the site's one accent. */
+.pstory__callout {
+  margin-top: var(--space-2xs);
+  font-size: var(--step--2);
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--tatvyra-purple);
+}
+
+/* A comparison of form, set so neither side reads as the lesser: one size, one
+   weight, one colour for both, divided by a hairline rather than ranked. */
+.pstory__compare,
+.pstory__finale {
+  margin-top: clamp(3rem, 2rem + 3vw, 5rem);
+  padding-top: clamp(2rem, 1.2rem + 2.4vw, 3rem);
+  border-top: 1px solid rgb(var(--ink-rgb) / 0.14);
+}
+
+/* The note leads on the left and the two forms sit side by side on the right,
+   so the sentence reads as the point of the comparison rather than as a
+   caption for whichever side it happened to sit under. */
+.pstory__compare {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: var(--space-l) clamp(2rem, 1rem + 4vw, 5rem);
+  align-items: center;
+}
+
+/* One ruled row, closed top and bottom by hairlines, not a card. */
+.pstory__versus {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0;
+  border-block: 1px solid rgb(var(--ink-rgb) / 0.14);
+}
+
+.pstory__versus-item { padding-block: clamp(1.5rem, 1.1rem + 1.2vw, 2.25rem); }
+.pstory__versus-item:first-child { padding-right: clamp(1.5rem, 1rem + 2vw, 3rem); }
+
+.pstory__versus-item + .pstory__versus-item {
+  position: relative;
+  padding-left: clamp(1.5rem, 1rem + 2vw, 3rem);
+  border-left: 1px solid rgb(var(--ink-rgb) / 0.14);
+}
+
+/* "vs" sat on the divider: it separates the two without ranking them. The
+   alt text after the slash keeps screen readers from announcing it. */
+.pstory__versus-item + .pstory__versus-item::before {
+  content: 'vs' / '';
+  position: absolute;
+  top: 50%;
+  left: -0.5px;
+  translate: -50% -50%;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  aspect-ratio: 1;
+  border: 1px solid rgb(var(--ink-rgb) / 0.14);
+  border-radius: 50%;
+  background: var(--surface);
+  font-size: var(--step--2);
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.pstory__versus dt {
+  font-size: var(--step--2);
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.pstory__versus dd {
+  margin: var(--space-xs) 0 0;
+  font-size: clamp(1.375rem, 1.05rem + 1.1vw, 2.125rem);
+  text-wrap: balance;
+  font-weight: var(--type-heading-weight);
+  line-height: 1.05;
+  letter-spacing: var(--heading-tracking);
+  color: var(--text);
+}
+
+.pstory__note {
+  margin-top: var(--space-m);
+  max-width: 24ch;
+  font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.75rem);
+  font-weight: var(--type-product-weight);
+  line-height: 1.35;
+  letter-spacing: var(--product-tracking);
+  color: var(--text);
+}
+
+.pstory__finale {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: var(--space-l) clamp(2rem, 1rem + 4vw, 5rem);
+  align-items: center;
+}
+
+.pstory__finale-title {
+  display: grid;
+  font-size: clamp(2rem, 1.2rem + 3vw, 3.5rem);
+  font-weight: var(--type-display-weight);
+  line-height: 1.05;
+  letter-spacing: var(--display-tracking);
+  color: var(--tatvyra-purple);
+}
+
+.pstory__finale-copy .pstory__callout { margin-top: var(--space-m); }
+
+.pstory__finale-media {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-s);
+}
+
+.pstory__finale-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: var(--radius-image);
+}
+
+/* A slot waiting for its photograph. Development only: a production build
+   drops the whole story while any slot looks like this. Declared after every
+   image class it pairs with (.pstory__img, __finale-img…), so its grid wins
+   over their display: block. */
+.pstory__pending {
+  display: grid;
+  place-content: center;
+  gap: 0.45rem;
+  padding: var(--space-s);
+  background: var(--surface-sunken);
+  border: 1px solid rgb(var(--ink-rgb) / 0.14);
+  text-align: center;
+}
+
+.pstory__pending-kicker {
+  font-size: var(--step--2);
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--tatvyra-purple);
+}
+
+.pstory__pending-brief {
+  font-size: var(--step--1);
+  line-height: 1.45;
+  color: var(--text-faint);
+}
+
+/* Narrower than this, the photograph shrinks faster than the sentence does and
+   the corner is no longer clear, so the line drops below as a caption. */
+@media (max-width: 87.5rem) {
+  .pstory__quote {
+    position: static;
+    max-width: 46ch;
+    margin-top: var(--space-s);
+  }
+}
+
+@media (max-width: 62rem) {
+  .pstory__lead { grid-template-columns: minmax(0, 1fr); }
+  .pstory__intro { max-width: 40ch; }
+  /* Two across, the order wraps and an arrow would point off the row. The
+     numerals carry the sequence here instead. */
+  .pstory__stages { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pstory__arrow { display: none; }
+  .pstory__foot { grid-template-columns: minmax(0, 1fr); }
+  .pstory__feature-img { border-radius: var(--radius-image); }
+  .pstory__compare { grid-template-columns: minmax(0, 1fr); }
+  .pstory__note { max-width: 32ch; }
+  .pstory__finale { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 40rem) {
+  .pstory { --pstory-gap: var(--space-m); }
+  /* One stage per row, photograph beside its text, so the sequence reads
+     straight down the page without four full-width portraits to scroll past. */
+  .pstory__stages { grid-template-columns: minmax(0, 1fr); row-gap: 0; }
+  .pstory__stage {
+    display: grid;
+    grid-template-columns: minmax(0, 0.42fr) minmax(0, 0.58fr);
+    column-gap: var(--space-m);
+    align-items: center;
+    padding-block: var(--space-m);
+    border-top: 1px solid rgb(var(--ink-rgb) / 0.14);
+  }
+  .pstory__stage:first-child { padding-top: 0; border-top: 0; }
+  .pstory__stage:last-child { padding-bottom: 0; }
+  .pstory__text .pstory__index { margin-top: 0; }
+  /* A narrow text column leaves the value a word wide, so each spec row
+     stacks its label over its value. */
+  .pstory__specs div { grid-template-columns: minmax(0, 1fr); }
+  .pstory__specs dt { min-width: 0; padding-right: 0; border-right: 0; }
+  .pstory__specs dd { padding-left: 0; }
+  /* The forms stay side by side, since that is what makes it a comparison;
+     only the padding and the marker tighten. */
+  .pstory__versus-item:first-child { padding-right: var(--space-m); }
+  .pstory__versus-item + .pstory__versus-item { padding-left: var(--space-m); }
+  .pstory__versus-item + .pstory__versus-item::before { width: 1.875rem; }
+}
+
+/* --- Product story: timeline -----------------------------------------------
+   A plain variant for a story that is one quick process: the stages on the
+   page's own Warm White, joined by one hairline timeline. Each stage is its
+   numbered marker on the line, its photograph, then its label and callout.
+   Burnt Orange appears only as the small node on the line — a graphic, never
+   text. The headline's last phrase takes the accent ink. */
+
+.pstory--timeline .pstory__title span:last-child,
+.pstory--timeline .pstory__finale-title span:last-child { color: var(--accent-ink); }
+
+.pstory--timeline .pstory__stages {
+  --pstory-gap: clamp(1.25rem, 0.6rem + 1.8vw, 2.5rem);
+  gap: clamp(2rem, 1.5rem + 1.5vw, 2.75rem) var(--pstory-gap);
+}
+
+.pstory--timeline .pstory__stage {
+  display: flex;
+  flex-direction: column;
+}
+
+/* The marker leads each stage; the text wrapper steps aside so the marker can
+   sit above the photograph and the words below it. */
+.pstory--timeline .pstory__text { display: contents; }
+
+.pstory--timeline .pstory__index {
+  order: -1;
+  margin: 0 0 clamp(1rem, 0.7rem + 0.8vw, 1.5rem);
+  gap: 0.75rem;
+  letter-spacing: 0.18em;
+}
+
+/* The node: a small Burnt Orange dot on the line. */
+.pstory--timeline .pstory__index::before {
+  content: '';
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--tatvyra-orange);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--tatvyra-orange) 18%, transparent);
+}
+
+/* The hairline runs on across the gap to the next stage's node, and fades out
+   after the last. */
+.pstory--timeline .pstory__index::after {
+  flex: 1;
+  width: auto;
+  margin-right: calc(var(--pstory-gap) * -1);
+}
+
+.pstory--timeline .pstory__stage:last-child .pstory__index::after {
+  margin-right: 0;
+  background: linear-gradient(to right, rgb(var(--ink-rgb) / 0.3), transparent);
+}
+
+/* No arrows: the running line carries the sequence. */
+.pstory--timeline .pstory__arrow { display: none; }
+
+/* The photographs' own proportion, so nothing is cropped. */
+.pstory--timeline .pstory__img { aspect-ratio: 576 / 688; }
+
+.pstory--timeline .pstory__label {
+  margin-top: clamp(1.1rem, 0.8rem + 0.8vw, 1.5rem);
+  font-size: var(--step--2);
+  letter-spacing: 0.18em;
+  color: var(--text-muted);
+}
+
+.pstory--timeline .pstory__stage .pstory__callout {
+  margin-top: 0.4rem;
+  font-size: clamp(1.125rem, 0.95rem + 0.55vw, 1.4rem);
+  font-weight: var(--weight-regular);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  color: var(--text);
+}
+
+/* The finale: the drink small and low, the packshot larger beside it. */
+.pstory--timeline .pstory__finale-media {
+  grid-template-columns: minmax(0, 0.62fr) minmax(0, 1fr);
+  align-items: end;
+}
+
+.pstory--timeline .pstory__finale-img:first-child { aspect-ratio: 576 / 688; }
+
+/* Two across, the second stage of each row has no neighbour for its line to
+   reach, so it fades out as the last one does. */
+@media (max-width: 62rem) {
+  .pstory--timeline .pstory__stage:nth-child(2n) .pstory__index::after {
+    margin-right: 0;
+    background: linear-gradient(to right, rgb(var(--ink-rgb) / 0.3), transparent);
+  }
+}
+
+/* Narrow: one stage per row, the photograph beside its marker and words, rows
+   divided by a hairline. */
+@media (max-width: 40rem) {
+  .pstory--timeline .pstory__stages { row-gap: 0; }
+
+  .pstory--timeline .pstory__stage {
+    display: grid;
+    grid-template-columns: minmax(0, 0.4fr) minmax(0, 0.6fr);
+    grid-template-rows: 1fr auto auto auto 1fr;
+    grid-template-areas:
+      'media .'
+      'media index'
+      'media label'
+      'media callout'
+      'media .';
+    column-gap: var(--space-m);
+  }
+
+  .pstory--timeline .pstory__media { grid-area: media; }
+  .pstory--timeline .pstory__index { grid-area: index; margin: 0; }
+
+  .pstory--timeline .pstory__index::after,
+  .pstory--timeline .pstory__stage:nth-child(2n) .pstory__index::after,
+  .pstory--timeline .pstory__stage:last-child .pstory__index::after {
+    flex: 0 0 1.5rem;
+    margin-right: 0;
+    background: rgb(var(--ink-rgb) / 0.3);
+  }
+
+  .pstory--timeline .pstory__label { grid-area: label; margin-top: 0.6rem; }
+  .pstory--timeline .pstory__stage .pstory__callout { grid-area: callout; }
 }
 
 /* --- Product information ---------------------------------------------------
@@ -1118,11 +2315,10 @@
 
 .pdoc__title {
   max-width: 14ch;
-  font-family: var(--font-serif);
   font-size: clamp(1.625rem, 1.1rem + 1.9vw, 2.5rem);
-  font-weight: 600;
+  font-weight: var(--type-heading-weight);
   line-height: 1.08;
-  letter-spacing: -0.015em;
+  letter-spacing: var(--heading-tracking);
   color: var(--tatvyra-purple);
 }
 
@@ -1138,7 +2334,6 @@
 .pdoc__item:last-child { padding-bottom: 0; }
 
 .pdoc__item dt {
-  font-family: var(--font-serif);
   font-size: var(--step-0);
   font-weight: 600;
   line-height: 1.3;
@@ -1162,9 +2357,8 @@
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  font-family: var(--font-ui);
   font-size: var(--step--1);
-  font-weight: 600;
+  font-weight: var(--type-button-weight);
   color: var(--tatvyra-purple);
   text-decoration: underline;
   text-underline-offset: 3px;
@@ -1250,7 +2444,6 @@
 }
 
 .checkout__subtitle {
-  font-family: var(--font-display);
   font-size: var(--step-1);
   font-weight: 700;
   letter-spacing: -0.012em;
@@ -1303,7 +2496,6 @@
 }
 
 .osum__title {
-  font-family: var(--font-display);
   font-size: var(--step--1);
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -1513,4 +2705,1985 @@
   .pay__grid,
   .pay__methods,
   .confirm__facts { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* --- Product journey ------------------------------------------------------
+   The editorial "from leaf to daily ritual" band on a product page. Set in
+   the body sans throughout: its brief rules out serif and the display face.
+
+   The stages share one row of photographs and one row of captions through
+   subgrid, so a taller photograph never knocks the captions out of line.
+   Photographs sit on the row's baseline; the product stage is wider and taller
+   than the others, because the actual jar is the point of the sequence. */
+
+.journey {
+  --journey-gap: clamp(1.25rem, 0.4rem + 2vw, 2.5rem);
+  --journey-rule: color-mix(in srgb, var(--tatvyra-purple) 34%, var(--tatvyra-warm-white));
+  padding-block: var(--section-y);
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.journey__head { margin-bottom: clamp(2.75rem, 1.5rem + 3.5vw, 5rem); }
+
+.journey__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  font-size: var(--step--2);
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.journey__eyebrow::after {
+  content: '';
+  width: clamp(3rem, 1rem + 9vw, 11rem);
+  height: 1px;
+  background: var(--line-strong);
+}
+
+.journey__title-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: clamp(2rem, 1rem + 4vw, 6rem);
+  align-items: end;
+  margin-top: var(--space-m);
+}
+
+.journey__title {
+  max-width: 10ch;
+  font-size: clamp(2.75rem, 1.3rem + 4.6vw, 5.5rem);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+  color: var(--tatvyra-aubergine);
+}
+
+.journey__intro {
+  max-width: 46ch;
+  padding-bottom: 0.35rem;
+  font-size: var(--step-0);
+  line-height: 1.65;
+  color: var(--text-muted);
+}
+
+/* No intro beside it: the headline takes the row, balanced over two lines. */
+.journey__title-row--solo { grid-template-columns: minmax(0, 1fr); }
+.journey__title-row--solo .journey__title { max-width: 20ch; text-wrap: balance; }
+
+/* --- The stages ----------------------------------------------------------- */
+
+.journey__stages {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1.34fr 1fr;
+  grid-template-rows: auto auto;
+  column-gap: var(--journey-gap);
+}
+
+.journey__stage {
+  grid-row: span 2;
+  display: grid;
+  grid-template-rows: subgrid;
+  min-width: 0;
+}
+
+.journey__media {
+  align-self: end;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border-radius: var(--radius-image);
+  background: var(--surface-sunken);
+}
+
+.journey__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* The actual jar: its own 4:5 photograph, uncropped, on an offset Lilac block
+   drawn from the packaging. A box-shadow rather than a pseudo-element, so the
+   frame's overflow can still clip the photograph to its radius. */
+.journey__stage--product .journey__media {
+  aspect-ratio: 4 / 5;
+  box-shadow: calc(var(--journey-gap) * -0.5) calc(var(--journey-gap) * 0.5) 0 0
+    color-mix(in srgb, var(--tatvyra-lilac) 62%, var(--tatvyra-warm-white));
+}
+
+.journey__caption { padding-top: clamp(1.4rem, 1rem + 1.2vw, 2rem); }
+
+/* The numeral and the rule that runs on to the next stage. The marker overhangs
+   its column into the gap, so the five read as one connected line. */
+.journey__marker {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-right: calc(var(--journey-gap) * -1 + 0.55rem);
+  margin-bottom: 0.9rem;
+}
+
+.journey__num {
+  font-size: var(--step--1);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--tatvyra-purple);
+}
+
+.journey__line {
+  position: relative;
+  flex: 1;
+  height: 1px;
+  color: var(--journey-rule);
+  background: currentColor;
+}
+
+/* A small chevron where the rule reaches the next stage. */
+.journey__line::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 1px;
+  width: 6px;
+  height: 6px;
+  border-top: 1px solid currentColor;
+  border-right: 1px solid currentColor;
+  translate: 0 -50%;
+  rotate: 45deg;
+}
+
+.journey__marker--end { margin-right: 0; }
+.journey__marker--end .journey__line { flex: 0 0 2.25rem; }
+.journey__marker--end .journey__line::after { content: none; }
+
+.journey__stage-title {
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.journey__body {
+  max-width: 26ch;
+  margin-top: 0.55rem;
+  font-size: var(--step--1);
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+.journey__note {
+  margin-top: 0.85rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--line);
+  font-size: var(--step--1);
+  font-weight: 600;
+  color: var(--tatvyra-purple);
+}
+
+/* --- Three stages and a side column ---------------------------------------
+   Powder, tablet, jar, then the qualities beside the jar. The track owns the
+   columns and the two rows; the stage list takes the first three columns as a
+   subgrid, so the qualities sit on the photographs' baseline and the closing
+   line on the captions' row. The tablet is the smallest frame, and wide: the
+   compact form, between the loose powder and the finished jar. */
+
+.journey__track--aside {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr) minmax(0, 1.28fr) minmax(0, 0.9fr);
+  grid-template-rows: auto auto;
+  column-gap: var(--journey-gap);
+}
+
+.journey__track--aside .journey__stages {
+  grid-column: 1 / 4;
+  grid-row: 1 / 3;
+  grid-template-columns: subgrid;
+  grid-template-rows: subgrid;
+}
+
+.journey__stage--wide .journey__media { aspect-ratio: 2 / 1; }
+
+.journey__qualities {
+  grid-column: 4;
+  grid-row: 1;
+  align-self: end;
+  border-top: 1px solid var(--line);
+}
+
+.journey__qualities li {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding-block: 0.85rem;
+  border-bottom: 1px solid var(--line);
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.journey__qualities li::before {
+  content: '';
+  flex: none;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--tatvyra-purple);
+}
+
+/* On the captions' row, with a short Purple rule where the markers carry
+   theirs, so the line reads as the sequence's last word. */
+.journey__aside-line {
+  grid-column: 4;
+  grid-row: 2;
+  max-width: 24ch;
+  padding-top: clamp(1.4rem, 1rem + 1.2vw, 2rem);
+  font-size: var(--step--1);
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.journey__aside-line::before {
+  content: '';
+  display: block;
+  width: 2.75rem;
+  height: 1px;
+  margin-block: 0.75em calc(0.9rem + 0.75em);
+  background: var(--tatvyra-purple);
+}
+
+/* --- Closing frame -------------------------------------------------------- */
+
+.journey__closing {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.9fr) minmax(0, 0.62fr);
+  gap: clamp(1.5rem, 0.5rem + 3vw, 3.5rem);
+  align-items: center;
+  margin-top: clamp(2.5rem, 1.6rem + 2.8vw, 4rem);
+  padding-top: clamp(2rem, 1.25rem + 2vw, 3rem);
+  border-top: 1px solid var(--line);
+}
+
+.journey__closing-label {
+  font-size: var(--step--2);
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.journey__closing-body {
+  max-width: 30ch;
+  margin-top: 0.75rem;
+  font-size: var(--step--1);
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.journey__closing-media {
+  aspect-ratio: 800 / 275;
+  overflow: hidden;
+  border-radius: var(--radius-image);
+}
+
+.journey__closing-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Stacked, tracked capitals, sized in em so the width the wrap depends on
+   scales with the type rather than with the character count. */
+.journey__statement {
+  max-width: 12em;
+  font-size: var(--step-0);
+  font-weight: 500;
+  line-height: 1.9;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.journey__statement::after {
+  content: '';
+  display: block;
+  width: 2.75rem;
+  height: 1px;
+  margin-top: 0.9rem;
+  background: var(--tatvyra-purple);
+}
+
+/* --- Narrow: a vertical sequence ------------------------------------------
+   The row becomes a column, in the same order: photograph on the left, caption
+   beside it, and a short tick under each photograph carrying the eye down to
+   the next. --media is the photograph column as a percentage, which is also
+   what centres the tick under it. */
+
+@media (max-width: 62rem) {
+  .journey__title-row { grid-template-columns: minmax(0, 1fr); align-items: start; }
+  .journey__title { max-width: 12ch; }
+
+  .journey__stages {
+    --journey-row-gap: clamp(2.5rem, 1.6rem + 3.5vw, 3.5rem);
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    row-gap: var(--journey-row-gap);
+  }
+
+  .journey__stage {
+    --media: 42;
+    position: relative;
+    grid-row: auto;
+    grid-template-rows: none;
+    grid-template-columns: calc(var(--media) * 1%) minmax(0, 1fr);
+    column-gap: clamp(1.25rem, 0.5rem + 3vw, 2.25rem);
+    align-items: center;
+  }
+
+  .journey__stage--product { --media: 52; }
+  .journey__media { align-self: auto; }
+  .journey__caption { padding-top: 0; }
+
+  /* No next column to run on to: the marker keeps only its short rule. */
+  .journey__marker { margin-right: 0; }
+  .journey__marker .journey__line { flex: 0 0 2.25rem; }
+  .journey__marker .journey__line::after { content: none; }
+
+  .journey__stage:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: calc(100% + 0.6rem);
+    left: calc(var(--media) * 1% / 2);
+    width: 1px;
+    height: calc(var(--journey-row-gap) - 1.2rem);
+    background: var(--journey-rule);
+  }
+
+  .journey__closing { grid-template-columns: minmax(0, 1fr); }
+  .journey__closing-media { order: -1; }
+
+  /* The side column drops below the sequence: the qualities as a short
+     ruled list, then the closing line. */
+  .journey__track--aside { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; }
+
+  .journey__track--aside .journey__stages {
+    grid-column: auto;
+    grid-row: auto;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+  }
+
+  .journey__stage--wide { --media: 52; }
+
+  .journey__qualities {
+    grid-column: auto;
+    grid-row: auto;
+    width: min(100%, 26rem);
+    margin-top: clamp(3rem, 2rem + 4vw, 4rem);
+  }
+
+  .journey__qualities li { padding-block: 0.7rem; }
+
+  .journey__aside-line { grid-column: auto; grid-row: auto; max-width: 30ch; }
+}
+
+@media (max-width: 30rem) {
+  .journey__stage { --media: 44; }
+  .journey__stage--product { --media: 54; }
+  .journey__stage--wide { --media: 54; }
+  .journey__body { max-width: none; }
+}
+
+/* --- Four stages ----------------------------------------------------------
+   The same row, one stage shorter, the fourth frame being the product. */
+
+.journey--4 .journey__stages { grid-template-columns: 1fr 1fr 1fr 1.34fr; }
+
+/* --- Display lines --------------------------------------------------------
+   A stage can carry a short line set large in its caption: the headline's
+   aubergine and regular weight, in capitals. The caption is a size container
+   and the type is sized in its units, so the lines are fitted to the column
+   they are given — a quarter of the row here, the column beside the
+   photograph on narrow screens — and a long line wraps rather than spills. */
+
+.journey__stage--display .journey__caption { container-type: inline-size; }
+
+.journey__display {
+  margin-top: 0.85rem;
+  font-size: clamp(1.625rem, 14.5cqi, 3.25rem);
+  font-weight: 400;
+  line-height: 0.94;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+  color: var(--tatvyra-aubergine);
+}
+
+.journey__display span { display: block; text-wrap: balance; }
+
+/* Headed by the numeral alone: the line sits straight under the marker. */
+.journey__marker + .journey__display { margin-top: 0; }
+
+.journey__display + .journey__body { margin-top: 1rem; }
+
+/* A stage the small-screen sequence moves carries both counts; only one
+   shows at a time. See the narrow rules below. */
+.journey__num-narrow { display: none; }
+
+/* --- Finale ---------------------------------------------------------------
+   Below a hairline, as the closing frame is: the closing line at the
+   headline's scale in the display lines' capitals, beside the product on the
+   product stage's offset Lilac block. The copy is a size container, so the
+   line is fitted to the column it has; its longest phrase wraps, balanced. */
+
+.journey__finale {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+  gap: var(--space-xl) clamp(2rem, 1rem + 5vw, 7rem);
+  align-items: end;
+  margin-top: clamp(2.5rem, 1.6rem + 2.8vw, 4rem);
+  padding-top: clamp(2rem, 1.3rem + 2.2vw, 3.25rem);
+  border-top: 1px solid var(--line);
+}
+
+.journey__finale-copy { container-type: inline-size; }
+
+.journey__finale-title {
+  font-size: clamp(2.5rem, 11.5cqi, 7rem);
+  font-weight: 400;
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: var(--tatvyra-aubergine);
+}
+
+.journey__finale-title span { display: block; text-wrap: balance; }
+
+/* The short Purple rule the side column's closing line carries, set ahead. */
+.journey__finale-callout {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  margin-top: clamp(1.5rem, 1rem + 1.5vw, 2.5rem);
+  font-size: var(--step--2);
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--tatvyra-purple);
+}
+
+.journey__finale-callout::before {
+  content: '';
+  flex: none;
+  width: 2.75rem;
+  height: 1px;
+  background: currentColor;
+}
+
+.journey__finale-media {
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: var(--radius-image);
+  box-shadow: calc(var(--journey-gap) * -0.5) calc(var(--journey-gap) * 0.5) 0 0
+    color-mix(in srgb, var(--tatvyra-lilac) 62%, var(--tatvyra-warm-white));
+}
+
+.journey__finale-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* --- Narrow: the order given for small screens ----------------------------
+   Once the row is a column, a stage with a `narrow` position takes it and
+   shows the count for that order. Every other stage's order is its own index,
+   so a sequence without one reads exactly as the row does. The finale stacks,
+   its line above the product. */
+
+@media (max-width: 62rem) {
+  .journey--4 .journey__stages { grid-template-columns: minmax(0, 1fr); }
+
+  .journey__stage { order: var(--narrow-order, 0); }
+
+  .journey__num-wide { display: none; }
+  .journey__num-narrow { display: inline; }
+
+  .journey__finale { grid-template-columns: minmax(0, 1fr); align-items: start; }
+  .journey__finale-media { width: min(100%, 30rem); }
+
+  /* Full width, the column alone would set the line far above the headline;
+     held nearer the headline's scale, as it sits beside the photograph. */
+  .journey__finale-title { font-size: clamp(2.5rem, min(11.5cqi, 1.5rem + 5.4vw), 4.75rem); }
+}
+
+/* --- Product origin -------------------------------------------------------
+   The "Origin & process" band (ProductOrigin). The left column carries the
+   headline and the benefit row; the illustration takes the right. As in the
+   layout reference, the benefit row runs on beneath the illustration's empty
+   lower-left corner — as far as the sign-off allows — so the grid's middle
+   column is shared by both.
+
+   Everything set on the illustration — the map layer, the photographs, the
+   labels and the lettering — is placed in cqi against the illustration's own
+   width, so the composition scales as one piece. Set in the body sans. */
+
+.origin {
+  position: relative;
+  overflow: hidden;
+  padding-block: var(--section-y);
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.origin__grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 38.7fr) minmax(0, 12fr) minmax(0, 49.3fr);
+  grid-template-rows: auto 1fr;
+}
+
+.origin__intro { grid-column: 1; grid-row: 1; }
+
+.origin__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  font-size: var(--step--2);
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.origin__eyebrow::after {
+  content: '';
+  width: clamp(3rem, 1rem + 9vw, 11rem);
+  height: 1px;
+  background: var(--line-strong);
+}
+
+.origin__title {
+  margin-top: var(--space-l);
+  font-size: clamp(2.75rem, 1.3rem + 4.6vw, 5.5rem);
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  color: var(--tatvyra-aubergine);
+}
+
+.origin__title span { display: block; }
+.origin__title-accent { color: var(--tatvyra-purple); }
+
+.origin__lede {
+  max-width: 36ch;
+  margin-top: clamp(1.75rem, 1rem + 2vw, 2.5rem);
+  font-size: var(--step-1);
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+/* --- Benefit row ---------------------------------------------------------- */
+
+.origin__benefits {
+  grid-column: 1 / 3;
+  grid-row: 2;
+  align-self: end;
+  margin-top: clamp(2.5rem, 1.5rem + 2.5vw, 3.5rem);
+  padding-top: clamp(1.5rem, 1rem + 1vw, 2rem);
+  border-top: 1px solid var(--line);
+}
+
+.origin__benefits-title {
+  font-size: var(--step--2);
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.origin__benefit-list {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin-top: 1.6rem;
+}
+
+.origin__benefit-list li {
+  padding-inline: 0.85rem;
+  border-left: 1px solid var(--line);
+}
+
+.origin__benefit-list li:first-child { padding-left: 0; border-left: 0; }
+.origin__benefit-icon { display: block; color: var(--tatvyra-purple); }
+
+.origin__benefit-list p {
+  margin-top: 1rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+/* --- The illustration ----------------------------------------------------- */
+
+/* Stretched down both rows, so the sign-off can sit on the grid's floor, in
+   line with the benefit row's last line as in the reference. */
+.origin__atlas {
+  grid-column: 2 / 4;
+  grid-row: 1 / 3;
+  position: relative;
+  container-type: inline-size;
+  /* Room between the headline and the map. The headline column has only
+     ~2rem to spare before "Wild Forests" wraps, so a column gap can’t give
+     it; instead the map steps in and scales down as one piece (it is all in
+     cqi). About 120px clear of the headline from 1280px up. The stacked
+     layout’s `margin: … auto 0` resets this. */
+  margin-left: clamp(2.5rem, 18.75vw - 12.5rem, 4.5rem);
+}
+
+/* Gives the illustration its height; everything on it is placed from here. */
+.origin__stage { position: relative; aspect-ratio: 1044 / 887; }
+
+.origin__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Sepia dotted routes ending in a dark dot, as on the other origin maps; the
+   route of the open point turns Purple. */
+.origin__route path {
+  fill: none;
+  stroke: rgb(var(--ink-rgb) / 0.62);
+  stroke-width: 3.6;
+  stroke-linecap: round;
+  stroke-dasharray: 0 13;
+  transition: stroke var(--dur) var(--ease);
+}
+
+.origin__route circle { fill: var(--tatvyra-aubergine); transition: fill var(--dur) var(--ease); }
+.origin__route.is-active path { stroke: var(--tatvyra-purple); }
+.origin__route.is-active circle { fill: var(--tatvyra-purple); }
+
+/* Centred on its point; the trailing tracking is padded back on the left so
+   the letters, not the box, sit on the centre. */
+.origin__country {
+  position: absolute;
+  left: calc(var(--x) * 1cqi);
+  top: calc(var(--y) * 1cqi);
+  translate: -50% -50%;
+  padding-left: 0.42em;
+  font-size: var(--step--1);
+  font-weight: 500;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.origin__photo {
+  position: absolute;
+  left: calc((var(--px) - var(--pd) / 2) * 1cqi);
+  top: calc((var(--py) - var(--pd) / 2) * 1cqi);
+  width: calc(var(--pd) * 1cqi);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--surface-sunken);
+  box-shadow: 0 14px 28px -18px rgb(var(--ink-rgb) / 0.5);
+  transition:
+    opacity var(--dur-slow) var(--ease-out),
+    scale var(--dur-slow) var(--ease-pop);
+  transition-delay: calc(var(--i) * 110ms + 250ms);
+}
+
+.origin__photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* The photographs settle onto the map one after another as it arrives. */
+.origin__atlas:not(.is-visible) .origin__photo { opacity: 0; scale: 0.88; }
+
+.origin__label {
+  position: absolute;
+  left: calc(var(--lx) * 1cqi);
+  top: calc(var(--ly) * 1cqi);
+  width: max-content;
+  max-width: calc(var(--lm, 13) * 1em);
+  font-size: 0.8125rem;
+}
+
+.origin__point-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-wrap: balance;
+  color: var(--text);
+}
+
+.origin__point-num { display: none; }
+
+.origin__point-body {
+  margin-top: 0.4rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+/* Anchored by its right edge, clear of the honey drip at the page edge. */
+/* One line at the foot of the map, centred over the sign-off so the two
+   close the section together; the top-right corner it once held carries a
+   photograph's label now the map is drawn true. */
+.origin__tagline {
+  position: absolute;
+  left: calc(52.39 * 1cqi);
+  bottom: calc(5.5 * 1cqi);
+  translate: -50% 0;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.95;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--text);
+}
+
+.origin__tagline span { display: inline; }
+
+
+
+.origin__signoff {
+  position: absolute;
+  left: calc(52.39 * 1cqi);
+  bottom: 0;
+  translate: -50% 0;
+  width: max-content;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+/* Honey running down the page's right edge, cut by it as in the reference. */
+.origin__drip {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: clamp(3rem, 0.75rem + 4.2vw, 5.25rem);
+  height: auto;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .origin__photo { transition-delay: 0s; }
+  .origin__atlas:not(.is-visible) .origin__photo { opacity: 1; scale: none; }
+}
+
+/* --- Explore: the map as a set of triggers ---------------------------------
+   Only with a mouse (ProductOrigin adds the class from a media query). Each
+   photograph carries a small plus; hovering or focusing it lifts that point's
+   label into view as a card and quiets the others. The cards keep the label
+   positions the layout already set, which were chosen so no label meets a
+   photograph. */
+
+.origin__points--explore .origin__photo {
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  /* Keeps the staggered arrival, but the open ring answers at once. */
+  transition:
+    opacity var(--dur-slow) var(--ease-out),
+    scale var(--dur-slow) var(--ease-pop),
+    box-shadow var(--dur) var(--ease);
+  transition-delay: calc(var(--i) * 110ms + 250ms), calc(var(--i) * 110ms + 250ms), 0s;
+}
+
+.origin__points--explore .origin__photo img { transition: opacity var(--dur) var(--ease); }
+
+/* A plus that turns into a close mark while its card is open. */
+.origin__points--explore .origin__photo::before {
+  content: '';
+  position: absolute;
+  top: 2%;
+  right: 2%;
+  z-index: 1;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background:
+    linear-gradient(var(--text-on-dark), var(--text-on-dark)) center / 44% 1.5px no-repeat,
+    linear-gradient(var(--text-on-dark), var(--text-on-dark)) center / 1.5px 44% no-repeat,
+    var(--tatvyra-purple);
+  box-shadow: 0 0 0 2px var(--surface);
+  transition: rotate var(--dur) var(--ease-out);
+}
+
+.origin__points--explore .is-open .origin__photo::before { rotate: 45deg; }
+
+.origin__points--explore .is-open .origin__photo {
+  box-shadow:
+    0 0 0 3px var(--surface),
+    0 0 0 4px var(--tatvyra-purple),
+    0 18px 32px -18px rgb(var(--ink-rgb) / 0.55);
+}
+
+.origin__points--explore.has-open .origin__point:not(.is-open) .origin__photo img { opacity: 0.45; }
+
+/* The label becomes a card. The negative margin cancels its padding so the
+   text lands exactly where the static label's text sits. */
+.origin__points--explore .origin__label {
+  z-index: 3;
+  max-width: calc(var(--lm, 13) * 1em + 2.2rem);
+  margin: -0.95rem 0 0 -1.1rem;
+  padding: 0.95rem 1.1rem 1.05rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-image);
+  box-shadow: var(--shadow-lift);
+  opacity: 0;
+  translate: 0 0.5rem;
+  pointer-events: none;
+  transition:
+    opacity var(--dur-fast) var(--ease),
+    translate var(--dur) var(--ease-out);
+}
+
+.origin__points--explore .is-open .origin__label {
+  opacity: 1;
+  translate: 0 0;
+  pointer-events: auto;
+}
+
+/* --- Stacked: headline, illustration, then the benefit row ---------------- */
+
+@media (max-width: 75rem) {
+  .origin__grid { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; }
+
+  .origin__intro,
+  .origin__atlas,
+  .origin__benefits { grid-column: auto; grid-row: auto; }
+
+  .origin__lede { max-width: 46ch; }
+
+  .origin__atlas {
+    width: min(100%, 60rem);
+    margin: clamp(2.5rem, 1.5rem + 3vw, 3.5rem) auto 0;
+  }
+}
+
+/* --- Narrow: the labels leave the map for a numbered list ----------------- */
+
+@media (max-width: 48rem) {
+  .origin__drip { display: none; }
+
+  .origin__points {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.75rem 1.5rem;
+    margin-top: 1.5rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .origin__label { position: static; width: auto; max-width: none; }
+
+  .origin__point-num {
+    display: inline;
+    margin-right: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--tatvyra-purple);
+  }
+
+  .origin__photo::after {
+    content: attr(data-index);
+    position: absolute;
+    top: -0.25rem;
+    left: -0.25rem;
+    display: grid;
+    place-items: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background: var(--tatvyra-purple);
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--text-on-dark);
+  }
+
+  .origin__tagline,
+  .origin__signoff { position: static; width: auto; translate: none; }
+
+  .origin__tagline { margin-top: 2.25rem; white-space: normal; }
+  .origin__signoff { margin-top: 1.5rem; line-height: 1.8; letter-spacing: 0.22em; }
+
+  .origin__benefit-list { grid-template-columns: minmax(0, 1fr); margin-top: 0.75rem; }
+
+  .origin__benefit-list li {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.85rem 0;
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .origin__benefit-list li:first-child { border-top: 0; }
+  .origin__benefit-list p { margin-top: 0; }
+  .origin__benefit-icon { flex: none; width: 1.75rem; height: 1.75rem; }
+}
+
+@media (max-width: 30rem) {
+  .origin__points { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* --- Benefit map -----------------------------------------------------------
+   An illustration with the product's benefits called out around it. The
+   drawing — the torn sheet, the map, the honey, the icons and the lines
+   between them — is one image. The heading and labels are live text placed
+   over it in fractions of its size, and sized in units of its width
+   (container query units), so they scale with it exactly and hold their marks.
+   Below 62rem they leave it: the heading above, the labels a list beneath. */
+
+.benefit-map {
+  /* The surface the sheet rests on, from Ink and Soft Peach in Warm White, so
+     the drawing's own margin melts into the band. */
+  --benefit-map-ground: color-mix(
+    in srgb,
+    var(--tatvyra-ink) 9%,
+    color-mix(in srgb, var(--tatvyra-peach) 7.5%, var(--tatvyra-warm-white))
+  );
+  padding-block: var(--section-y-tight);
+  background: var(--benefit-map-ground);
+}
+
+.benefit-map__card {
+  /* One of the drawing's own pixels (--sw × --sh, set from the catalogue), for
+     anything placed on it. Resolved by each descendant against this card. */
+  --u: calc(100cqi / var(--sw));
+  position: relative;
+  container-type: inline-size;
+}
+
+/* The drawing and whatever is laid over it. */
+.benefit-map__stage { position: relative; }
+
+.benefit-map__art {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* Feather the drawing's outer margin into the band; the sheet sits inside
+     the fade. Ink for the opaque stops: the mask reads alpha only. */
+  mask-image:
+    linear-gradient(to right, transparent, var(--tatvyra-ink) 2%, var(--tatvyra-ink) 98%, transparent),
+    linear-gradient(to bottom, transparent, var(--tatvyra-ink) 3.5%, var(--tatvyra-ink) 96.5%, transparent);
+  mask-composite: intersect;
+}
+
+/* Each block is trimmed to its capitals and its baseline, so a label's
+   position is where its first capital starts, as it was on the drawing, and
+   the gaps between blocks run from baseline to capital. */
+.benefit-map__head > *,
+.benefit-map__benefit p { text-box: trim-both cap alphabetic; }
+
+/* Lifted over the drawing: its mask gives it a layer of its own, which would
+   otherwise paint over the heading that precedes it. Placed in the drawing's
+   units rather than the card's height, which grows when a card opens below. */
+.benefit-map__head {
+  position: absolute;
+  z-index: 1;
+  top: calc(13.37 / 100 * var(--sh) * var(--u));
+  left: 7.48cqi;
+}
+
+.benefit-map__title {
+  font-size: 4.69cqi;
+  font-weight: var(--type-body-weight);
+  line-height: 1;
+  letter-spacing: var(--display-tracking);
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.benefit-map__note {
+  margin-top: 1.81cqi;
+  font-size: 2cqi;
+  line-height: 1.15;
+  color: var(--text);
+}
+
+.benefit-map__title + .benefit-map__note { margin-top: 1.62cqi; }
+
+.benefit-map__line { display: block; }
+
+.benefit-map__benefit {
+  position: absolute;
+  z-index: 1;
+  top: calc(var(--y) / 100 * var(--sh) * var(--u));
+  left: calc(var(--x) * 1cqi);
+  font-size: 1.45cqi;
+  line-height: 1.29;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+/* The icon is drawn on the map; the list below 62rem needs its own copy. */
+.benefit-map__icon { display: none; }
+
+@media (max-width: 62rem) {
+  .benefit-map__head,
+  .benefit-map__benefit { position: static; }
+
+  .benefit-map__title {
+    font-size: clamp(2.25rem, 1.5rem + 3vw, 3.25rem);
+    white-space: normal;
+  }
+
+  .benefit-map__note {
+    font-size: var(--step-1);
+    line-height: 1.4;
+    color: var(--text-muted);
+  }
+
+  .benefit-map__title + .benefit-map__note { margin-top: var(--space-m); }
+  .benefit-map__note + .benefit-map__note { margin-top: var(--space-xs); }
+
+  .benefit-map__line { display: inline; }
+
+  /* The space beneath the drawing is split around the card that opens there,
+     so the drawing and the list keep their distance while it is closed. */
+  .benefit-map__stage { margin-block: var(--space-l) var(--space-s); }
+
+  .benefit-map__benefits {
+    margin-top: var(--space-s);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-m) var(--space-l);
+  }
+
+  .benefit-map__benefit {
+    display: flex;
+    align-items: center;
+    gap: var(--space-s);
+    font-size: var(--step-0);
+    line-height: 1.4;
+    white-space: normal;
+  }
+
+  .benefit-map__benefit p { text-box: none; }
+
+  .benefit-map__icon {
+    display: block;
+    flex: none;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+  }
+}
+
+@media (max-width: 30rem) {
+  .benefit-map__benefits { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* --- Benefit map: exploring the drawing ------------------------------------
+   Where the catalogue gives a benefit a hotspot, its honey drop is a button
+   and the drawing is explored from it (ProductBenefitMap). A mouse over a drop
+   — or the keyboard reaching it — lifts it, warms its route and wakes its
+   benefit. A press keeps it lifted, traces the route from its source on the
+   map through the honey to the icon, and opens a small card beside it.
+
+   Nothing is redrawn. The drops are the drawing itself, cut out to each drop
+   and shown only while they differ from it, so a drop lifts exactly as it was
+   painted. The routes, glows and icon washes are ink laid on in multiply, so
+   the paper and its linework read through. Everything is placed in the
+   drawing's own pixels (--u), and coloured from Orange, Peach and Warm White. */
+
+.benefit-map__card.is-interactive { --bm-dur: 360ms; }
+
+.benefit-map__ink,
+.benefit-map__drops {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.benefit-map__ink {
+  /* Route weight, in the drawing's pixels: its own linework's, and heavier as
+     the drawing shrinks, so a route still reads on a phone. */
+  --bm-stroke: 2.6px;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  mix-blend-mode: multiply;
+}
+
+@container (max-width: 48rem) {
+  .benefit-map__ink { --bm-stroke: 4.6px; }
+}
+
+.benefit-map__glow,
+.benefit-map__ripple,
+.benefit-map__source,
+.benefit-map__halo {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* A warm bloom on the paper around the drop. */
+.benefit-map__glow-stop { stop-color: rgb(var(--orange-rgb)); }
+
+.benefit-map__glow {
+  opacity: 0;
+  transform: scale(0.8);
+  transition:
+    opacity var(--bm-dur) var(--ease-out),
+    transform var(--bm-dur) var(--ease-out);
+}
+
+.is-hovered > .benefit-map__glow,
+.is-active > .benefit-map__glow {
+  opacity: 1;
+  transform: none;
+}
+
+/* One ring spreading out from the drop, as if it had just been touched. */
+.benefit-map__ripple {
+  fill: none;
+  stroke: rgb(var(--orange-rgb));
+  stroke-width: calc(var(--bm-stroke) * 0.45);
+  opacity: 0;
+}
+
+.is-hovered > .benefit-map__ripple { animation: benefit-map-ripple 1.3s var(--ease-out); }
+.is-active > .benefit-map__ripple { animation: benefit-map-ripple-open 1.8s var(--ease-out); }
+
+@keyframes benefit-map-ripple {
+  from { opacity: 0.5; transform: none; }
+  to { opacity: 0; transform: scale(1.5); }
+}
+
+/* The same ring under a second name, so a press replays it mid-hover. */
+@keyframes benefit-map-ripple-open {
+  from { opacity: 0.5; transform: none; }
+  to { opacity: 0; transform: scale(1.5); }
+}
+
+/* The route, over its drawn line: a soft copy to preview it, and a second
+   one traced along its length (pathLength 1) from the source when opened. The
+   trace rests whole but unseen, so closing fades it rather than unwinding. */
+.benefit-map__route,
+.benefit-map__trace {
+  fill: none;
+  stroke: var(--accent-ink);
+  stroke-width: var(--bm-stroke);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0;
+  transition: opacity var(--bm-dur) var(--ease-out);
+}
+
+.is-hovered > .benefit-map__route { opacity: 0.5; }
+.is-active > .benefit-map__route { opacity: 0.28; }
+
+.benefit-map__trace { stroke-dasharray: 1 1; }
+
+.is-active > .benefit-map__trace {
+  opacity: 0.92;
+  animation: benefit-map-trace var(--trace) cubic-bezier(0.5, 0.05, 0.25, 1) both;
+}
+
+@keyframes benefit-map-trace {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+
+/* Where the route starts out on the paper. */
+.benefit-map__source {
+  fill: var(--accent-ink);
+  opacity: 0;
+  transform: scale(0.3);
+  transition:
+    opacity var(--bm-dur) var(--ease-out),
+    transform var(--bm-dur) var(--ease-out);
+}
+
+.is-hovered > .benefit-map__source { opacity: 0.5; transform: none; }
+.is-active > .benefit-map__source { opacity: 0.9; transform: none; }
+
+/* The benefit's icon: a blush of Peach inside its ring, and when opened a
+   dotted ring around it, as an atlas marks a place. */
+.benefit-map__wash {
+  fill: rgb(var(--peach-rgb));
+  opacity: 0;
+  transition: opacity var(--bm-dur) var(--ease-out);
+}
+
+.benefit-map__halo {
+  fill: none;
+  stroke: var(--accent-ink);
+  stroke-width: calc(var(--bm-stroke) * 0.7);
+  stroke-dasharray: 0.1 7;
+  stroke-linecap: round;
+  opacity: 0;
+  transform: scale(0.94);
+  transition:
+    opacity var(--bm-dur) var(--ease-out),
+    transform var(--bm-dur) var(--ease-out);
+}
+
+.is-hovered > .benefit-map__wash { opacity: 0.16; }
+
+/* Opened, the benefit wakes as the trace arrives at it. */
+.is-active > .benefit-map__wash,
+.is-active > .benefit-map__halo { transition-delay: calc(var(--trace) * 0.8); }
+
+.is-active > .benefit-map__wash { opacity: 0.3; }
+.is-active > .benefit-map__halo { opacity: 0.65; transform: none; }
+
+/* Each drop cut from the drawing: a circle of it a third wider than the drop,
+   for its shadow, feathered at the edge so it sinks into the paper as it
+   grows. Unseen at rest; hidden again only once it has settled back. */
+.benefit-map__drop {
+  --reach: calc(var(--r) * 1.34);
+  position: absolute;
+  left: calc((var(--cx) - var(--reach)) * var(--u));
+  top: calc((var(--cy) - var(--reach)) * var(--u));
+  width: calc(var(--reach) * 2 * var(--u));
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background-image: var(--art);
+  background-repeat: no-repeat;
+  background-size: 100cqi auto;
+  background-position:
+    calc((var(--reach) - var(--cx)) * var(--u))
+    calc((var(--reach) - var(--cy)) * var(--u));
+  /* Ink for the opaque stop: the mask reads alpha only. */
+  mask-image: radial-gradient(closest-side, var(--tatvyra-ink) 76%, transparent);
+  opacity: 0;
+  transition:
+    scale var(--bm-dur) var(--ease-out),
+    opacity 0s linear var(--bm-dur);
+}
+
+/* A veil of Warm White, for the drops that step back. */
+.benefit-map__drop::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--tatvyra-warm-white) 24%, transparent) 72%,
+    color-mix(in srgb, var(--tatvyra-warm-white) 0%, transparent)
+  );
+  opacity: 0;
+  transition: opacity var(--bm-dur) var(--ease-out);
+}
+
+.benefit-map__drop[data-state] {
+  opacity: 1;
+  transition:
+    scale var(--bm-dur) var(--ease-out),
+    opacity 0s;
+}
+
+.benefit-map__drop[data-state='lift'] { scale: 1.08; }
+.benefit-map__drop[data-state='dim']::after { opacity: 1; }
+
+/* On arrival the drops breathe in once, one after another along the range.
+   On `transform`, so it never fights the lift on `scale`. */
+.reveal.is-visible .benefit-map__drop {
+  animation: benefit-map-breathe 2.8s ease-in-out calc(0.9s + var(--order) * 0.24s);
+}
+
+@keyframes benefit-map-breathe {
+  0%,
+  100% { opacity: 1; transform: none; }
+  50% { opacity: 1; transform: scale(1.04); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal.is-visible .benefit-map__drop { animation: none; }
+}
+
+/* The drop's button: a little wider than the drop, and never smaller than a
+   fingertip on a phone. */
+.benefit-map__spot {
+  position: absolute;
+  z-index: 2;
+  left: calc(var(--cx) * var(--u));
+  top: calc(var(--cy) * var(--u));
+  width: max(calc(var(--r) * 2.3 * var(--u)), 2rem);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.benefit-map__spot:focus-visible {
+  border-radius: 50%;
+  outline-offset: 2px;
+}
+
+/* The labels: the others step back (still clearing AA), the one in question
+   warms, and turns fully to accent once its route has been traced to it. */
+.is-interactive .benefit-map__benefit {
+  transition:
+    color var(--bm-dur) var(--ease-out),
+    opacity var(--bm-dur) var(--ease-out);
+}
+
+.has-focus .benefit-map__benefit:not(.is-active, .is-hovered) { opacity: 0.68; }
+
+.benefit-map__benefit.is-hovered {
+  color: color-mix(in srgb, var(--accent-ink) 45%, var(--text));
+}
+
+.benefit-map__benefit.is-active {
+  color: var(--accent-ink);
+  transition-delay: calc(var(--trace) * 0.8);
+}
+
+@media (max-width: 62rem) {
+  .is-interactive .benefit-map__icon {
+    transition: box-shadow var(--bm-dur) var(--ease-out);
+  }
+
+  .benefit-map__benefit.is-active .benefit-map__icon {
+    box-shadow:
+      0 0 0 2px var(--benefit-map-ground),
+      0 0 0 3.5px rgb(var(--orange-rgb) / 0.5);
+  }
+}
+
+/* The card. By default it opens beneath the drawing, pointing up at its
+   drop, so it never covers the drawing; on a wide drawing it is pinned beside
+   the drop instead, at a point the catalogue keeps clear of the route. */
+.benefit-map__detail {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition:
+    grid-template-rows var(--dur) var(--ease-out),
+    visibility 0s linear var(--dur);
+}
+
+.benefit-map__detail[data-open] {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.benefit-map__detail-clip {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.benefit-map__detail-card {
+  --card-w: min(100cqi, 26rem);
+  /* Centred under its drop, and kept within the drawing's width. */
+  --off: clamp(
+    0px,
+    calc(var(--drop-x) * var(--u) - var(--card-w) / 2),
+    calc(100cqi - var(--card-w))
+  );
+  position: relative;
+  width: var(--card-w);
+  margin: 0.625rem 0 var(--space-2xs) var(--off);
+  padding: var(--space-s) var(--space-m) calc(var(--space-s) + 0.125rem);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface-raised);
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease-out);
+  animation: benefit-map-card-in var(--dur) var(--ease-out);
+}
+
+.benefit-map__detail[data-open] .benefit-map__detail-card { opacity: 1; }
+
+@keyframes benefit-map-card-in {
+  from { opacity: 0; translate: 0 0.3rem; }
+}
+
+/* The point up to the drop. */
+.benefit-map__detail-card::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: clamp(
+    1.25rem,
+    calc(var(--drop-x) * var(--u) - var(--off)),
+    calc(var(--card-w) - 1.25rem)
+  );
+  width: 9px;
+  height: 9px;
+  translate: -50% 0;
+  rotate: 45deg;
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+  background: inherit;
+}
+
+.benefit-map__detail-title {
+  font-size: var(--step-0);
+  font-weight: var(--type-product-weight);
+  letter-spacing: var(--product-tracking);
+  line-height: 1.25;
+  color: var(--text);
+}
+
+/* A drop of honey before the title. */
+.benefit-map__detail-title::before {
+  content: '';
+  display: inline-block;
+  width: 0.5em;
+  height: 0.5em;
+  margin-right: 0.5em;
+  border-radius: 50%;
+  vertical-align: 0.06em;
+  background: radial-gradient(
+    circle at 35% 32%,
+    var(--tatvyra-peach),
+    color-mix(in srgb, var(--tatvyra-orange) 80%, var(--tatvyra-ink)) 78%
+  );
+}
+
+.benefit-map__detail-text {
+  margin-top: 0.3em;
+  font-size: var(--step--1);
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+/* Wide enough for the card to sit on the drawing: pinned by one corner at its
+   point, sized with the drawing, opening a beat after the press so the trace
+   leads. */
+@container (min-width: 68.75rem) {
+  .benefit-map__detail {
+    position: absolute;
+    z-index: 3;
+    top: calc(var(--card-y) * var(--u));
+    left: calc(var(--card-x) * var(--u));
+    display: block;
+    width: 14.5cqi;
+    translate: var(--card-tx) var(--card-ty);
+    transform-origin: var(--card-origin);
+    opacity: 0;
+    scale: 0.96;
+    transition:
+      opacity var(--bm-dur) var(--ease-out),
+      scale var(--bm-dur) var(--ease-out),
+      visibility 0s linear var(--bm-dur);
+  }
+
+  .benefit-map__detail[data-open] {
+    opacity: 1;
+    scale: 1;
+    transition-delay: 0.12s, 0.12s, 0s;
+  }
+
+  .benefit-map__detail-clip { overflow: visible; }
+
+  .benefit-map__detail-card {
+    width: auto;
+    margin: 0;
+    padding: 0.95cqi 1.1cqi 1.05cqi;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .benefit-map__detail-card::before { content: none; }
+
+  .benefit-map__detail-title { font-size: 1.18cqi; }
+  .benefit-map__detail-text { font-size: max(0.75rem, 1.08cqi); }
+}
+
+/* --- Origin trail ------------------------------------------------------------
+   "Origin & process" as a map on which every point leads home
+   (ProductOriginTrail): the headline on the left; on the right an illustrated
+   map with photographs around it, each joined by a dotted route to a pin on
+   the honey's source.
+
+   Everything on the map is placed in the illustration's own units, `--u`: one
+   unit is 1/--sw of the width the map is drawn at, resolved against the
+   nearest container where it is used. Set in the body sans throughout. */
+
+.trail {
+  --u: calc(100cqi / var(--sw));
+  position: relative;
+  overflow: hidden;
+  padding-block: var(--section-y);
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.trail__grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 34fr) minmax(0, 66fr);
+}
+
+/* --- Headline ----------------------------------------------------------------- */
+
+.trail__intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.trail__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  font-size: var(--step--2);
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.trail__eyebrow::after {
+  content: '';
+  width: clamp(3rem, 1rem + 9vw, 11rem);
+  height: 1px;
+  background: var(--line-strong);
+}
+
+.trail__title {
+  margin-top: var(--space-l);
+  font-size: clamp(2.75rem, 1rem + 4vw, 4.5rem);
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  color: var(--tatvyra-aubergine);
+}
+
+.trail__title span { display: block; }
+
+/* The blossom lines in the accent ink, deepening down the two lines. Accent
+   ink rather than flat Orange: the display size needs 3:1, which it clears. */
+.trail__title-accent { color: var(--accent-ink); }
+
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+  .trail__title-accent {
+    background: linear-gradient(
+      to bottom,
+      var(--accent-ink),
+      color-mix(in srgb, var(--accent-ink) 70%, var(--tatvyra-ink))
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
+.trail__lede {
+  max-width: 30ch;
+  margin-top: clamp(1.5rem, 1rem + 1.5vw, 2.25rem);
+  font-size: var(--step-1);
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+/* On the grid's floor, clear of the sprig that bleeds off the corner. */
+.trail__tagline {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  margin-top: auto;
+  padding-top: var(--space-xl);
+  padding-left: clamp(0rem, -3rem + 6vw, 4rem);
+  white-space: nowrap;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.trail__tagline::before {
+  content: '';
+  flex: none;
+  width: 2.75rem;
+  height: 1px;
+  background: var(--line-strong);
+}
+
+/* White acacia bleeding off the section's lower-left corner, and honey
+   running down its right edge, both as in the layout reference. */
+.trail__sprig,
+.trail__drip {
+  position: absolute;
+  height: auto;
+  pointer-events: none;
+}
+
+.trail__sprig { left: 0; bottom: 0; width: clamp(6rem, 2rem + 6vw, 9.5rem); }
+.trail__drip { top: 0; right: 0; width: clamp(3rem, 0.75rem + 4.2vw, 5.25rem); }
+
+/* --- The map ---------------------------------------------------------------- */
+
+.trail__atlas {
+  position: relative;
+  container-type: inline-size;
+  border-radius: var(--radius-card);
+}
+
+.trail__stage {
+  position: relative;
+  container-type: inline-size;
+  aspect-ratio: var(--sw) / var(--sh);
+}
+
+.trail__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Dots rather than dashes: zero-length dashes with round caps. */
+.trail__route {
+  fill: none;
+  stroke: rgb(var(--ink-rgb) / 0.62);
+  stroke-width: 3.4;
+  stroke-linecap: round;
+  stroke-dasharray: 0 13;
+  transition:
+    stroke var(--dur) var(--ease),
+    stroke-width var(--dur) var(--ease),
+    opacity var(--dur) var(--ease);
+}
+
+.trail__route.is-active { stroke: var(--tatvyra-purple); stroke-width: 4.4; }
+
+/* The source: Orange as a mark, never as text, with a slow ring around it. */
+.trail__pin-ring { fill: var(--tatvyra-orange); stroke: var(--tatvyra-warm-white); stroke-width: 3.5; }
+.trail__pin-core { fill: var(--tatvyra-aubergine); }
+
+.trail__pin-pulse {
+  fill: color-mix(in srgb, var(--tatvyra-orange) 30%, transparent);
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: trail-pulse 2.6s var(--ease-out) infinite;
+}
+
+@keyframes trail-pulse {
+  from { scale: 0.55; opacity: 1; }
+  to { scale: 1.7; opacity: 0; }
+}
+
+/* Centred on their points; trailing tracking is padded back on the left so
+   the letters, not the box, sit on the centre. */
+.trail__country,
+.trail__place {
+  position: absolute;
+  left: calc(var(--x) * var(--u));
+  top: calc(var(--y) * var(--u));
+  translate: -50% -50%;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.trail__country {
+  padding-left: 0.42em;
+  font-size: var(--step--1);
+  font-weight: 500;
+  letter-spacing: 0.42em;
+  color: var(--text-muted);
+}
+
+/* Ending at its point, up and to the left of the pin, on plain paper. */
+.trail__place {
+  translate: -100% -50%;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  color: var(--tatvyra-aubergine);
+  /* Held off the painted mountains behind it. */
+  text-shadow: 0 0 6px var(--surface), 0 0 2px var(--surface);
+}
+
+.trail__photo {
+  position: absolute;
+  left: calc((var(--x) - var(--r)) * var(--u));
+  top: calc((var(--y) - var(--r)) * var(--u));
+  width: calc(var(--r) * 2 * var(--u));
+  aspect-ratio: 1;
+  padding: calc(var(--r) * 0.075 * var(--u));
+  border-radius: 50%;
+  background: var(--tatvyra-warm-white);
+  box-shadow: 0 14px 30px -16px rgb(var(--ink-rgb) / 0.45);
+  transition: scale var(--dur) var(--ease-out);
+}
+
+.trail__photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.trail__photo.is-active { scale: 1.04; }
+
+/* --- Labels, placed on the map ------------------------------------------------ */
+
+.trail__points {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  pointer-events: none;
+}
+
+.trail__label {
+  position: absolute;
+  left: calc(var(--x) * var(--u));
+  top: calc(var(--y) * var(--u));
+  width: calc(var(--lw) * var(--u));
+  font-size: 0.8125rem;
+  pointer-events: auto;
+  transition:
+    opacity var(--dur) var(--ease),
+    translate var(--dur) var(--ease-out);
+}
+
+.trail__label-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.5;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.trail__label-num { display: none; }
+
+.trail__label-body {
+  margin-top: 0.45rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.trail__label-body + .trail__label-body { margin-top: 0.35rem; }
+
+.trail__label-lead {
+  margin-top: 0.5rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.trail__label-list {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0.4rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trail__label-list li {
+  position: relative;
+  padding-left: 1.05rem;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+.trail__label-list li::before {
+  content: '';
+  position: absolute;
+  top: 0.45em;
+  left: 0.15rem;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--tatvyra-orange);
+}
+
+.trail__hint { display: none; }
+
+/* --- Explore: with a mouse, the labels arrive when the map is hovered --------
+   Only where hovering is real: a fine pointer on anything wider than the
+   phone layout. Focus brings them in too, so the keyboard gets the same. */
+
+@media (hover: hover) and (pointer: fine) and (min-width: 48.0625rem) {
+  .trail__label {
+    opacity: 0;
+    translate: 0 0.5rem;
+  }
+
+  .trail__atlas:is(:hover, :focus-within) .trail__label {
+    opacity: 1;
+    translate: 0 0;
+    transition-delay: calc(var(--i) * 70ms);
+  }
+
+  /* Pointing at one point quietens the others. */
+  .trail__atlas.has-active .trail__label:not(.is-active) { opacity: 0.4; transition-delay: 0ms; }
+
+  .trail__route { opacity: 0.55; }
+
+  .trail__atlas:is(:hover, :focus-within) .trail__route {
+    opacity: 1;
+    animation: trail-march 0.7s linear infinite;
+  }
+
+  .trail__hint {
+    position: absolute;
+    left: calc(var(--x) * var(--u));
+    top: calc(var(--y) * var(--u));
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    transition: opacity var(--dur) var(--ease);
+  }
+
+  .trail__hint::before {
+    content: '';
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--tatvyra-orange);
+  }
+
+  .trail__atlas:is(:hover, :focus-within) .trail__hint { opacity: 0; }
+}
+
+/* Dots walk the routes toward the source. */
+@keyframes trail-march {
+  to { stroke-dashoffset: -8; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trail__pin-pulse { animation: none; opacity: 0; }
+  .trail__atlas:is(:hover, :focus-within) .trail__route { animation: none; }
+  .trail__label { translate: none !important; }
+}
+
+/* --- Stacked: headline, then the map ------------------------------------------ */
+
+@media (max-width: 75rem) {
+  .trail__grid { grid-template-columns: minmax(0, 1fr); }
+  .trail__lede { max-width: 46ch; }
+  .trail__tagline { margin-top: var(--space-l); padding-top: 0; padding-left: 0; white-space: normal; }
+  .trail__sprig { display: none; }
+
+  .trail__atlas {
+    width: min(100%, 60rem);
+    margin: clamp(2.5rem, 1.5rem + 3vw, 3.5rem) auto 0;
+  }
+}
+
+/* --- Narrow: the map fills the width, the labels become a numbered list ------- */
+
+@media (max-width: 48rem) {
+  .trail__drip { display: none; }
+
+  /* The labels' side of the map is empty once they leave it, so the frame
+     shows only the part holding the map and photographs (1270 of the view's
+     1600 units), drawn larger. */
+  .trail__frame { overflow: hidden; aspect-ratio: 1270 / 1175; }
+  .trail__stage { width: calc(100% * 1600 / 1270); }
+
+  .trail__photo::after {
+    content: attr(data-index);
+    position: absolute;
+    top: -0.2rem;
+    left: -0.2rem;
+    display: grid;
+    place-items: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background: var(--tatvyra-purple);
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--text-on-dark);
+  }
+
+  .trail__points {
+    position: static;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.75rem 1.5rem;
+    margin-top: 1.5rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .trail__label { position: static; width: auto; }
+
+  .trail__place { font-size: 0.5625rem; letter-spacing: 0.22em; }
+
+  .trail__label-num {
+    display: inline;
+    margin-right: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--tatvyra-purple);
+  }
+}
+
+@media (max-width: 30rem) {
+  .trail__points { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* --- Painted India map (IndiaMapArt) ------------------------------------------
+   The one map beneath every origin section: India's official outline painted
+   as a sepia watercolour wash on crumpled paper, pooling darker at the rim and
+   bleeding softly into the page. Brand colours only: the wash is Warm White
+   greyed with Ink and warmed with Soft Peach; the rim, the bleed and the fine
+   border are Ink. */
+
+.ima__wash-colour {
+  flood-color: color-mix(
+    in srgb,
+    var(--tatvyra-ink) 8%,
+    color-mix(in srgb, var(--tatvyra-peach) 12%, var(--tatvyra-warm-white))
+  );
+}
+
+.ima__rim-colour {
+  flood-color: color-mix(in srgb, var(--tatvyra-ink) 55%, var(--tatvyra-warm-white));
+  flood-opacity: 0.55;
+}
+
+.ima__bleed-colour {
+  flood-color: color-mix(in srgb, var(--tatvyra-ink) 30%, var(--tatvyra-warm-white));
+  flood-opacity: 0.2;
+}
+
+.ima__land { fill: var(--tatvyra-ink); }
+
+/* Painted into the paper rather than laid on it: light areas take the wash,
+   only the shading shows — as watercolour does. */
+.ima__painting { mix-blend-mode: multiply; }
+
+.ima__border {
+  fill: none;
+  stroke: var(--tatvyra-ink);
+  stroke-width: 0.8px;
+  stroke-linejoin: round;
+  opacity: 0.3;
+  vector-effect: non-scaling-stroke;
 }

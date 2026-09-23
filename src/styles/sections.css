@@ -81,7 +81,6 @@
 
 .hero__eyebrow {
   margin-bottom: var(--space-s);
-  font-family: var(--font-ui);
   color: var(--text);
 }
 
@@ -98,7 +97,6 @@
 .hero__lede {
   max-width: 38ch;
   margin-top: var(--space-m);
-  font-family: var(--font-ui);
   font-size: var(--step-1);
   font-weight: 400;
   line-height: 1.55;
@@ -112,8 +110,6 @@
   gap: var(--space-s) var(--space-m);
   margin-top: var(--space-l);
 }
-
-.hero__actions .btn { font-family: var(--font-ui); }
 
 /* The quiet link beside the primary button. At rest it is Ink over a hairline;
    on hover the text turns Purple and a Burnt Orange rule sweeps in over the
@@ -172,7 +168,6 @@
   align-items: center;
   gap: clamp(2.5rem, 1.5rem + 3vw, 5rem);
   padding-right: clamp(2.5rem, 1.5rem + 3vw, 5rem);
-  font-family: var(--font-ui);
   font-size: var(--step-1);
   font-weight: 500;
   letter-spacing: 0.12em;
@@ -236,68 +231,486 @@
 }
 
 /* --- Brand philosophy -----------------------------------------------------
-   Retuned to the refresh palette so it reads as one cream block with the
-   category section directly below it: Purple eyebrow, Fraunces in Purple,
-   and body copy in the same translucent Ink the categories use. */
+   The brand statement as an editorial spread (BrandPhilosophy): the headline
+   on the left; the brand and its four clean-label standards on the right;
+   between them a ruled axis carrying a turning seal. It sits under soft
+   washes of Lilac and Purple with a paper grain — brand colours faded to
+   their own transparent, so no new hue is made. Type is the site's one sans
+   throughout, the headline set large and light, as the origin map's is.
+
+   The scroll work reads two numbers the section is handed (useScrollScrub):
+   --p, its passage through the viewport, 0 → 1, and --ink, how far the
+   headline has been written in. Everything scrubbed is a calc() of those, so
+   nothing can fall out of step with the scroll, and a still page shows a
+   finished section. */
 
 .philosophy {
-  padding-block: 0;
+  --p: 0.5;
+  --ink: 1;
+  /* Ink speckle with its alpha baked in, as the shelf's grain is. */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' seed='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.16 0 0 0 0 0.13 0 0 0 0 0.09 0 0 0 -1.9 1.05'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E");
+  --hairline: color-mix(in srgb, var(--tatvyra-purple) 26%, transparent);
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-block: clamp(3rem, 2rem + 3.6vw, 5.5rem);
+  border-top: 1px solid rgb(var(--ink-rgb) / 0.08);
   background: var(--tatvyra-warm-white);
 }
 
-.philosophy .eyebrow {
-  font-family: var(--font-ui);
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  color: var(--tatvyra-purple);
+.philosophy::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: var(--grain);
+  background-size: 180px 180px;
+  opacity: 0.22;
 }
 
-.philosophy .display {
-  font-family: var(--font-serif);
-  font-weight: 400;
-  line-height: 1.08;
-  letter-spacing: -0.01em;
-  color: var(--tatvyra-purple);
+/* --- The washes -----------------------------------------------------------
+   A Lilac orb behind the axis, a paler disc over the right-hand page, a
+   Purple haze in the low corner and a Lilac arc across the high one. Each
+   drifts a little against the scroll. Faded out at the section's top and
+   bottom edges, so neither neighbour meets a cut-off haze. */
+
+.philosophy__wash {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  /* Ink for the opaque stops: the mask reads alpha only. */
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    var(--tatvyra-ink) 10%,
+    var(--tatvyra-ink) 80%,
+    transparent
+  );
 }
+
+.philosophy__wash > span {
+  position: absolute;
+  aspect-ratio: 1;
+  border-radius: 50%;
+}
+
+.philosophy__orb {
+  top: 52%;
+  left: 47%;
+  width: min(46vw, 42rem);
+  translate: -64% calc(-50% + (0.5 - var(--p)) * 8rem);
+  scale: calc(0.93 + var(--p) * 0.12);
+  background:
+    radial-gradient(
+      circle at 32% 74%,
+      color-mix(in srgb, var(--tatvyra-purple) 20%, transparent),
+      color-mix(in srgb, var(--tatvyra-purple) 0%, transparent) 60%
+    ),
+    radial-gradient(
+      circle at 40% 46%,
+      rgb(var(--lilac-rgb) / 0.66),
+      rgb(var(--lilac-rgb) / 0.34) 52%,
+      rgb(var(--lilac-rgb) / 0.12) 70.5%,
+      rgb(var(--lilac-rgb) / 0) 71%
+    );
+}
+
+.philosophy__moon {
+  top: 50%;
+  left: 60%;
+  width: min(52vw, 48rem);
+  translate: -50% calc(-50% + (var(--p) - 0.5) * 5rem);
+  background: radial-gradient(
+    circle at 36% 32%,
+    color-mix(in srgb, var(--tatvyra-warm-white) 50%, transparent),
+    color-mix(in srgb, var(--tatvyra-warm-white) 12%, transparent) 70%
+  );
+  box-shadow: inset 0 0 0 1px rgb(var(--lilac-rgb) / 0.22);
+}
+
+.philosophy__haze--low {
+  bottom: -32%;
+  left: -14%;
+  width: min(62vw, 54rem);
+  translate: calc((0.5 - var(--p)) * 3rem) calc((var(--p) - 0.5) * -4rem);
+  background: radial-gradient(
+    circle at 44% 50%,
+    color-mix(in srgb, var(--tatvyra-purple) 52%, var(--tatvyra-lilac)),
+    rgb(var(--lilac-rgb) / 0.45) 34%,
+    rgb(var(--lilac-rgb) / 0) 66%
+  );
+  opacity: 0.7;
+}
+
+.philosophy__haze--high {
+  top: -74%;
+  right: -28%;
+  width: min(80vw, 70rem);
+  translate: calc((var(--p) - 0.5) * 3rem) calc((0.5 - var(--p)) * 3rem);
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgb(var(--lilac-rgb) / 0) 46%,
+    rgb(var(--lilac-rgb) / 0.42) 60%,
+    color-mix(in srgb, var(--tatvyra-purple) 16%, transparent) 66%,
+    rgb(var(--lilac-rgb) / 0) 71%
+  );
+}
+
+/* --- The spread ----------------------------------------------------------- */
 
 .philosophy__inner {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: clamp(2rem, 1rem + 3vw, 4.5rem);
-  align-items: start;
-  padding-block: var(--section-y-tight);
-  border-top: 1px solid rgb(var(--ink-rgb) / 0.1);
+  grid-template-columns: minmax(0, 1.08fr) auto minmax(0, 1fr);
+  column-gap: clamp(1.5rem, 0.4rem + 2.6vw, 3.75rem);
 }
 
-.philosophy__lead .display { margin-top: var(--space-s); max-width: 18ch; }
+.philosophy__lead,
+.philosophy__body {
+  display: flex;
+  flex-direction: column;
+}
+
+.philosophy__lead {
+  justify-content: space-between;
+  gap: var(--space-xl);
+}
+
+.philosophy__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  font-size: var(--step--2);
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--tatvyra-purple);
+}
+
+.philosophy__eyebrow::after {
+  content: '';
+  flex: 0 1 clamp(3rem, 1rem + 5vw, 7rem);
+  min-width: 1.5rem;
+  height: 1px;
+  background: color-mix(in srgb, var(--tatvyra-purple) 50%, transparent);
+}
+
+.philosophy__title {
+  margin-top: clamp(1.5rem, 0.8rem + 2vw, 2.75rem);
+  font-size: clamp(2.75rem, 1rem + 5.2vw, 6.25rem);
+  font-weight: var(--weight-regular);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+}
+
+.philosophy__line { display: block; }
+
+/* What is in it is written in Purple, deepening to Aubergine on its second
+   line; what is not stays muted Ink (still 3:1 at this size). */
+.philosophy__line.is-said { --word-ink: var(--tatvyra-purple); }
+
+.philosophy__line.is-said + .philosophy__line.is-said {
+  --word-ink: color-mix(in srgb, var(--tatvyra-aubergine) 84%, var(--tatvyra-purple));
+}
+
+.philosophy__line.is-unsaid {
+  --word-ink: color-mix(in srgb, var(--tatvyra-ink) 55%, var(--tatvyra-warm-white));
+}
+
+/* Each word takes its share of --ink in turn — 0 until the pen reaches it, 1
+   once it has passed, overlapping its neighbours by two words — and comes
+   up from a faint underdrawing into its ink and into focus. */
+.philosophy__word {
+  --w: clamp(0, (var(--ink) * (var(--words) + 2) - var(--i)) / 2, 1);
+  display: inline-block;
+  color: color-mix(
+    in srgb,
+    var(--word-ink) calc(var(--w) * 100%),
+    color-mix(in srgb, var(--tatvyra-ink) 12%, transparent)
+  );
+  translate: 0 calc((1 - var(--w)) * 0.06em);
+  filter: blur(calc((1 - var(--w)) * 1.5px));
+}
+
+.philosophy__signoff {
+  font-size: var(--step--1);
+  font-weight: var(--type-label-weight);
+  line-height: 1.95;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--tatvyra-purple);
+}
+
+.philosophy__signoff span { display: block; }
+
+/* --- The axis --------------------------------------------------------------
+   A hairline drawn down the spine as the section rises, broken by the seal,
+   which turns with the scroll. */
+
+.philosophy__axis {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: clamp(8rem, 4.5rem + 5vw, 11rem);
+}
+
+.philosophy__rule {
+  flex: 1;
+  width: 1px;
+  transform-origin: top;
+  scale: 1 var(--draw);
+}
+
+.philosophy__rule:first-child {
+  --draw: clamp(0, (var(--p) - 0.1) / 0.2, 1);
+  background: linear-gradient(to bottom, transparent, var(--hairline) 35%);
+}
+
+.philosophy__rule:last-child {
+  --draw: clamp(0, (var(--p) - 0.24) / 0.2, 1);
+  background: linear-gradient(to bottom, var(--hairline) 65%, transparent);
+}
+
+.philosophy__seal {
+  position: relative;
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 1;
+}
+
+.philosophy__seal--axis { margin-block: var(--space-s); }
+
+.philosophy__ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  rotate: calc(var(--p) * var(--turn, 270deg));
+}
+
+.philosophy__ring text {
+  font-size: 8.4px;
+  font-weight: var(--type-label-weight);
+  fill: var(--tatvyra-purple);
+}
+
+.philosophy__seal-dot {
+  width: 5px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--tatvyra-aubergine);
+}
+
+/* --- The standards ----------------------------------------------------------- */
 
 .philosophy__body {
-  display: grid;
-  gap: var(--space-s);
-  max-width: 54ch;
-  font-family: var(--font-ui);
-  font-size: var(--step-0);
-  line-height: 1.6;
+  gap: clamp(2rem, 1.2rem + 2vw, 3rem);
+  padding-top: clamp(2.25rem, 1.2rem + 2.8vw, 4rem);
+}
+
+.philosophy__text {
+  max-width: 46ch;
+  font-size: clamp(1rem, 0.92rem + 0.25vw, 1.125rem);
+  line-height: 1.7;
   color: rgb(var(--ink-rgb) / 0.7);
 }
 
-.philosophy__body p:last-child {
-  color: var(--tatvyra-purple);
-  font-weight: 600;
+.philosophy__claims {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.25rem, 0.8rem + 1vw, 1.75rem) clamp(1rem, 0.4rem + 1.6vw, 2rem);
+  max-width: 34rem;
 }
 
+.philosophy__claim {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: var(--step-0);
+  line-height: 1.35;
+  color: rgb(var(--ink-rgb) / 0.82);
+}
+
+/* A Lilac disc lit from the upper left, rimmed in Lilac. */
+.philosophy__chip {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: clamp(3.5rem, 2.8rem + 1.6vw, 4.25rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  color: var(--tatvyra-aubergine);
+  background: radial-gradient(
+    circle at 34% 28%,
+    color-mix(in srgb, var(--tatvyra-lilac) 18%, var(--tatvyra-warm-white)),
+    color-mix(in srgb, var(--tatvyra-lilac) 50%, var(--tatvyra-warm-white))
+  );
+  box-shadow:
+    inset 0 0 0 1px rgb(var(--lilac-rgb) / 0.6),
+    0 12px 24px -16px color-mix(in srgb, var(--tatvyra-purple) 50%, transparent);
+}
+
+.philosophy__chip svg {
+  width: 44%;
+  height: auto;
+}
+
+/* Each icon draws its own strokes in as its standard arrives. Every stroke
+   in these icons is shorter than the dash, so one value covers them all. */
+.philosophy__chip :is(path, circle) {
+  stroke-dasharray: 70;
+  stroke-dashoffset: 70;
+  transition: stroke-dashoffset 1.5s var(--ease-out) calc(0.3s + var(--n) * 0.11s);
+}
+
+.philosophy__claim.is-visible .philosophy__chip :is(path, circle) { stroke-dashoffset: 0; }
+
+.philosophy__close {
+  display: flex;
+  align-items: center;
+  gap: var(--space-m);
+  margin-top: auto;
+}
+
+.philosophy__signoff--close {
+  flex: 1;
+  padding-top: var(--space-m);
+  border-top: 1px solid var(--hairline);
+}
+
+/* The FSSAI seal turns against the axis seal. Its outer rule is the seal's
+   edge; the mark at its heart holds still. */
+.philosophy__seal--fssai {
+  --turn: -200deg;
+  width: clamp(8.5rem, 6rem + 5vw, 11.25rem);
+}
+
+.philosophy__seal--fssai::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tatvyra-purple) 40%, transparent);
+}
+
+.philosophy__fssai {
+  width: 44%;
+  aspect-ratio: 600 / 291;
+  background: var(--tatvyra-aubergine);
+  -webkit-mask: url('/images/fssai-mark.webp') center / contain no-repeat;
+  mask: url('/images/fssai-mark.webp') center / contain no-repeat;
+}
+
+/* --- The rail -----------------------------------------------------------------
+   The brand line set upright in the right-hand margin, sliding gently
+   against the scroll. Only where the margin has room for it. */
+
+.philosophy__rail {
+  position: absolute;
+  top: 50%;
+  right: max(1rem, calc((100% - var(--page-max)) / 2 - 0.25rem));
+  display: none;
+  align-items: center;
+  gap: 1.25rem;
+  writing-mode: vertical-rl;
+  translate: 0 calc(-50% + (0.5 - var(--p)) * 5rem);
+  font-size: 11px;
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: color-mix(in srgb, var(--tatvyra-purple) 72%, transparent);
+}
+
+.philosophy__rail::before,
+.philosophy__rail::after {
+  content: '';
+  width: 1px;
+  height: clamp(3rem, 7vh, 5.5rem);
+  background: var(--hairline);
+}
+
+.philosophy__rail span { color: var(--tatvyra-purple); }
+
+@media (min-width: 80rem) {
+  .philosophy__rail { display: flex; }
+}
+
+/* --- Narrow ------------------------------------------------------------------
+   One column. The axis turns on its side between the headline and the
+   standards: a hairline either side of the seal, drawn from the left. */
+
 @media (max-width: 62rem) {
-  .philosophy__inner { grid-template-columns: minmax(0, 1fr); }
+  .philosophy__inner {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--space-xl);
+  }
+
+  .philosophy__lead { gap: var(--space-l); }
+
+  .philosophy__axis {
+    flex-direction: row;
+    width: 100%;
+  }
+
+  .philosophy__rule {
+    width: auto;
+    height: 1px;
+    transform-origin: left;
+    scale: var(--draw) 1;
+  }
+
+  .philosophy__rule:first-child {
+    background: linear-gradient(to right, transparent, var(--hairline) 35%);
+  }
+
+  .philosophy__rule:last-child {
+    background: linear-gradient(to right, var(--hairline) 65%, transparent);
+  }
+
+  .philosophy__seal--axis {
+    width: 7.25rem;
+    margin: 0 var(--space-m);
+  }
+
+  .philosophy__body { padding-top: 0; }
+
+  .philosophy__orb {
+    top: 36%;
+    left: 50%;
+    width: 92vw;
+    translate: -50% calc(-50% + (0.5 - var(--p)) * 6rem);
+  }
+
+  .philosophy__moon {
+    top: 70%;
+    width: 110vw;
+  }
+}
+
+@media (max-width: 30rem) {
+  /* Tracked a little closer, so the eyebrow and its rule hold one line. */
+  .philosophy__eyebrow { letter-spacing: 0.16em; }
+}
+
+@media (max-width: 26rem) {
+  .philosophy__claims { grid-template-columns: minmax(0, 1fr); }
+
+  .philosophy__seal--fssai { width: 7.5rem; }
 }
 
 /* --- Four pillars ---------------------------------------------------------
    The four ranges as irregular blobs scattered across an editorial
-   composition, each carrying its packshot under a drawn lid that pops off on
-   hover and lets a few of the contents drift out.
+   composition, each carrying its packshot under a drawn lid that lifts away
+   on hover, letting a soft light rise from the jar.
 
    GEOMETRY. Everything that has to land on the jar — the lid, the neck under
-   it, the glow, the pieces — is placed from the custom properties set per card
+   it, the glow, the motes — is placed from the custom properties set per card
    in FourPillars.jsx: --lid-x/y/w/h (the cap's box as fractions of the
    photograph) and --cap-round/-bot/-face (how round that cap's ellipse reads,
    which differs per shot). Each frame is cut to the blob's own aspect, so
@@ -306,13 +719,13 @@
    that drifts off 0.82 still lands. All of these vars are unitless numbers
    multiplied by 1% at the point of use.
 
-   The lid and the pieces live OUTSIDE .pillar__blob, which clips, so they can
+   The lid and the motes live OUTSIDE .pillar__blob, which clips, so they can
    travel clear of the blob's edge. ---------------------------------------- */
 
 .pillars {
   position: relative;
   isolation: isolate;
-  padding-block: clamp(4rem, 2.2rem + 6vw, 7rem) clamp(3.5rem, 2rem + 5vw, 6rem);
+  padding-block: clamp(2.75rem, 1.8rem + 3.4vw, 4.75rem) clamp(2.5rem, 1.6rem + 3vw, 4.25rem);
   background: var(--tatvyra-warm-white);
 }
 
@@ -341,14 +754,13 @@
   flex-direction: column;
   align-items: center;
   gap: 0.85rem;
-  margin-bottom: clamp(2.5rem, 1.4rem + 3vw, 4rem);
+  margin-bottom: clamp(2rem, 1.2rem + 2.2vw, 3rem);
   text-align: center;
 }
 
 .pillars__eyebrow {
-  font-family: var(--font-ui);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: var(--type-label-weight);
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--tatvyra-purple);
@@ -356,17 +768,15 @@
 
 .pillars__title {
   max-width: 20ch;
-  font-family: var(--font-serif);
   font-size: clamp(2.125rem, 1.2rem + 3vw, 3.5rem);
-  font-weight: 400;
+  font-weight: var(--type-heading-weight);
   line-height: 1.06;
-  letter-spacing: -0.015em;
+  letter-spacing: var(--heading-tracking);
   color: var(--tatvyra-purple);
 }
 
 .pillars__intro {
   max-width: 44ch;
-  font-family: var(--font-ui);
   font-size: 16px;
   line-height: 1.55;
   color: rgb(var(--ink-rgb) / 0.7);
@@ -414,6 +824,11 @@
   --mouth-cx: calc((var(--stage-left) + (var(--lid-x) + var(--lid-w) / 2) * var(--stage-w)) * 1%);
   --mouth-cy: calc((var(--stage-top) + (var(--lid-y) + var(--lid-h) / 2) * var(--stage-h)) * 1%);
 
+  /* One timing for everything that moves when the jar opens: slow, and
+     easing out without overshoot. */
+  --open-dur: 900ms;
+  --open-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -443,7 +858,9 @@
   -webkit-clip-path: var(--blob);
   clip-path: var(--blob);
   filter: drop-shadow(0 18px 26px rgb(var(--ink-rgb) / 0.18));
-  transition: translate var(--dur-slow) var(--ease-out);
+  transition:
+    translate var(--open-dur) var(--open-ease),
+    filter var(--open-dur) var(--open-ease);
 }
 
 .pillar__stage {
@@ -452,7 +869,7 @@
   top: calc(var(--stage-top) * 1%);
   width: calc(var(--stage-w) * 1%);
   height: calc(var(--stage-h) * 1%);
-  transition: scale var(--dur-slow) var(--ease-out);
+  transition: scale var(--open-dur) var(--open-ease);
 }
 
 .pillar__photo {
@@ -461,7 +878,7 @@
   height: 100%;
   object-fit: cover;
   filter: saturate(0.94) brightness(0.98);
-  transition: filter var(--dur-slow) var(--ease-out);
+  transition: filter var(--open-dur) var(--open-ease);
 }
 
 /* Vignette, so the jar carries the card and the scene falls back. */
@@ -471,12 +888,12 @@
   background:
     radial-gradient(72% 58% at 50% 44%, transparent 40%, rgb(var(--ink-rgb) / 0.4) 100%),
     linear-gradient(180deg, rgb(var(--ink-rgb) / 0.14), transparent 30%);
-  transition: opacity var(--dur-slow) var(--ease-out);
+  transition: opacity var(--open-dur) var(--open-ease);
 }
 
 /* --- Packaging colour -----------------------------------------------------
-   The lid, the neck and the pieces are not brand surfaces — they continue the
-   photograph, standing in for each product's own cap, glass and contents. They
+   The lid and the neck are not brand surfaces — they continue the
+   photograph, standing in for each product's own cap and glass. They
    are the one place in this section that carries literal colour rather than a
    palette mix, for the same reason .catcard sets a white name and a black
    scrim over its photograph. Everything else here is Purple, Orange, Lilac,
@@ -534,7 +951,8 @@
     0 0.04em 0.06em rgb(248 245 236 / 0.16);
 }
 
-/* Light coming up out of the open jar. */
+/* Light coming up out of the open jar — a soft warm bloom, arriving a beat
+   after the lid starts to lift. */
 .pillar__glow {
   position: absolute;
   left: var(--mouth-cx);
@@ -543,12 +961,17 @@
   aspect-ratio: 1;
   translate: -50% -50%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgb(var(--orange-rgb) / 0.3), transparent 66%);
+  background: radial-gradient(
+    circle,
+    rgb(var(--peach-rgb) / 0.55),
+    rgb(var(--orange-rgb) / 0.12) 38%,
+    transparent 66%
+  );
   opacity: 0;
-  scale: 0.5;
+  scale: 0.6;
   transition:
-    opacity var(--dur-slow) var(--ease-out),
-    scale var(--dur-slow) var(--ease-out);
+    opacity var(--open-dur) var(--open-ease) 120ms,
+    scale calc(var(--open-dur) * 1.3) var(--open-ease) 120ms;
 }
 
 /* --- The lid --------------------------------------------------------------
@@ -587,10 +1010,9 @@
     0 0.35em 0.6em -0.3em rgb(var(--ink-rgb) / 0.5);
   transform-origin: 50% 135%;
   transition:
-    translate var(--dur-slow) var(--ease-pop),
-    rotate var(--dur-slow) var(--ease-pop),
-    scale var(--dur-slow) var(--ease-pop),
-    filter var(--dur) var(--ease);
+    translate var(--open-dur) var(--open-ease),
+    rotate var(--open-dur) var(--open-ease),
+    filter var(--open-dur) var(--open-ease);
 }
 
 .pillar__lid-face {
@@ -607,144 +1029,63 @@
   box-shadow: inset 0 0.06em 0.09em rgb(255 255 255 / 0.2);
 }
 
-/* --- Pieces of the product drifting out ------------------------------------
-   Tablets, and only for the two bottles that hold tablets. They rise slowly out
-   of the opening, so they sit above the photograph but below the flying lid. */
+/* --- Light rising from the open jar ---------------------------------------
+   A few fine motes of warm light drift up out of the opening and fade: small,
+   sparse and slow, so the jar reads as opened rather than as spilling. They
+   sit above the photograph but below the lifted lid. */
 
-.pillar__pieces {
+.pillar__motes {
   position: absolute;
   z-index: 2;
   left: var(--mouth-cx);
   top: var(--mouth-cy);
   width: 0;
   height: 0;
+  pointer-events: none;
 }
 
-.pillar__piece {
+.pillar__mote {
   position: absolute;
-  left: calc(var(--piece-w) / -2);
-  top: calc(var(--piece-w) * var(--piece-ratio) / -2);
-  width: var(--piece-w);
-  height: calc(var(--piece-w) * var(--piece-ratio));
-  opacity: 0;
-}
-
-/* A tablet: a pressed disc, lit from above and darker at its lower edge. */
-.pillar__piece--tablet {
-  --piece-w: 0.95rem;
-  --piece-ratio: 0.58;
+  left: calc(var(--mote-s) / -2);
+  top: calc(var(--mote-s) / -2);
+  width: var(--mote-s);
+  height: var(--mote-s);
   border-radius: 50%;
-  background: linear-gradient(180deg, var(--piece-hi), var(--piece-mid) 48%, var(--piece-lo));
-  box-shadow:
-    inset 0 0.06em 0.08em rgb(255 255 255 / 0.34),
-    inset 0 -0.07em 0.1em rgb(0 0 0 / 0.4);
-}
-
-/* --- Hand-drawn doodles ---------------------------------------------------
-   The two jars have nothing countable to tip out, so instead of pieces they get
-   marks drawn around the opening: an exclamation and a bee for the honey, a
-   star and an exclamation for the nut butter. Each is placed from the centre of
-   the jar's mouth using --dd-x/--dd-y, chosen to stay clear of the lid's flight
-   path, and each draws itself on before settling into a small hand-held wobble.
-   Each path is dashed by its own measured length (--len, set per path in the
-   component), which is what makes it draw itself on. */
-
-.pillar__doodle {
-  position: absolute;
-  z-index: 4;
-  left: calc(var(--mouth-cx) + var(--dd-x) * 1%);
-  top: calc(var(--mouth-cy) + var(--dd-y) * 1%);
-  width: calc(var(--dd-w) * 1%);
-  translate: -50% -50%;
-  color: var(--tatvyra-aubergine);
+  background: var(--tatvyra-warm-white);
+  box-shadow: 0 0 6px 2px rgb(var(--peach-rgb) / 0.7);
   opacity: 0;
-  scale: 0.5;
-  rotate: 0deg;
-  transition:
-    opacity var(--dur) var(--ease),
-    scale var(--dur-slow) var(--ease-pop),
-    rotate var(--dur-slow) var(--ease-pop);
 }
 
-.pillar__doodle svg {
-  display: block;
-  width: 100%;
-  height: auto;
-  overflow: visible;
-  filter: drop-shadow(0 1px 2px rgb(var(--ink-rgb) / 0.35));
+@keyframes pillar-mote {
+  0% { opacity: 0; translate: 0 0.4rem; }
+  22% { opacity: 0.9; }
+  100% { opacity: 0; translate: var(--mote-x) -5.5rem; }
 }
 
-/* Filled paths opt out of the fill reset below, or it would outrank their
-   own fill colour. */
-.pillar__doodle path {
-  stroke: currentColor;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+/* Once lifted, the lid hangs in the air with the smallest float. It moves on
+   transform, which composes with the translate that lifted it. */
+@keyframes pillar-lid-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10%); }
 }
 
-.pillar__doodle path:not(.pillar__doodle-fill) { fill: none; }
-
-.pillar__doodle--orange { color: var(--tatvyra-orange); }
-
-.pillar__doodle path:not(.pillar__doodle-trail) {
-  stroke-dasharray: var(--len);
-  stroke-dashoffset: var(--len);
-}
-
-/* The bee's flight trail carries a dash pattern of its own, so it fades in
-   rather than drawing on. */
-.pillar__doodle-trail {
-  stroke-dasharray: 3 3.6;
-  opacity: 0;
-  transition: opacity var(--dur) var(--ease);
-}
-
-/* Fills arrive once the outline has been drawn, so a mark never appears as a
-   flat shape before its line. */
-.pillar__doodle-fill {
-  fill-opacity: 0;
-  transition: fill-opacity var(--dur) var(--ease);
-}
-
-.pillar__doodle-fill--body { fill: var(--tatvyra-orange); }
-.pillar__doodle-fill--wing { fill: var(--tatvyra-warm-white); }
-.pillar__doodle-fill--ink { fill: var(--tatvyra-aubergine); }
-
-@keyframes pillar-doodle-draw {
-  to { stroke-dashoffset: 0; }
-}
-
-@keyframes pillar-doodle-bob {
-  0%, 100% { translate: 0 0; rotate: -2.5deg; }
-  50% { translate: 0 -0.3rem; rotate: 2.5deg; }
-}
-
-@keyframes pillar-piece {
-  0% { opacity: 0; translate: 0 0.35rem; scale: 0.2; }
-  14% { opacity: 1; scale: var(--piece-s); }
-  74% { opacity: 1; }
-  100% {
-    opacity: 0;
-    translate: var(--piece-x) -7.5rem;
-    scale: var(--piece-s);
-    rotate: var(--piece-r);
-  }
-}
-
-/* --- Open: hover, keyboard focus, or scrolled to on a touch screen --------- */
+/* --- Open: hover, keyboard focus, or scrolled to on a touch screen ---------
+   One slow, eased movement: the lid lifts clear and tilts a few degrees, the
+   jar rises a little on a deeper shadow, and a warm light comes up out of the
+   opening. Nothing overshoots, and it settles back the same way. */
 
 .pillar:is(:hover, :focus-visible, .is-open) .pillar__blob {
-  translate: 0 -0.45rem;
-  filter: drop-shadow(0 24px 34px rgb(var(--ink-rgb) / 0.24));
+  translate: 0 -0.4rem;
+  filter: drop-shadow(0 26px 36px rgb(var(--ink-rgb) / 0.22));
 }
 
-.pillar:is(:hover, :focus-visible, .is-open) .pillar__stage { scale: 1.04; }
+.pillar:is(:hover, :focus-visible, .is-open) .pillar__stage { scale: 1.03; }
 
 .pillar:is(:hover, :focus-visible, .is-open) .pillar__photo {
-  filter: saturate(1.06) brightness(1.04);
+  filter: saturate(1.04) brightness(1.03);
 }
 
-.pillar:is(:hover, :focus-visible, .is-open) .pillar__wash { opacity: 0.7; }
+.pillar:is(:hover, :focus-visible, .is-open) .pillar__wash { opacity: 0.75; }
 
 .pillar:is(:hover, :focus-visible, .is-open) .pillar__mouth {
   opacity: var(--mouth-open);
@@ -756,40 +1097,15 @@
 }
 
 .pillar:is(:hover, :focus-visible, .is-open) .pillar__lid {
-  translate: 9% -132%;
-  rotate: -14deg;
-  scale: 1.04;
-  filter: drop-shadow(0 0.7em 0.6em rgb(var(--ink-rgb) / 0.32));
+  translate: 5% -118%;
+  rotate: -7deg;
+  filter: drop-shadow(0 0.9em 0.8em rgb(var(--ink-rgb) / 0.28));
+  animation: pillar-lid-float 5s ease-in-out var(--open-dur) infinite;
 }
 
-.pillar:is(:hover, :focus-visible, .is-open) .pillar__piece {
-  animation: pillar-piece 3.4s var(--ease-out) infinite;
-  animation-delay: var(--piece-delay);
-}
-
-.pillar:is(:hover, :focus-visible, .is-open) .pillar__doodle {
-  opacity: 1;
-  scale: 1;
-  rotate: var(--dd-rot);
-  transition-delay: var(--dd-delay);
-}
-
-.pillar:is(:hover, :focus-visible, .is-open) .pillar__doodle svg {
-  animation: pillar-doodle-bob 2.8s var(--ease) var(--dd-delay) infinite;
-}
-
-.pillar:is(:hover, :focus-visible, .is-open) .pillar__doodle path:not(.pillar__doodle-trail) {
-  animation: pillar-doodle-draw 0.42s var(--ease-out) var(--dd-delay) forwards;
-}
-
-.pillar:is(:hover, :focus-visible, .is-open) .pillar__doodle-trail {
-  opacity: 0.8;
-  transition-delay: calc(var(--dd-delay) + 0.4s);
-}
-
-.pillar:is(:hover, :focus-visible, .is-open) .pillar__doodle-fill {
-  fill-opacity: 1;
-  transition-delay: calc(var(--dd-delay) + 0.28s);
+.pillar:is(:hover, :focus-visible, .is-open) .pillar__mote {
+  animation: pillar-mote 4.5s cubic-bezier(0.33, 0, 0.25, 1) infinite;
+  animation-delay: calc(var(--mote-delay) + 450ms);
 }
 
 .pillar:is(:hover, :focus-visible, .is-open) .pillar__cta {
@@ -810,16 +1126,14 @@
 }
 
 .pillar__name {
-  font-family: var(--font-serif);
   font-size: clamp(1.15rem, 0.88rem + 0.85vw, 1.5rem);
-  font-weight: 600;
+  font-weight: var(--type-product-weight);
   line-height: 1.12;
-  letter-spacing: -0.01em;
+  letter-spacing: var(--product-tracking);
   color: var(--tatvyra-purple);
 }
 
 .pillar__benefit {
-  font-family: var(--font-serif);
   font-size: clamp(1.05rem, 0.85rem + 0.7vw, 1.35rem);
   font-weight: 400;
   line-height: 1.18;
@@ -830,7 +1144,6 @@
 .pillar__note {
   margin-top: 0.5rem;
   max-width: 26ch;
-  font-family: var(--font-ui);
   font-size: 13px;
   line-height: 1.5;
   color: rgb(var(--ink-rgb) / 0.7);
@@ -841,9 +1154,8 @@
   align-items: center;
   gap: 0.4rem;
   margin-top: 0.6rem;
-  font-family: var(--font-ui);
   font-size: 13px;
-  font-weight: 600;
+  font-weight: var(--type-button-weight);
   letter-spacing: 0.02em;
   color: var(--tatvyra-purple);
   opacity: 0;
@@ -861,7 +1173,7 @@
   display: flex;
   align-items: center;
   gap: clamp(1rem, 0.5rem + 1.5vw, 2rem);
-  margin-top: clamp(3rem, 1.6rem + 4vw, 5rem);
+  margin-top: clamp(2rem, 1.2rem + 2.6vw, 3.25rem);
 }
 
 .pillars__outro::before,
@@ -874,7 +1186,6 @@
 }
 
 .pillars__closer {
-  font-family: var(--font-serif);
   font-size: clamp(1.35rem, 1rem + 1.4vw, 2.125rem);
   font-weight: 400;
   line-height: 1.12;
@@ -885,8 +1196,8 @@
 
 /* --- Per range ------------------------------------------------------------
    The blob tints are Lilac and Peach thinned into Warm White, the same way
-   --surface-lilac and --surface-peach are built. The lid and piece colours
-   continue each photograph, as noted above. */
+   --surface-lilac and --surface-peach are built. The lid colours continue
+   each photograph, as noted above. */
 
 .pillar--honey {
   --pillar-tint: color-mix(in srgb, var(--tatvyra-peach) 46%, var(--tatvyra-warm-white));
@@ -904,10 +1215,6 @@
   --lid-hi: #3b4534;
   --lid-mid: #191f14;
   --lid-lo: #090c06;
-  /* Olive moringa tablet. */
-  --piece-hi: #b9b783;
-  --piece-mid: #8a8a4a;
-  --piece-lo: #55552a;
 }
 
 .pillar--spirulina {
@@ -917,10 +1224,6 @@
   --lid-hi: #3b4534;
   --lid-mid: #191f14;
   --lid-lo: #090c06;
-  /* Near-black green spirulina tablet. */
-  --piece-hi: #546a4c;
-  --piece-mid: #22331f;
-  --piece-lo: #101a0e;
 }
 
 .pillar--nut-butter {
@@ -982,21 +1285,20 @@
 }
 
 /* Under reduced motion the lid still lifts and the jar still opens — they just
-   arrive without the flight, and nothing loops. */
+   arrive without the movement, and nothing loops. */
 @media (prefers-reduced-motion: reduce) {
   .pillar:is(:hover, :focus-visible, .is-open) .pillar__blob { translate: none; }
-  .pillar:is(:hover, :focus-visible, .is-open) .pillar__piece { animation: none; }
-  .pillar:is(:hover, :focus-visible, .is-open) .pillar__doodle svg { animation: none; }
-  .pillar__doodle path { stroke-dashoffset: 0; }
+  .pillar:is(:hover, :focus-visible, .is-open) .pillar__lid { animation: none; }
+  .pillar:is(:hover, :focus-visible, .is-open) .pillar__mote { animation: none; }
 }
 
 /* --- Categories -----------------------------------------------------------
-   The category section from the Figma refresh (node 71:22). Fraunces carries
-   the headings, Poppins the UI, and the ranges sit on full-bleed photographs
-   under a corner scrim rather than in bordered panels. */
+   The category section from the Figma refresh (node 71:22). The ranges sit
+   on full-bleed photographs under a corner scrim rather than in bordered
+   panels. */
 
 .categories {
-  padding-block: clamp(3rem, 1.8rem + 4vw, 5rem) clamp(3.5rem, 2rem + 5vw, 6.25rem);
+  padding-block: clamp(2.5rem, 1.6rem + 2.8vw, 4rem) clamp(2.75rem, 1.7rem + 3.2vw, 4.5rem);
   background: var(--tatvyra-warm-white);
 }
 
@@ -1008,9 +1310,8 @@
 }
 
 .categories__eyebrow {
-  font-family: var(--font-ui);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: var(--type-label-weight);
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--tatvyra-purple);
@@ -1025,18 +1326,16 @@
 
 .categories__title {
   max-width: 44rem;
-  font-family: var(--font-serif);
   font-size: clamp(2rem, 1.2rem + 2.6vw, 3rem);
-  font-weight: 400;
+  font-weight: var(--type-heading-weight);
   line-height: 1.08;
-  letter-spacing: -0.01em;
+  letter-spacing: var(--heading-tracking);
   color: var(--tatvyra-purple);
 }
 
 .categories__intro {
   width: 25rem;
   max-width: 100%;
-  font-family: var(--font-ui);
   font-size: 16px;
   line-height: 1.5;
   color: rgb(var(--ink-rgb) / 0.7);
@@ -1100,18 +1399,17 @@
 /* Soft Peach, not Purple: these sit on a darkened photograph, which is the
    one place the palette asks for its light accent instead of its primary. */
 .catcard__eyebrow {
-  font-family: var(--font-ui);
   font-size: 13px;
-  font-weight: 600;
+  font-weight: var(--type-label-weight);
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--tatvyra-peach);
 }
 
 .catcard__name {
-  font-family: var(--font-serif);
   font-size: clamp(1.75rem, 1.1rem + 2vw, 2.375rem);
-  font-weight: 600;
+  font-weight: var(--type-product-weight);
+  letter-spacing: var(--product-tracking);
   line-height: 1.05;
   color: #fff;
 }
@@ -1120,9 +1418,8 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-family: var(--font-ui);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: var(--type-button-weight);
   color: #fff;
 }
 
@@ -1145,36 +1442,45 @@
 }
 
 /* --- Shelf trust ----------------------------------------------------------
-   Four differentiators struck as seals on a grained purple ground.
+   "The Difference": four bright numbered cards on a grained purple ground.
 
-   The wash runs Aubergine through Purple into a Lilac-lifted corner, which is
-   the brand gradient rather than a new hue. The grain is the same pair of
-   inline feTurbulence tiles used elsewhere — one speckle darker than the
-   ground, one lighter — so the panel keeps a printed tooth instead of reading
-   as flat colour. */
+   The wash runs a Purple deepened toward Aubergine, through Purple, into a
+   Lilac-lifted corner — the brand gradient rather than a new hue. The grain is
+   the same pair of inline feTurbulence tiles used elsewhere, one speckle
+   darker than the ground and one lighter, held in custom properties so each
+   card can lay the same tooth over its own colour.
+
+   The four card colours, the gold eyebrow and the lilac turn of the headline
+   come from the approved design for this section and are scoped to it. Every
+   text tone drawn from them is checked against its own ground, per card. */
 
 .shelf {
+  --shelf-gold: #f7c763;
+  --shelf-lilac: #dbaffc;
+  --grain-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.4' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.06 0 0 0 0 0.02 0 0 0 0 0.1 0 0 0 -1.7 0.9'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)'/%3E%3C/svg%3E");
+  --grain-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='h'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.4' numOctaves='3' seed='11' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 0.97 0 0 0 0 1 0 0 0 1.8 -0.9'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23h)'/%3E%3C/svg%3E");
+
   position: relative;
   isolation: isolate;
   overflow: hidden;
   background:
     radial-gradient(
-      86% 70% at 82% 88%,
-      color-mix(in srgb, var(--tatvyra-lilac) 28%, var(--tatvyra-purple)),
-      transparent 64%
+      90% 80% at 96% 100%,
+      color-mix(in srgb, var(--tatvyra-purple) 68%, var(--tatvyra-lilac)),
+      transparent 70%
     ),
     linear-gradient(
-      148deg,
-      var(--tatvyra-aubergine),
-      var(--tatvyra-purple) 52%,
-      color-mix(in srgb, var(--tatvyra-purple) 72%, var(--tatvyra-lilac))
+      120deg,
+      color-mix(in srgb, var(--tatvyra-aubergine) 55%, var(--tatvyra-purple)),
+      var(--tatvyra-purple) 48%,
+      color-mix(in srgb, var(--tatvyra-purple) 80%, var(--tatvyra-lilac))
     );
   color: var(--text-on-dark);
 }
 
-/* The grain: two speckle tiles, one darker than the ground and one lighter,
-   offset by seed so the grains interleave instead of stacking. Alpha is baked
-   into each tile, so they need no blend mode and never tint the type above. */
+/* The grain: the two tiles offset by seed so the grains interleave instead of
+   stacking. Alpha is baked into each tile, so they need no blend mode and
+   never tint the type above. */
 .shelf::before {
   content: '';
   position: absolute;
@@ -1182,110 +1488,284 @@
   z-index: -1;
   pointer-events: none;
   opacity: 0.55;
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.4' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.06 0 0 0 0 0.02 0 0 0 0 0.1 0 0 0 -1.7 0.9'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)'/%3E%3C/svg%3E"),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='h'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.4' numOctaves='3' seed='11' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 0.97 0 0 0 0 1 0 0 0 1.8 -0.9'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23h)'/%3E%3C/svg%3E");
+  background-image: var(--grain-dark), var(--grain-light);
   background-size: 200px 200px, 200px 200px;
+}
+
+/* Holds the shared filters and gradients; takes no room. */
+.shelf__defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
 }
 
 .shelf__inner { position: relative; }
 
 .shelf__header {
-  max-width: 44rem;
+  max-width: 56rem;
   margin-inline: auto;
-  margin-bottom: clamp(2.5rem, 1.4rem + 3.4vw, 4.5rem);
+  margin-bottom: clamp(1.75rem, 1.2rem + 1.2vw, 2.25rem);
   text-align: center;
 }
 
-/* Soft Peach carries the accent on dark grounds — Gold and Orange both fall
-   under AA at this size. */
+/* Gold on the wash measures 6.8:1. */
 .shelf__eyebrow {
-  margin-bottom: 0.75rem;
-  font-family: var(--font-ui);
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.16em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-bottom: 0.65rem;
+  font-size: 15px;
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--tatvyra-peach);
+  color: var(--shelf-gold);
+}
+
+.shelf__spark {
+  flex: none;
+  width: 0.95rem;
+  height: 0.95rem;
 }
 
 .shelf__title {
-  font-family: var(--font-serif);
   font-size: clamp(1.75rem, 1.1rem + 2.2vw, 2.75rem);
-  font-weight: 400;
+  font-weight: var(--type-heading-weight);
   line-height: 1.12;
-  letter-spacing: -0.012em;
+  letter-spacing: var(--heading-tracking);
   color: var(--text-on-dark);
 }
 
+/* One line each, so the headline always turns after the comma. */
+.shelf__title span { display: block; }
+
+/* The turn: the same face in italic, in lilac — 5.9:1 on the wash at its
+   darkest and 3.6:1 where it lifts, clear of the 3:1 large text needs. */
+.shelf__title-turn {
+  font-style: italic;
+  color: var(--shelf-lilac);
+}
+
+/* Each card spans three shared rows — heading, sentence, motto — so when a
+   name wraps in a narrow column the row grows for every card, and the
+   hairlines and mottos still run level across the row. */
 .shelf__grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: clamp(2rem, 0.8rem + 3.4vw, 3.5rem) clamp(1.25rem, 0.4rem + 2.4vw, 2.5rem);
+  gap: clamp(0.75rem, 0.5rem + 0.6vw, 1rem);
+  max-width: 76rem;
+  margin-inline: auto;
 }
 
-.shelf__item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
+.shelf__card {
+  --card-pad-x: clamp(1.25rem, 1rem + 0.6vw, 1.5rem);
+  --card-pad-bottom: 1.25rem;
 
-.shelf__seal {
   position: relative;
+  isolation: isolate;
+  overflow: hidden;
   display: grid;
-  place-items: center;
-  width: clamp(11rem, 7.5rem + 10.5vw, 15rem);
-  aspect-ratio: 1;
+  grid-row: span 3;
+  grid-template-rows: subgrid;
+  row-gap: 0;
+  padding: 1.1rem var(--card-pad-x) var(--card-pad-bottom);
+  border-radius: var(--radius-card);
+  background:
+    radial-gradient(
+      120% 90% at 18% 0%,
+      color-mix(in srgb, var(--tatvyra-warm-white) 30%, transparent),
+      transparent 60%
+    ),
+    var(--card-fill);
+  color: var(--text);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--tatvyra-warm-white) 50%, transparent),
+    0 2px 6px -2px color-mix(in srgb, var(--tatvyra-aubergine) 30%, transparent),
+    0 30px 48px -30px color-mix(in srgb, var(--tatvyra-aubergine) 85%, transparent);
 }
 
-.shelf__rings {
+/* The ground's light speckle, thinned right down, so the card reads as
+   printed stock rather than a flat fill. The dark tile is left out: its
+   Aubergine speckle muddies the brighter fills. */
+.shelf__card::before {
+  content: '';
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  transition: opacity var(--dur) var(--ease), translate var(--dur) var(--ease);
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.3;
+  background-image: var(--grain-light);
+  background-size: 200px 200px;
+  background-position: 70px 90px;
 }
 
-/* The deboss pair. Both are set against the purple rather than against white,
-   so the shadow is Aubergine and the light is Warm White. */
-.shelf__rings-shade { stroke: rgb(var(--ink-rgb) / 0.34); }
-.shelf__rings-lit { stroke: rgb(255 255 255 / 0.34); }
+/* Per tone: the fill, the hairline, the numeral disc and the numeral on it,
+   and the motto — the disc cut with Ink until it clears AA (4.5:1) on the
+   fill, since it is set small. Ink body copy is 8.4:1 or better on all four. */
+.shelf__card--coral {
+  --card-fill: #feab92;
+  --card-rule: #d97c63;
+  --card-badge: #9a402c;
+  --card-badge-ink: var(--tatvyra-warm-white); /* 6.1:1 */
+  --card-motto: color-mix(in srgb, var(--card-badge) 70%, var(--tatvyra-ink)); /* 4.8:1 */
+}
 
-.shelf__arc {
-  fill: rgb(255 255 255 / 0.5);
-  font-family: var(--font-ui);
-  font-size: 8.5px;
-  font-weight: 500;
-  letter-spacing: 2.4px;
+.shelf__card--lime {
+  --card-fill: #e7f36f;
+  --card-rule: #bcc33e;
+  --card-badge: #6e7202;
+  --card-badge-ink: var(--tatvyra-warm-white); /* 4.7:1 */
+  --card-motto: color-mix(in srgb, var(--card-badge) 80%, var(--tatvyra-ink)); /* 5.3:1 */
+}
+
+.shelf__card--lilac {
+  --card-fill: #d7abfc;
+  --card-rule: #a476cc;
+  --card-badge: #5f3189;
+  --card-badge-ink: var(--tatvyra-warm-white); /* 8.4:1 */
+  --card-motto: var(--card-badge); /* 4.9:1 */
+}
+
+/* Warm White on the bright amber disc is only 2.8:1, so its numeral takes
+   Deep Aubergine instead (5.9:1) — the same fix as the orange cart badge. */
+.shelf__card--butter {
+  --card-fill: #fee8a3;
+  --card-rule: #f2c566;
+  --card-badge: #d28e02;
+  --card-badge-ink: var(--tatvyra-aubergine);
+  --card-motto: color-mix(in srgb, var(--card-badge) 55%, var(--tatvyra-ink)); /* 4.8:1 */
+}
+
+.shelf__card-head {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+/* A disc reads smaller than the square edge of a text column, so it sits a
+   touch proud of it. */
+.shelf__num {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-inline-start: -0.3rem;
+  border-radius: 50%;
+  background: var(--card-badge);
+  box-shadow:
+    inset 0 1px 1px color-mix(in srgb, var(--tatvyra-warm-white) 28%, transparent),
+    inset 0 -3px 6px rgb(var(--ink-rgb) / 0.16);
+  font-size: 13px;
+  font-weight: var(--weight-bold);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--card-badge-ink);
+}
+
+.shelf__card-title {
+  font-size: clamp(0.8125rem, 0.75rem + 0.1vw, 0.875rem);
+  font-weight: var(--weight-bold);
+  line-height: 1.25;
+  letter-spacing: 0.01em;
   text-transform: uppercase;
-}
-
-.shelf__item:hover .shelf__rings {
-  opacity: 0.85;
-  translate: 0 -3px;
-}
-
-.shelf__mark {
-  max-width: 70%;
-  font-family: var(--font-serif);
-  font-size: clamp(0.875rem, 0.72rem + 0.42vw, 1rem);
-  font-weight: 400;
-  line-height: 1.32;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--text-on-dark);
 }
 
 .shelf__body {
-  margin-top: clamp(1rem, 0.7rem + 0.9vw, 1.5rem);
-  max-width: 27ch;
-  font-family: var(--font-ui);
+  margin-top: 0.8rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--card-rule);
   font-size: var(--step--1);
-  line-height: 1.6;
-  /* Near-full Warm White: the muted tint is mixed against Aubergine and
-     goes illegible over the wash where it lifts toward Lilac. */
-  color: rgb(248 245 236 / 0.88);
+  line-height: 1.45;
+}
+
+/* The motto sits on the card's floor; the mark stands beside it and runs off
+   the bottom edge. The mark's column gives way before the motto does, and
+   the motto wraps rather than pushing the mark off the card. */
+.shelf__foot {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(4.75rem, 46%, 7rem);
+  column-gap: 0.5rem;
+  align-items: end;
+  padding-top: 0.25rem;
+}
+
+.shelf__motto {
+  font-size: 10px;
+  font-style: italic;
+  font-weight: var(--weight-medium);
+  line-height: 1.5;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--card-motto);
+}
+
+.shelf__motto span { display: block; }
+
+.shelf__art {
+  display: block;
+  justify-self: end;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  margin-right: -0.3rem;
+  margin-bottom: calc(-1 * var(--card-pad-bottom));
+  overflow: visible;
+}
+
+/* Motion. The check draws itself in once its card has risen into view; the
+   other marks answer a hover. Every moving piece turns about a point given in
+   the mark's own 120-unit space. */
+.shelf__check {
+  stroke-dasharray: 1 2;
+  /* Just past 1, so the round cap is off the path too, not left as a dot. */
+  stroke-dashoffset: 1.01;
+  transition: stroke-dashoffset 700ms var(--ease-out) 520ms;
+}
+
+.shelf__card.is-visible .shelf__check { stroke-dashoffset: 0; }
+
+.shelf__sway,
+.shelf__tilt,
+.shelf__spin,
+.shelf__drift,
+.shelf__ring,
+.shelf__twinkle {
+  transform-box: view-box;
+  transition:
+    rotate var(--dur-slow) var(--ease-pop),
+    translate var(--dur-slow) var(--ease-pop),
+    scale var(--dur-slow) var(--ease-pop);
+}
+
+.shelf__sway--left { transform-origin: 72px 121px; }
+.shelf__sway--right { transform-origin: 83px 122px; }
+.shelf__sway--stem { transform-origin: 56px 121px; }
+.shelf__tilt { transform-origin: 31px 51px; }
+.shelf__spin { transform-origin: 96px 24px; }
+.shelf__ring { transform-origin: 62px 60px; }
+.shelf__twinkle { transform-origin: 98px 83px; }
+
+@media (hover: hover) {
+  .shelf__card:hover .shelf__sway--left { rotate: -5deg; }
+  .shelf__card:hover .shelf__sway--right { rotate: 7deg; }
+  .shelf__card:hover .shelf__sway--stem { rotate: 3deg; }
+  .shelf__card:hover .shelf__tilt { rotate: -14deg; }
+  .shelf__card:hover .shelf__spin { rotate: 40deg; }
+  .shelf__card:hover .shelf__drift { translate: 0 -4px; }
+  /* One step of five, so the flower lands on its own shape. */
+  .shelf__card:hover .shelf__ring { rotate: 72deg; }
+  .shelf__card:hover .shelf__twinkle { rotate: 45deg; scale: 1.2; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shelf__card:hover :is(.shelf__sway, .shelf__tilt, .shelf__spin, .shelf__drift, .shelf__ring, .shelf__twinkle) {
+    rotate: none;
+    translate: none;
+    scale: none;
+  }
 }
 
 @media (max-width: 62rem) {
@@ -1294,11 +1774,6 @@
 
 @media (max-width: 34rem) {
   .shelf__grid { grid-template-columns: minmax(0, 1fr); }
-  .shelf__body { max-width: 34ch; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .shelf__item:hover .shelf__rings { translate: none; }
 }
 
 /* --- Clean label / standards --------------------------------------------- */
@@ -1329,14 +1804,13 @@
   display: flex;
   align-items: baseline;
   gap: 0.75rem;
-  font-family: var(--font-display);
   font-size: var(--step-1);
   font-weight: 700;
   letter-spacing: -0.01em;
   color: var(--text-on-dark);
 }
 
-.cleanlabel__index { font-family: var(--font-body); font-size: var(--step--2); letter-spacing: 0.1em; color: var(--tatvyra-peach); }
+.cleanlabel__index { font-size: var(--step--2); letter-spacing: 0.1em; color: var(--tatvyra-peach); }
 .cleanlabel__def { font-size: var(--step--1); line-height: 1.6; color: var(--text-on-dark-muted); }
 
 @media (max-width: 62rem) {
@@ -1395,7 +1869,6 @@
 }
 
 .why__title {
-  font-family: var(--font-display);
   font-size: var(--step-2);
   font-weight: 700;
   letter-spacing: -0.015em;
@@ -1456,91 +1929,728 @@
   .cfeature__product svg { display: none; }
 }
 
-/* --- Brand story ---------------------------------------------------------- */
+/* --- Brand story: the orbit ---------------------------------------------------
+   Who makes Tatvyra, and its four ranges shown one at a time in a floating
+   glass pod ringed by an orbit (BrandStory). The copy on the left, the pod in
+   the middle, the ranges named on the right.
 
-.story__inner {
+   Everything that moves reads --s: the range shown, 0 to 3, with the turn
+   between two ranges as the fraction. The ring turns a quarter per range, so
+   the range's pip comes round to the top; each scene in the pod sits at its
+   own distance from --s, and turns, dissolves and blurs by that distance. It
+   is registered, so where the controls set it (not pinned) it eases between
+   whole numbers, and where scrolling sets it (pinned) it is only smoothed.
+
+   The glass is drawn over the photograph: darker toward the rim, a band of
+   thick glass at the edge, a window reflection and rim glints in Warm White,
+   and the light each scene throws on the page below. */
+
+@property --s {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --progress {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+.orbit {
+  --hair: color-mix(in srgb, var(--tatvyra-ink) 16%, transparent);
+  position: relative;
+  isolation: isolate;
+  /* Clip rather than hide: hidden would make this a scroll container and
+     stop the stage from sticking. */
+  overflow: clip;
+  border-top: 1px solid rgb(var(--ink-rgb) / 0.08);
+  background: var(--tatvyra-warm-white);
+  transition:
+    --s 1.1s var(--ease-out),
+    --progress 1.1s var(--ease-out);
+}
+
+.orbit[data-active='0'] { --tone-now: var(--tatvyra-orange); }
+.orbit[data-active='1'] { --tone-now: var(--tatvyra-purple); }
+.orbit[data-active='2'] { --tone-now: var(--tatvyra-lilac); }
+.orbit[data-active='3'] { --tone-now: var(--tatvyra-peach); }
+
+/* Pinned: the section is the stage's height plus a stretch of scroll for
+   each of the three turns, and the stage holds under the header throughout. */
+.orbit.is-pinned {
+  height: calc(100svh - var(--header-h-compact) + 3 * 62svh);
+  transition:
+    --s 0.25s linear,
+    --progress 0.25s linear;
+}
+
+.orbit__sticky {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding-block: var(--section-y) var(--section-y-tight);
+  background:
+    radial-gradient(50% 60% at 6% 10%, rgb(var(--peach-rgb) / 0.22), transparent 70%),
+    radial-gradient(46% 56% at 94% 92%, rgb(var(--lilac-rgb) / 0.24), transparent 70%),
+    radial-gradient(30% 42% at 52% 48%, rgb(var(--peach-rgb) / 0.18), transparent 72%);
+}
+
+.orbit.is-pinned .orbit__sticky {
+  position: sticky;
+  top: var(--header-h-compact);
+  height: calc(100svh - var(--header-h-compact));
+  padding-block: clamp(1.25rem, 4svh, 3rem) clamp(1rem, 3svh, 2rem);
+}
+
+.orbit__inner {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-  gap: clamp(2rem, 1rem + 4vw, 5rem);
-  align-items: stretch;
+  flex: 1;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr) minmax(0, 0.62fr);
+  align-items: center;
+  gap: clamp(1.5rem, 0.5rem + 2.6vw, 4rem);
+  width: 100%;
 }
 
-.story__copy { display: grid; gap: var(--space-s); }
-.story__title { margin-top: 0.5rem; max-width: 19ch; }
-.story__lede { font-size: var(--step-1); color: var(--tatvyra-purple); font-style: italic; max-width: 40ch; }
-.story__copy > p:not(.eyebrow):not(.story__lede) { color: var(--text-muted); max-width: 54ch; }
-.story__copy .btn { justify-self: start; margin-top: var(--space-xs); }
+/* --- The copy ------------------------------------------------------------- */
 
-/* One raised panel, not two loose blocks. On the sunken section ground the
-   tinted quote and the bare fact rows had nothing holding them, which is what
-   made the column read as floating. It now takes its column full height and
-   centres its content, so the leftover space reads as breathing room. */
-.story__aside {
-  display: grid;
-  align-content: center;
-  gap: clamp(1.25rem, 1rem + 0.8vw, 1.75rem);
-  padding: clamp(1.5rem, 1.1rem + 1.5vw, 2.25rem);
-  background: var(--surface-raised);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-image);
-  box-shadow: var(--shadow-soft);
-}
-
-/* Three depths down the column — sunken section, raised panel, tinted quote —
-   so the brand line reads as the thing the panel is built around. */
-.story__quote {
-  padding: clamp(1.15rem, 0.85rem + 1.1vw, 1.6rem);
-  background: var(--surface-lilac);
-  border-radius: var(--radius-m);
-}
-
-.story__quote .display { color: var(--tatvyra-aubergine); }
-
-/* Tied to the line above it by a rule and tight spacing. Sitting loose it read
-   as a heading for the facts below rather than as the quote’s attribution. */
-.story__quote footer {
-  margin-top: 0.85rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid color-mix(in srgb, var(--tatvyra-aubergine) 20%, transparent);
+.orbit__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   font-size: var(--step--2);
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--tatvyra-aubergine) 72%, var(--tatvyra-lilac));
-}
-
-.story__facts { display: grid; gap: 0; }
-
-/* Label over value rather than beside it. Side by side, the value column was
-   narrow enough to orphan "Raw Honey" onto its own line, and stacking also
-   gives each fact a clear two-step read: what it is, then what it says. */
-.story__facts > div {
-  display: grid;
-  gap: 0.3rem;
-  padding-block: 0.9rem;
-  border-top: 1px solid var(--line);
-}
-
-/* The panel edge already closes the list, so the outer rules would double it. */
-.story__facts > div:first-child { border-top: 0; padding-top: 0; }
-.story__facts > div:last-child { padding-bottom: 0; }
-
-.story__facts dt {
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  font-size: var(--step--2);
-  font-weight: 700;
   color: var(--tatvyra-purple);
 }
 
-.story__facts dd {
+.orbit__eyebrow::after {
+  content: '';
+  flex: 0 1 4rem;
+  height: 1px;
+  background: color-mix(in srgb, var(--tatvyra-purple) 50%, transparent);
+}
+
+.orbit__title {
+  margin-top: clamp(1rem, 0.5rem + 1.4vw, 1.75rem);
+  font-size: clamp(2.75rem, 1.2rem + 3.9vw, 5rem);
+  font-weight: var(--weight-regular);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  color: var(--tatvyra-aubergine);
+}
+
+.orbit__title span { display: block; }
+.orbit__title-accent { color: var(--tatvyra-purple); }
+
+.orbit__lede {
+  max-width: 22ch;
+  margin-top: clamp(1.1rem, 0.7rem + 1vw, 1.6rem);
+  font-size: var(--step-2);
+  line-height: 1.28;
+  letter-spacing: -0.01em;
+  color: color-mix(in srgb, var(--tatvyra-purple) 70%, var(--tatvyra-ink));
+}
+
+.orbit__body {
+  max-width: 40ch;
+  margin-top: var(--space-s);
   font-size: var(--step-0);
-  line-height: 1.45;
+  line-height: 1.65;
+  color: rgb(var(--ink-rgb) / 0.7);
+}
+
+.orbit__sign {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-s) var(--space-l);
+  margin-top: clamp(1.25rem, 0.8rem + 1.4vw, 2.25rem);
+}
+
+.orbit__signoff {
+  display: grid;
+  grid-template-columns: 2.75rem auto;
+  column-gap: 1rem;
+  align-items: center;
+  font-size: var(--step--2);
+  font-weight: var(--type-label-weight);
+  line-height: 1.8;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgb(var(--ink-rgb) / 0.78);
+}
+
+.orbit__signoff::before {
+  content: '';
+  grid-row: span 2;
+  height: 1px;
+  background: var(--hair);
+}
+
+.orbit__signoff span { grid-column: 2; }
+
+.orbit__story {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding-bottom: 0.2rem;
+  border-bottom: 1px solid currentColor;
+  font-size: var(--step--1);
+  font-weight: var(--type-button-weight);
+  letter-spacing: 0.02em;
+  color: var(--tatvyra-purple);
+}
+
+.orbit__story svg { transition: translate var(--dur) var(--ease-out); }
+.orbit__story:is(:hover, :focus-visible) svg { translate: 0.2rem 0; }
+
+/* --- The stage ------------------------------------------------------------
+   Square, and a size container, so the ring, pips and glass are all placed in
+   fractions of it (cqi). Pinned, it is also held to the height available. */
+
+.orbit__stage {
+  position: relative;
+  justify-self: center;
+  width: min(100%, 34rem);
+  aspect-ratio: 1;
+  container-type: inline-size;
+}
+
+.orbit.is-pinned .orbit__stage {
+  width: min(100%, 34rem, calc(100svh - var(--header-h-compact) - 12rem));
+}
+
+/* The ring: a hairline orbit with a fainter one sweeping inside it. It turns
+   a quarter per range, carrying the pips. */
+.orbit__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  rotate: calc(var(--s) * -90deg);
+}
+
+.orbit__ring::before,
+.orbit__ring::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.orbit__ring::before {
+  inset: 0;
+  border: 1px solid color-mix(in srgb, var(--tatvyra-ink) 15%, transparent);
+}
+
+.orbit__ring::after {
+  inset: 3.4%;
+  background: conic-gradient(
+    from 200deg,
+    transparent 0deg 20deg,
+    color-mix(in srgb, var(--tatvyra-purple) 26%, transparent) 120deg,
+    transparent 230deg
+  );
+  /* Ink for the opaque stop: the mask reads alpha only. */
+  mask: radial-gradient(closest-side, transparent calc(100% - 1px), var(--tatvyra-ink) calc(100% - 1px));
+}
+
+/* Where the light catches the ring: fixed at the top, where the range in
+   view has its pip, and warmed by that range's colour. */
+.orbit__glint {
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: conic-gradient(
+    from -46deg,
+    transparent 0deg,
+    color-mix(in srgb, var(--tone-now) 85%, transparent) 46deg,
+    transparent 92deg
+  );
+  mask: radial-gradient(closest-side, transparent calc(100% - 2px), var(--tatvyra-ink) calc(100% - 2px));
+  transition: background var(--dur-slow) var(--ease-out);
+}
+
+/* A pip for each range, on the ring at its quarter. The nearer its range is
+   to being in view, the larger and brighter it glows. */
+.orbit__pip {
+  --near: calc(1 - min(1, max(var(--k) - var(--s), var(--s) - var(--k))));
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: clamp(0.7rem, 2.6cqi, 0.95rem);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  /* Out to the ring along its quarter, then scaled about its own centre —
+     all in one transform, so the scale never pushes it off the ring. */
+  transform:
+    rotate(calc(var(--k) * 90deg))
+    translateY(-50cqi)
+    scale(calc(1 + var(--near) * 0.5));
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 34% 30%,
+    var(--tatvyra-warm-white),
+    var(--tone) 52%,
+    color-mix(in srgb, var(--tone) 70%, var(--tatvyra-ink))
+  );
+  box-shadow:
+    0 0 0 calc(2px + var(--near) * 3px) color-mix(in srgb, var(--tone) 18%, transparent),
+    0 0 calc(var(--near) * 1.3rem) color-mix(in srgb, var(--tone) 75%, transparent);
+}
+
+/* A fingertip's reach around each pip. */
+.orbit__pip::before {
+  content: '';
+  position: absolute;
+  inset: -0.85rem;
+  border-radius: 50%;
+}
+
+/* --- The pod ---------------------------------------------------------------- */
+
+.orbit__pod {
+  position: absolute;
+  inset: 13%;
+  border-radius: 50%;
+  touch-action: pan-y;
+  animation: orbit-float 7s ease-in-out infinite;
+}
+
+@keyframes orbit-float {
+  0%,
+  100% { translate: 0 -1.1cqi; }
+  50% { translate: 0 1.1cqi; }
+}
+
+.orbit__glass {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--tatvyra-peach) 30%, var(--tatvyra-warm-white));
+  box-shadow:
+    0 2.6cqi 5cqi -2.2cqi rgb(var(--ink-rgb) / 0.4),
+    0 0 0 1px color-mix(in srgb, var(--tatvyra-warm-white) 70%, transparent);
+}
+
+/* The dome: darker toward the rim, a band of thick glass at the edge with a
+   bright lip, shade underneath and a warm bounce off the page. */
+.orbit__glass::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: 50%;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 42%, transparent 55%, rgb(var(--ink-rgb) / 0.26) 100%),
+    radial-gradient(90% 60% at 50% 110%, rgb(var(--orange-rgb) / 0.2), transparent 60%);
+  box-shadow:
+    inset 0 0 0 1.7cqi color-mix(in srgb, var(--tatvyra-warm-white) 22%, transparent),
+    inset 0 0 0 calc(1.7cqi + 1.5px) color-mix(in srgb, var(--tatvyra-warm-white) 60%, transparent),
+    inset 0 -3.2cqi 5cqi -2cqi rgb(var(--ink-rgb) / 0.38),
+    inset 0 3cqi 5cqi -3cqi color-mix(in srgb, var(--tatvyra-warm-white) 75%, transparent);
+}
+
+/* Each scene at its distance from the range in view: turned by up to a
+   quarter, dissolved, softened and a touch enlarged, so the next one comes
+   round with the ring as this one leaves. */
+.orbit__scene {
+  --d: calc(var(--k) - var(--s));
+  --far: min(1, max(var(--d), -1 * var(--d)));
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: calc(1 - var(--far));
+  rotate: calc(clamp(-1, var(--d), 1) * 90deg);
+  scale: calc(1.1 + var(--far) * 0.16);
+  filter: blur(calc(var(--far) * 0.9cqi)) saturate(calc(1 - var(--far) * 0.4));
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Reflections on the glass: a window of light high on the left, a small
+   catch low on the right, and glints along the rim. */
+.orbit__shine {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: 50%;
+  pointer-events: none;
+  background:
+    radial-gradient(36% 19% at 35% 17%, color-mix(in srgb, var(--tatvyra-warm-white) 80%, transparent), transparent 72%),
+    radial-gradient(9% 5% at 69% 85%, color-mix(in srgb, var(--tatvyra-warm-white) 60%, transparent), transparent 72%);
+}
+
+.orbit__shine::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 290deg,
+    transparent 0deg,
+    color-mix(in srgb, var(--tatvyra-warm-white) 90%, transparent) 34deg,
+    transparent 72deg 150deg,
+    color-mix(in srgb, var(--tatvyra-warm-white) 45%, transparent) 186deg,
+    transparent 222deg
+  );
+  mask: radial-gradient(closest-side, transparent calc(100% - 2.2cqi), var(--tatvyra-ink) calc(100% - 1.2cqi), transparent 100%);
+}
+
+/* The ground: a shadow that tightens as the pod rises, and the light each
+   range's scene throws through the glass, in that range's colour. */
+.orbit__ground {
+  position: absolute;
+  top: 86%;
+  left: 18%;
+  right: 18%;
+  height: 18%;
+  pointer-events: none;
+  animation: orbit-ground 7s ease-in-out infinite;
+}
+
+@keyframes orbit-ground {
+  0%,
+  100% { scale: 0.9; opacity: 0.78; }
+  50% { scale: 1.04; opacity: 1; }
+}
+
+.orbit__shadow,
+.orbit__caustic {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.orbit__shadow {
+  inset: 30% 12% 36%;
+  background: radial-gradient(closest-side, rgb(var(--ink-rgb) / 0.32), rgb(var(--ink-rgb) / 0));
+  filter: blur(0.6cqi);
+}
+
+.orbit__caustic {
+  --far: min(1, max(var(--k) - var(--s), var(--s) - var(--k)));
+  inset: 0;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--tone) 55%, transparent),
+    color-mix(in srgb, var(--tone) 0%, transparent)
+  );
+  opacity: calc((1 - var(--far)) * 0.75);
+  filter: blur(1.4cqi);
+}
+
+/* --- The ranges --------------------------------------------------------------- */
+
+.orbit__ranges {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.25rem, 3svh, 2rem);
+}
+
+.orbit__tabs {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.5rem, 1.6svh, 1.1rem);
+}
+
+.orbit__tab {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  padding: 0.35rem 0 0.35rem 1.1rem;
+  text-align: left;
+  opacity: 0.6;
+  transition: opacity var(--dur) var(--ease-out);
+}
+
+.orbit__tab:hover,
+.orbit__tab[aria-selected='true'] { opacity: 1; }
+
+/* The tick in the range's colour, drawn full length when it is in view. */
+.orbit__tab::before {
+  content: '';
+  position: absolute;
+  top: 18%;
+  bottom: 18%;
+  left: 0;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--tone);
+  opacity: 0.5;
+  scale: 1 0.4;
+  transition:
+    scale var(--dur-slow) var(--ease-out),
+    opacity var(--dur) var(--ease-out);
+}
+
+.orbit__tab[aria-selected='true']::before {
+  opacity: 1;
+  scale: 1 1;
+}
+
+/* A small pod of the same scene. */
+.orbit__thumb {
+  position: relative;
+  flex: none;
+  width: clamp(3.5rem, 2.6rem + 1.8vw, 4.75rem);
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 50%;
+  box-shadow:
+    0 8px 18px -12px rgb(var(--ink-rgb) / 0.5),
+    0 0 0 1px color-mix(in srgb, var(--tatvyra-warm-white) 70%, transparent);
+  transition: box-shadow var(--dur) var(--ease-out);
+}
+
+.orbit__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  scale: 1.12;
+  filter: saturate(0.7);
+  transition: filter var(--dur) var(--ease-out);
+}
+
+.orbit__thumb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(42% 24% at 36% 20%, color-mix(in srgb, var(--tatvyra-warm-white) 75%, transparent), transparent 72%),
+    radial-gradient(circle at 50% 44%, transparent 58%, rgb(var(--ink-rgb) / 0.24) 100%);
+  box-shadow: inset 0 0 0 0.28rem color-mix(in srgb, var(--tatvyra-warm-white) 24%, transparent);
+}
+
+.orbit__tab[aria-selected='true'] .orbit__thumb {
+  box-shadow:
+    0 10px 22px -12px rgb(var(--ink-rgb) / 0.55),
+    0 0 0 2px var(--tatvyra-warm-white),
+    0 0 0 3.5px var(--tone);
+}
+
+.orbit__tab[aria-selected='true'] .orbit__thumb img { filter: none; }
+
+.orbit__tab-name {
+  display: block;
+  font-size: 12px;
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
   color: var(--text);
 }
 
+.orbit__tab[aria-selected='true'] .orbit__tab-name { color: var(--tatvyra-purple); }
+
+.orbit__tab-lines {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: var(--step--1);
+  line-height: 1.45;
+  color: rgb(var(--ink-rgb) / 0.62);
+}
+
+.orbit__tab-lines span { display: block; }
+
+/* The two arrows, and the range in view's shop link on its own line. */
+.orbit__nav {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: center;
+  gap: 0.6rem;
+  padding-left: 1.1rem;
+}
+
+.orbit__arrow {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  aspect-ratio: 1;
+  border: 1px solid var(--hair);
+  border-radius: 50%;
+  color: var(--text);
+  transition:
+    border-color var(--dur) var(--ease-out),
+    color var(--dur) var(--ease-out),
+    opacity var(--dur) var(--ease-out);
+}
+
+.orbit__arrow:hover:not(:disabled) {
+  border-color: var(--tatvyra-purple);
+  color: var(--tatvyra-purple);
+}
+
+.orbit__arrow:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.orbit__arrow--prev svg { rotate: 180deg; }
+
+.orbit__shop {
+  grid-column: 1 / -1;
+  justify-self: start;
+  margin-top: 0.4rem;
+  padding-bottom: 0.2rem;
+  border-bottom: 1px solid currentColor;
+  font-size: 12px;
+  font-weight: var(--type-button-weight);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--tatvyra-purple);
+}
+
+/* --- The foot ----------------------------------------------------------------
+   The scroll cue (pinned only), whose knob travels as the orbit turns, and
+   the brand's closing line. */
+
+.orbit__foot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-l);
+  margin-top: var(--space-l);
+}
+
+.orbit__cue {
+  display: none;
+  align-items: center;
+  gap: 1rem;
+  font-size: 11px;
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgb(var(--ink-rgb) / 0.7);
+}
+
+.orbit.is-pinned .orbit__cue { display: flex; }
+
+.orbit__cue-track {
+  position: relative;
+  width: 5rem;
+  height: 1px;
+  background: var(--hair);
+}
+
+.orbit__cue-track::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc(var(--progress) * 100%);
+  background: var(--tatvyra-purple);
+}
+
+.orbit__cue-knob {
+  position: absolute;
+  top: 50%;
+  left: calc(var(--progress) * 100%);
+  width: 0.65rem;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border: 1px solid var(--tatvyra-purple);
+  border-radius: 50%;
+  background: var(--tatvyra-warm-white);
+}
+
+.orbit__wisdom {
+  margin-left: auto;
+  padding-left: 1.25rem;
+  border-left: 1px solid var(--hair);
+  font-size: 11px;
+  font-weight: var(--type-label-weight);
+  line-height: 1.9;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgb(var(--ink-rgb) / 0.7);
+}
+
+.orbit__wisdom span { display: block; }
+
+@media (prefers-reduced-motion: reduce) {
+  .orbit__pod,
+  .orbit__ground { animation: none; }
+}
+
+/* The range in view, named under the row of pods on a phone. */
+.orbit__caption {
+  display: none;
+  text-align: center;
+}
+
+.orbit__caption .orbit__tab-name { color: var(--tatvyra-purple); }
+
+/* --- Narrow --------------------------------------------------------------------
+   One column: the copy, the pod, then the ranges as a grid of tabs. */
+
 @media (max-width: 62rem) {
-  .story__inner { grid-template-columns: minmax(0, 1fr); }
+  .orbit__inner {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--space-xl);
+  }
+
+  .orbit__stage { width: min(100%, 26rem); }
+
+  .orbit__tabs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem 1.25rem;
+  }
+
+  .orbit__foot { margin-top: var(--space-xl); }
+  .orbit__wisdom { margin-left: 0; }
+}
+
+/* On a phone the tabs become a row of small pods, their words kept for
+   assistive technology but hidden, and the range in view is named beneath. */
+@media (max-width: 34rem) {
+  .orbit__tabs {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .orbit__tab { padding: 0 0 0.9rem; }
+
+  .orbit__tab::before {
+    top: auto;
+    right: 30%;
+    bottom: 0;
+    left: 30%;
+    width: auto;
+    height: 2px;
+    scale: 0.4 1;
+  }
+
+  .orbit__tab[aria-selected='true']::before { scale: 1 1; }
+
+  .orbit__tab-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .orbit__caption { display: block; }
+
+  .orbit__nav {
+    grid-template-columns: 1fr auto auto 1fr;
+    padding-left: 0;
+  }
+
+  .orbit__arrow--prev { grid-column: 2; }
+  .orbit__shop { justify-self: center; }
 }
 
 /* --- Final CTA ------------------------------------------------------------ */

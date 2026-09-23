@@ -1,34 +1,57 @@
 /* ==========================================================================
    TATVYRA — TYPEFACES
 
-   Lumaire is the brand display face and carries the headlines. Its font files
-   are licensed and are NOT committed to this repository.
+   SITE TYPOGRAPHY
+   Every piece of text uses --font-sans ("Helvetica Neue", Helvetica, Arial)
+   — see tokens.css. These are system faces on every platform the site ships
+   to, so no @font-face and no web font download is needed for them.
 
-   The @font-face below is ACTIVE and --font-display already lists 'Lumaire'
-   first, so the only remaining step is to drop the licensed files into
-   public/fonts/ (see the README there):
+   THE LOGO
+   Luminaire is the logo's face, and is used for nothing else. Its token,
+   --font-logo, is scoped to .logo in components.css so it cannot leak into
+   site typography.
 
-       public/fonts/Lumaire.woff2
-       public/fonts/Lumaire.woff     (optional)
+   Its font file is NOT in this repository, so the declaration below is left
+   switched off: loading a file that is not there would 404 on every page, and
+   no look-alike has been substituted. To enable it:
 
-   Until they are present that request 404s and headlines fall back to
-   Helvetica, the brand's own secondary face. Do not substitute a downloaded
-   look-alike.
+     1. Put the licensed file(s) in public/fonts/
+          Luminaire.woff2
+          Luminaire.woff        (optional)
+     2. Uncomment the @font-face block below.
 
-   Helvetica needs no @font-face: it is a system face on the platforms the
-   brand ships to, with Arial as the final fallback.
+   IMPORTANT: the current lockup (public/brand/tatvyra-logo.svg) is vector
+   artwork — its wordmark is drawn as outlined paths extracted from the
+   catalogue, not set as text. A font cannot change those paths, so enabling
+   Luminaire here only takes effect if the wordmark is ever set as live text.
+   To change the logo itself, re-export the artwork.
+   ========================================================================== */
 
-   Poppins IS now loaded, from Google Fonts in index.html, and is used for the
-   hero lede and buttons via --font-ui. This overrides the "never Poppins"
-   rule in BRAND-NOTES.md and is kept at the brand owner's direction.
+/*
+@font-face {
+  font-family: 'Luminaire';
+  src:
+    url('/fonts/Luminaire.woff2') format('woff2'),
+    url('/fonts/Luminaire.woff') format('woff');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+*/
+
+/* ==========================================================================
+   THE HANDWRITTEN NOTES
+   "Oooh Baby" by Robert Leuschke, SIL Open Font License 1.1 — free to use,
+   bundle and self-host. Latin subset only, as served by Google Fonts, kept in
+   public/fonts/ so the page makes no third-party request. Used through
+   --font-script for the two margin notes on the homepage brand section and
+   for nothing else; every other piece of text stays in --font-sans.
    ========================================================================== */
 
 @font-face {
-  font-family: 'Lumaire';
-  src:
-    url('/fonts/Lumaire.woff2') format('woff2'),
-    url('/fonts/Lumaire.woff') format('woff');
-  font-weight: 400 700;
+  font-family: 'Oooh Baby';
+  src: url('/fonts/OoohBaby-Regular-latin.woff2') format('woff2');
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }

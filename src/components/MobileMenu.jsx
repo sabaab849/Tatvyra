@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { NavLink } from 'react-router-dom'
 import Logo from './Logo'
 import { CloseIcon, ArrowIcon } from './Icons'
-import { SECTION_NAV, CATEGORY_NAV, SUPPORT_NAV } from '../lib/nav'
+import { SECTION_NAV, CATEGORY_NAV, SUPPORT_NAV, POLICY_NAV } from '../lib/nav'
 import { useOverlay } from '../lib/useOverlay'
 
 export default function MobileMenu({ open, onClose }) {
@@ -70,7 +70,7 @@ export default function MobileMenu({ open, onClose }) {
 
         <div className="drawer__foot">
           <ul className="drawer__support">
-            {SUPPORT_NAV.map((item) => (
+            {[...SUPPORT_NAV, ...POLICY_NAV].map((item) => (
               <li key={item.to}>
                 <NavLink to={item.to} tabIndex={open ? 0 : -1}>
                   {item.label}

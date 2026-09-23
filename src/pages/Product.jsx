@@ -2,9 +2,15 @@ import { Link, Navigate, useParams } from 'react-router-dom'
 import ProductGallery from '../components/ProductGallery'
 import ProductInfo from '../components/ProductInfo'
 import ProductGrid from '../components/ProductGrid'
+import ProductStory from '../components/ProductStory'
 import ProductSpotlight from '../components/ProductSpotlight'
 import ProductCampaign from '../components/ProductCampaign'
 import ProductFaq from '../components/ProductFaq'
+import ProductJourney from '../components/ProductJourney'
+import ProductOrigin from '../components/ProductOrigin'
+import ProductOriginMap from '../components/ProductOriginMap'
+import ProductBenefitMap from '../components/ProductBenefitMap'
+import ProductOriginTrail from '../components/ProductOriginTrail'
 import ProductInformation from '../components/ProductInformation'
 import SectionHeading from '../components/SectionHeading'
 import { getCategory, getProduct, productsByCategory } from '../data/catalogue'
@@ -17,7 +23,7 @@ export default function Product() {
 
   usePageMeta({
     title: product ? `${product.name} — Tatvyra` : 'Product — Tatvyra',
-    description: product ? product.descriptor : undefined,
+    description: product ? (product.description ?? product.descriptor) : undefined,
   })
 
   if (!product) return <Navigate to="/shop" replace />
@@ -39,6 +45,21 @@ export default function Product() {
         <ProductGallery product={product} category={category} />
         <ProductInfo product={product} category={category} />
       </div>
+
+      {/* Straight after the buy box, ahead of the rest of the range and the FAQ,
+          so the story stays with the product it tells. Renders only for SKUs
+          that carry `journey` data. */}
+      <ProductJourney product={product} />
+
+      <ProductStory product={product} />
+
+      <ProductOrigin product={product} />
+
+      <ProductOriginMap product={product} />
+
+      <ProductBenefitMap product={product} />
+
+      <ProductOriginTrail product={product} />
 
       {related.length > 0 && (
         <section className="section section--sunken" aria-labelledby="related-title">

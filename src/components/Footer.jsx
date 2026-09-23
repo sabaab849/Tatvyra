@@ -3,7 +3,7 @@ import Logo from './Logo'
 import Newsletter from './Newsletter'
 import { BRAND } from '../data/brand'
 import { CATEGORIES } from '../data/catalogue'
-import { SUPPORT_NAV } from '../lib/nav'
+import { POLICY_NAV, SUPPORT_NAV } from '../lib/nav'
 import { MailIcon, PhoneIcon, PinIcon } from './Icons'
 
 export default function Footer() {
@@ -91,9 +91,23 @@ export default function Footer() {
       </div>
 
       <div className="footer__bottom shell">
-        <p className="footer__legal">
-          © {new Date().getFullYear()} {BRAND.company}. All rights reserved.
-        </p>
+        {/* The policies sit with the copyright line, below the main footer
+            navigation, and take no heading of their own. */}
+        <div className="footer__legal">
+          <p>
+            {/* The company name ends on "Ltd.", which closes the sentence. */}
+            © {new Date().getFullYear()} {BRAND.company} All rights reserved.
+          </p>
+          <nav aria-label="Policies">
+            <ul className="footer__policies">
+              {POLICY_NAV.map((item) => (
+                <li key={item.to}>
+                  <Link to={item.to}>{item.label}</Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
         <p className="footer__line">{BRAND.line}</p>
         <p className="footer__site">{BRAND.website}</p>
       </div>

@@ -5,7 +5,14 @@ import { useEffect, useRef, useState } from 'react'
  * Motion is a short fade and 18px rise; it is disabled entirely under
  * prefers-reduced-motion via CSS.
  */
-export default function Reveal({ as: Tag = 'div', delay = 0, className = '', children, ...rest }) {
+export default function Reveal({
+  as: Tag = 'div',
+  delay = 0,
+  className = '',
+  style,
+  children,
+  ...rest
+}) {
   const ref = useRef(null)
   // Browsers without IntersectionObserver simply start visible; nothing to observe.
   const [visible, setVisible] = useState(() => typeof IntersectionObserver === 'undefined')
@@ -32,7 +39,8 @@ export default function Reveal({ as: Tag = 'div', delay = 0, className = '', chi
     <Tag
       ref={ref}
       className={`reveal ${visible ? 'is-visible' : ''} ${className}`.trim()}
-      style={delay ? { transitionDelay: `${delay}ms` } : undefined}
+      // Merged, so a caller's own style never drops the stagger delay.
+      style={delay ? { ...style, transitionDelay: `${delay}ms` } : style}
       {...rest}
     >
       {children}

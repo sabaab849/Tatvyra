@@ -23,7 +23,11 @@ export const PRIMARY_NAV = [SHOP, ...CATEGORY_NAV, ABOUT]
 export const SUPPORT_NAV = [
   { label: 'Contact', to: '/contact' },
   { label: 'FAQ', to: '/faq' },
-  { label: 'Shipping & Returns', to: '/shipping-returns' },
+]
+
+/** The only two policy links. Shipping, refunds, terms and the disclaimer are
+ *  sections of Our Policies, not links of their own. */
+export const POLICY_NAV = [
   { label: 'Privacy Policy', to: '/privacy' },
-  { label: 'Terms', to: '/terms' },
+  { label: 'Our Policies', to: '/policies' },
 ]

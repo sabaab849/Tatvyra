@@ -79,25 +79,49 @@
   --glass-blur: 20px;
 
   /* --- Typography -------------------------------------------------------
-     Display face: Lumaire (headlines only).
-     UI/body face: Helvetica.
-     Poppins is deliberately absent — it is reserved for the catalogue.
+     ONE family sets every piece of text on the site: headings, body, nav,
+     buttons, labels, product information and prices. It is set once on
+     <body> and inherited — components do not redeclare it, and form
+     controls pick it up through the `font: inherit` reset in base.css.
 
-     The Lumaire files are NOT in this repository (see BRAND-NOTES.md).
-     Drop Lumaire.woff2 / Lumaire.woff into public/fonts/ and uncomment the
-     @font-face block in fonts.css. Until then headlines fall back to
-     Helvetica, which is the brand's own second face.                       */
-  --font-display: 'Lumaire', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  --font-body: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  /* Poppins, loaded in index.html. The guidelines reserved it for the
-     catalogue; it is used on the site at the brand owner's direction, and is
-     scoped to the hero lede and buttons rather than applied to body copy. */
-  --font-ui: 'Poppins', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  /* Fraunces is the display face in the Figma refresh — a variable serif set
-     with SOFT 0 / WONK 1 there. Scoped to the refreshed sections. */
-  --font-serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+     Helvetica Neue where it is installed (macOS, iOS), then Helvetica, then
+     Arial (Windows, Android). No web font is loaded for body text.        */
+  --font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
+  /* The logo's face, and nothing else. Isolated so it can be switched on
+     without touching site typography — see fonts.css. Note the current
+     lockup is vector artwork, so this only takes effect if the wordmark is
+     ever set as live text. */
+  --font-logo: 'Luminaire', var(--font-sans);
+
+  /* The handwritten notes on the homepage brand section, and nothing else:
+     a monoline script, self-hosted — see fonts.css. Never for running text. */
+  --font-script: 'Oooh Baby', cursive;
+
+  /* Weights, named for what actually renders. Helvetica Neue ships a real
+     Medium (500); Helvetica and Arial do not, so 500 falls back to Regular
+     on Windows. None of the three ships a 600, so 600 resolves to Bold
+     everywhere. So product names sit at Medium, not Semibold: 600 would
+     draw exactly as bold as the headings on every platform and erase that
+     step in the hierarchy. Buttons keep 600 and draw Bold, for affordance. */
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* Roles — components reference these rather than raw numbers. */
+  --type-display-weight: var(--weight-bold);      /* hero and page titles */
+  --type-heading-weight: var(--weight-bold);      /* section headings */
+  --type-product-weight: var(--weight-medium);    /* product and range names */
+  --type-body-weight: var(--weight-regular);      /* running copy */
+  --type-label-weight: var(--weight-medium);      /* eyebrows, metadata */
+  --type-button-weight: var(--weight-semibold);   /* buttons and CTA links */
+
+  /* Tracking. A bold grotesque reads looser than it is at display sizes, so
+     headings are drawn in; labels keep their own wider tracking. */
   --display-tracking: -0.022em;
+  --heading-tracking: -0.02em;
+  --product-tracking: -0.01em;
   --display-leading: 0.98;
 
   /* Fluid type scale */
@@ -121,8 +145,8 @@
   --space-xl: 3rem;
   --space-2xl: 4rem;
   --space-3xl: 6rem;
-  --section-y: clamp(3.5rem, 2.2rem + 6.5vw, 7.5rem);
-  --section-y-tight: clamp(2.75rem, 1.9rem + 4.2vw, 5rem);
+  --section-y: clamp(2.75rem, 1.9rem + 3.6vw, 5rem);
+  --section-y-tight: clamp(2.25rem, 1.6rem + 2.6vw, 3.5rem);
 
   /* --- Layout ----------------------------------------------------------- */
   --page-max: 82.5rem; /* 1320px */

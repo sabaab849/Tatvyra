@@ -1,0 +1,429 @@
+/* ==========================================================================
+   PRODUCT ORIGIN MAP
+   The "Origin & process" map (ProductOriginMap): headline on the left, a map
+   of India in the middle with each source's photograph joined to its pin, and
+   the product's notes on the right.
+
+   The map is inline SVG drawn from India's official boundary; the photographs,
+   labels and lettering over it are HTML placed in cqi against the figure's own
+   width, so the whole composition scales as one piece. With a mouse the map is
+   explored by hovering (.is-explore); elsewhere its details are listed beneath
+   it (.is-list). Set in the body sans throughout.
+   ========================================================================== */
+
+.omap {
+  position: relative;
+  overflow: hidden;
+  padding-block: var(--section-y);
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.omap__grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.75fr) minmax(0, 0.72fr);
+  gap: clamp(1.5rem, 0.5rem + 2.5vw, 3.5rem);
+  align-items: start;
+}
+
+/* --- Headline ------------------------------------------------------------- */
+
+.omap__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  font-size: var(--step--2);
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.omap__eyebrow::after {
+  content: '';
+  width: clamp(3rem, 1rem + 6vw, 8rem);
+  height: 1px;
+  background: var(--line-strong);
+}
+
+.omap__title {
+  margin-top: var(--space-l);
+  font-size: clamp(2.75rem, 1.3rem + 4.6vw, 5.5rem);
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  color: var(--tatvyra-aubergine);
+}
+
+.omap__title span { display: block; }
+.omap__title-accent { color: var(--tatvyra-purple); }
+
+.omap__lede {
+  max-width: 34ch;
+  margin-top: clamp(1.75rem, 1rem + 2vw, 2.5rem);
+  font-size: var(--step-1);
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+/* --- The map -------------------------------------------------------------- */
+
+.omap__figure {
+  position: relative;
+  container-type: inline-size;
+}
+
+.omap__stage { position: relative; }
+
+.omap__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* The land is the shared vintage map (IndiaMapArt); routes and pins follow
+   it: sepia dots, Orange pins, Purple for the route in hand. */
+.omap__line {
+  fill: none;
+  stroke: rgb(var(--ink-rgb) / 0.62);
+  stroke-width: 3.4;
+  stroke-linecap: round;
+  stroke-dasharray: 0.1 10;
+  transition: stroke var(--dur) var(--ease), opacity var(--dur) var(--ease);
+}
+
+.omap__pin {
+  fill: var(--tatvyra-orange);
+  stroke: var(--tatvyra-warm-white);
+  stroke-width: 3.5;
+}
+
+.omap__halo {
+  fill: var(--tatvyra-orange);
+  opacity: 0.22;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.omap__route { transition: opacity var(--dur) var(--ease); }
+
+/* The chosen route runs toward its pin, and the pin rings out. */
+.omap__route.is-active .omap__line {
+  stroke: var(--tatvyra-purple);
+  animation: omap-march 1.1s linear infinite;
+}
+
+.omap__route.is-active .omap__halo { animation: omap-ring 1.8s var(--ease-out) infinite; }
+.has-active .omap__route:not(.is-active) { opacity: 0.3; }
+
+@keyframes omap-march { to { stroke-dashoffset: -20.2; } }
+
+@keyframes omap-ring {
+  from { scale: 0.6; opacity: 0.32; }
+  to { scale: 1.9; opacity: 0; }
+}
+
+.omap__country {
+  position: absolute;
+  left: calc(var(--x) * 1cqi);
+  top: calc(var(--y) * 1cqi);
+  translate: -50% -50%;
+  padding-left: 0.5em;
+  font-size: var(--step--1);
+  font-weight: 500;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+/* --- Photographs ---------------------------------------------------------- */
+
+.omap__photo {
+  position: absolute;
+  left: calc((var(--cx) - var(--d) / 2) * 1cqi);
+  top: calc((var(--cy) - var(--d) / 2) * 1cqi);
+  display: block;
+  width: calc(var(--d) * 1cqi);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--surface-sunken);
+  /* A Warm White ring, as the reference mounts its photographs. */
+  box-shadow:
+    0 0 0 clamp(3px, 0.55cqi, 5px) var(--tatvyra-warm-white),
+    0 16px 30px -18px rgb(var(--ink-rgb) / 0.55);
+  transition:
+    opacity var(--dur) var(--ease),
+    scale var(--dur) var(--ease-pop),
+    filter var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+
+.omap__photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.omap__photo:focus-visible { outline: 2px solid var(--focus); outline-offset: 6px; }
+
+.omap__num { display: none; }
+
+/* --- Explore: labels on the map, details on hover -------------------------- */
+
+.is-explore .omap__label {
+  position: absolute;
+  top: calc(var(--ly) * 1cqi);
+  width: max-content;
+  max-width: 17.5em;
+  font-size: 0.8125rem;
+}
+
+.is-explore .omap__point--start .omap__label { left: calc(var(--lx) * 1cqi); }
+
+.is-explore .omap__point--end .omap__label {
+  right: calc((100 - var(--lx)) * 1cqi);
+  text-align: right;
+}
+
+.omap__label-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+/* The details rise in as a small card under the title, above the map. */
+.is-explore .omap__detail {
+  position: relative;
+  z-index: 2;
+  margin-top: 0.6rem;
+  padding: 0.85rem 1rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-image);
+  background: var(--surface);
+  box-shadow: var(--shadow-soft);
+  text-align: left;
+  opacity: 0;
+  translate: 0 8px;
+  pointer-events: none;
+  transition:
+    opacity var(--dur) var(--ease-out),
+    translate var(--dur) var(--ease-out);
+}
+
+.is-explore .omap__point.is-active .omap__detail {
+  opacity: 1;
+  translate: 0 0;
+  pointer-events: auto;
+}
+
+/* Raised by z-index alone: the list item must stay unpositioned, or it would
+   become the photograph's and label's containing block and move them. */
+.is-explore .omap__point.is-active .omap__photo,
+.is-explore .omap__point.is-active .omap__label { z-index: 3; }
+
+.is-explore .omap__point.is-active .omap__photo {
+  scale: 1.05;
+  box-shadow:
+    0 0 0 clamp(3px, 0.55cqi, 5px) var(--tatvyra-warm-white),
+    0 0 0 clamp(4.5px, 0.8cqi, 7px) color-mix(in srgb, var(--tatvyra-purple) 55%, transparent),
+    0 18px 34px -18px rgb(var(--ink-rgb) / 0.6);
+}
+
+.has-active .omap__point:not(.is-active) .omap__photo { opacity: 0.55; filter: saturate(0.6); }
+.has-active .omap__point:not(.is-active) .omap__label { opacity: 0.45; }
+.is-explore .omap__label { transition: opacity var(--dur) var(--ease); }
+
+.omap__label-body {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.omap__region {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.6rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--tatvyra-purple);
+}
+
+.omap__region svg { flex: none; }
+
+.omap__hint {
+  margin-top: 1.25rem;
+  font-size: var(--step--2);
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  transition: opacity var(--dur) var(--ease);
+}
+
+.has-active .omap__hint { opacity: 0; }
+
+/* --- List: the same details, beneath the map ------------------------------- */
+
+.is-list .omap__points {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.75rem 1.5rem;
+  margin-top: 1.75rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--line);
+}
+
+.is-list .omap__num {
+  display: inline;
+  margin-right: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--tatvyra-purple);
+}
+
+.is-list .omap__label-body { margin-top: 0.45rem; }
+
+/* Each photograph carries the number of its entry in the list. */
+.is-list .omap__photo::after {
+  content: attr(data-index);
+  position: absolute;
+  top: -0.2rem;
+  left: -0.2rem;
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: var(--tatvyra-purple);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--text-on-dark);
+}
+
+/* --- Notes ---------------------------------------------------------------- */
+
+.omap__aside { padding-top: 0.35rem; }
+
+.omap__tagline {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.95;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.omap__tagline span { display: block; }
+
+/* Burnt Orange for rules and dots, as the palette allows: the honey's note. */
+.omap__tagline::after {
+  content: '';
+  display: block;
+  width: 3.25rem;
+  height: 1px;
+  margin-top: 1.1rem;
+  background: var(--tatvyra-orange);
+}
+
+.omap__note { margin-top: clamp(2rem, 1.2rem + 2vw, 2.75rem); }
+
+.omap__note-title {
+  font-size: var(--step--2);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.omap__note-body {
+  margin-top: 0.6rem;
+  font-size: var(--step--1);
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.omap__note-lead {
+  margin-top: 0.6rem;
+  font-size: var(--step--1);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.omap__benefits { display: grid; gap: 0.6rem; margin-top: 0.6rem; }
+
+.omap__benefits li {
+  position: relative;
+  padding-left: 1.25rem;
+  font-size: var(--step--1);
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.omap__benefits li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--tatvyra-orange);
+}
+
+/* Honey running down the page's right edge, as on the other honey pages. */
+.omap__drip {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: clamp(3rem, 0.75rem + 4.2vw, 5.25rem);
+  height: auto;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .omap__route.is-active .omap__line,
+  .omap__route.is-active .omap__halo { animation: none; }
+}
+
+/* --- Two columns: headline above, map and notes side by side ---------------- */
+
+@media (max-width: 75rem) {
+  .omap__grid { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); }
+  .omap__intro { grid-column: 1 / -1; }
+  .omap__lede { max-width: 46ch; }
+  .omap__figure { margin-top: clamp(1rem, 0.5rem + 1.5vw, 2rem); }
+  .omap__aside { margin-top: clamp(1rem, 0.5rem + 1.5vw, 2rem); padding-right: clamp(2.5rem, 1rem + 4vw, 4.5rem); }
+}
+
+/* --- One column: headline, map, its list, then the notes ------------------- */
+
+@media (max-width: 48rem) {
+  .omap__drip { display: none; }
+  .omap__grid { grid-template-columns: minmax(0, 1fr); }
+  .omap__figure { margin-top: 0; }
+
+  .omap__aside {
+    margin-top: 0;
+    padding: 1.75rem 0 0;
+    border-top: 1px solid var(--line);
+  }
+}
+
+@media (max-width: 30rem) {
+  .is-list .omap__points { grid-template-columns: minmax(0, 1fr); }
+}

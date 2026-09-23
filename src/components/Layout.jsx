@@ -8,9 +8,14 @@ import CartDrawer from './CartDrawer'
 export default function Layout() {
   const { pathname } = useLocation()
 
-  // Route changes should land at the top of the new page, not mid-scroll.
+  // Route changes should land at the top of the new page, not mid-scroll — or
+  // on the section the address names (/policies#disclaimer). Keyed to the path
+  // alone, so an in-page jump keeps the browser's own scrolling.
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+    const id = decodeURIComponent(window.location.hash.slice(1))
+    const target = id && document.getElementById(id)
+    if (target) target.scrollIntoView({ block: 'start', behavior: 'instant' })
+    else window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
   }, [pathname])
 
   return (

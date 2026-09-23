@@ -4,8 +4,11 @@ import Button from '../components/Button'
 import { ArrowIcon } from '../components/Icons'
 import WhyTatvyra from '../sections/WhyTatvyra'
 import FinalCTA from '../sections/FinalCTA'
+import AboutBrand from '../sections/AboutBrand'
+import AboutFounder from '../sections/AboutFounder'
+import AboutPhilosophy from '../sections/AboutPhilosophy'
 import { BRAND, MARKS } from '../data/brand'
-import { CATEGORIES, PRODUCTS } from '../data/catalogue'
+import { CATEGORIES } from '../data/catalogue'
 import usePageMeta from '../lib/usePageMeta'
 
 /**
@@ -32,14 +35,6 @@ const RANGE_PHOTOS = {
   },
 }
 
-/* Counted from the catalogue rather than typed in, so the hero never
-   disagrees with the shop. */
-const FACTS = [
-  { term: 'Ranges', value: String(CATEGORIES.length).padStart(2, '0') },
-  { term: 'Products', value: String(PRODUCTS.length) },
-  { term: 'Certified process', value: 'FSSAI' },
-]
-
 export default function About() {
   usePageMeta({
     title: 'About — Tatvyra',
@@ -49,54 +44,23 @@ export default function About() {
 
   return (
     <div className="about">
-      {/* Its own photograph, not the homepage banner — sharing that made the
-          two pages read as one. The copy comes first in the DOM, so the stacked
-          layout on narrow screens reads headline before picture. */}
-      <header className="about-hero" aria-labelledby="about-title">
-        <div className="shell about-hero__inner">
-          <div className="about-hero__copy">
-            <p className="about-eyebrow">About Tatvyra</p>
-            <h1 id="about-title" className="display about-hero__title">
-              {BRAND.positioning}
-            </h1>
-            <p className="about-hero__lede">
-              The wellness range from {BRAND.company} — four real foods, made to a clean-label
-              standard.
-            </p>
-            <dl className="about-hero__facts">
-              {FACTS.map((fact) => (
-                <div key={fact.term}>
-                  <dt>{fact.term}</dt>
-                  <dd>{fact.value}</dd>
-                </div>
-              ))}
-            </dl>
-          </div>
+      <AboutBrand />
+      <AboutFounder />
 
-          <div className="about-hero__media">
-            <img
-              className="about-hero__photo"
-              src="/images/products/range-green.webp"
-              alt="The Tatvyra moringa range — leaf powder, effervescent tablets, capsules and gummies — beside a bowl of moringa powder and fresh leaves."
-              width={800}
-              height={1000}
-              fetchPriority="high"
-              decoding="async"
-            />
+      {/* The approach shares the philosophy's ground, so the leaf mark and the
+          wash run on behind it. */}
+      <AboutPhilosophy>
+        <section className="about-intro" aria-labelledby="about-intro-title">
+          <div className="shell">
+            <Reveal className="about-intro__inner">
+              <p className="about-eyebrow">Our approach</p>
+              <h2 id="about-intro-title" className="about-intro__statement">
+                A simpler approach to better ingredients.
+              </h2>
+            </Reveal>
           </div>
-        </div>
-      </header>
-
-      <section className="about-intro" aria-labelledby="about-intro-title">
-        <div className="shell">
-          <Reveal className="about-intro__inner">
-            <p className="about-eyebrow">Our approach</p>
-            <h2 id="about-intro-title" className="about-intro__statement">
-              A simpler approach to better ingredients.
-            </h2>
-          </Reveal>
-        </div>
-      </section>
+        </section>
+      </AboutPhilosophy>
 
       <section className="section about-story" aria-labelledby="about-story-title">
         <div className="shell about-story__inner">

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Layout from './components/Layout'
 import { CartProvider } from './context/CartContext'
 import Home from './pages/Home'
@@ -10,6 +10,9 @@ import Checkout from './pages/Checkout'
 import Payment from './pages/Payment'
 import OrderConfirmation from './pages/OrderConfirmation'
 import InfoPage from './pages/InfoPage'
+import LegalPage from './pages/LegalPage'
+import Faq from './pages/Faq'
+import { PRIVACY_POLICY, OUR_POLICIES } from './data/legal'
 import NotFound from './pages/NotFound'
 
 export default function App() {
@@ -41,45 +44,19 @@ export default function App() {
                 />
               }
             />
-            <Route
-              path="faq"
-              element={
-                <InfoPage
-                  eyebrow="Support"
-                  title="Frequently asked questions"
-                  summary="Answers about the range, formats and availability."
-                />
-              }
-            />
+            <Route path="faq" element={<Faq />} />
+            <Route path="privacy" element={<LegalPage doc={PRIVACY_POLICY} />} />
+            <Route path="policies" element={<LegalPage doc={OUR_POLICIES} />} />
+
+            {/* Shipping and terms now live as sections of Our Policies; the old
+                addresses land on the matching section. */}
             <Route
               path="shipping-returns"
-              element={
-                <InfoPage
-                  eyebrow="Support"
-                  title="Shipping & returns"
-                  summary="How orders are dispatched and what happens if something is wrong."
-                />
-              }
-            />
-            <Route
-              path="privacy"
-              element={
-                <InfoPage
-                  eyebrow="Legal"
-                  title="Privacy policy"
-                  summary="What we collect, why, and what we do with it."
-                />
-              }
+              element={<Navigate to="/policies#shipping-policy" replace />}
             />
             <Route
               path="terms"
-              element={
-                <InfoPage
-                  eyebrow="Legal"
-                  title="Terms"
-                  summary="The terms that apply to using this site and buying from it."
-                />
-              }
+              element={<Navigate to="/policies#terms-and-conditions" replace />}
             />
             <Route path="*" element={<NotFound />} />
           </Route>
