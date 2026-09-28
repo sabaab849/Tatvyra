@@ -2533,15 +2533,14 @@
   border-bottom: 1px solid var(--line);
 }
 
-/* The one place --font-serif is used. Three words, spaced rather than
-   punctuated: the gap does the separating. */
+/* Three words, spaced rather than punctuated: the gap does the separating.
+   Set in the site's sans, inherited from body like every other line here. */
 .proof__title {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 0.5em clamp(1.75rem, 0.9rem + 2.8vw, 4rem);
   margin: 0;
-  font-family: var(--font-serif);
   font-size: clamp(1rem, 0.75rem + 0.85vw, 1.5rem);
   font-weight: 400;
   letter-spacing: 0.22em;
