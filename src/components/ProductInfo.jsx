@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import Button from './Button'
 import QuantitySelector from './QuantitySelector'
 import { MARKS } from '../data/brand'
-import { benefitsFor, priceFor } from '../data/catalogue'
+import { benefitsFor, STORE_DISCOUNT, mrpFor, priceFor } from '../data/catalogue'
 import { formatINR } from '../lib/money'
 import { useCart } from '../context/useCart'
 
@@ -16,6 +16,8 @@ export default function ProductInfo({ product, category }) {
   const [size, setSize] = useState(product.sizes[0])
   const [quantity, setQuantity] = useState(1)
   const price = formatINR(priceFor(product, size))
+  const mrp = formatINR(mrpFor(product, size))
+  const off = `${Math.round(STORE_DISCOUNT * 100)}% off`
   const benefits = benefitsFor(product)
   const { addItem } = useCart()
 
@@ -37,7 +39,23 @@ export default function ProductInfo({ product, category }) {
 
       <div className="pinfo__price">
         {price ? (
-          <span className="pinfo__price-value">{price}</span>
+          <>
+            <p className="pinfo__price-now">
+              <span className="pinfo__price-value">{price}</span>
+              <span className="pinfo__price-mrp">
+                <span className="visually-hidden">MRP </span>
+                <s>{mrp}</s>
+              </span>
+              <span className="pinfo__price-off">{off}</span>
+            </p>
+            {/* A pack the supplied price sheet does not carry: the figure is
+                ours, so the page says so rather than letting it read as MRP. */}
+            {product.priceTbc && (
+              <span className="pinfo__price-note">
+                Indicative price — Tatvyra&rsquo;s MRP for this pack is still to be confirmed.
+              </span>
+            )}
+          </>
         ) : (
           <>
             <span className="pinfo__price-tbc">Price on request</span>

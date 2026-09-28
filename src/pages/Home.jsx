@@ -3,6 +3,7 @@ import BrandPhilosophy from '../sections/BrandPhilosophy'
 import FourPillars from '../sections/FourPillars'
 import ShopByCategory from '../sections/ShopByCategory'
 import ShelfTrust from '../sections/ShelfTrust'
+import CertificationProof from '../sections/CertificationProof'
 import BrandStory from '../sections/BrandStory'
 import FinalCTA from '../sections/FinalCTA'
 import usePageMeta from '../lib/usePageMeta'
@@ -21,6 +22,7 @@ export default function Home() {
       <FourPillars />
       <ShopByCategory />
       <ShelfTrust />
+      <CertificationProof />
       <BrandStory />
       <FinalCTA />
     </>

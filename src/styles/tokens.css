@@ -98,6 +98,12 @@
      a monoline script, self-hosted — see fonts.css. Never for running text. */
   --font-script: 'Oooh Baby', cursive;
 
+  /* The certification band's one line, and nothing else. A serif was asked for
+     there to echo the serif wordmark; the wordmark's own face (Luminaire) is
+     not licensed into this project, so this is the system serif — no web font
+     is downloaded for it. Swap in the brand face here if it ever ships. */
+  --font-serif: Georgia, 'Times New Roman', Times, serif;
+
   /* Weights, named for what actually renders. Helvetica Neue ships a real
      Medium (500); Helvetica and Arial do not, so 500 falls back to Regular
      on Windows. None of the three ships a 600, so 600 resolves to Bold

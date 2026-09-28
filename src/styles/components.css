@@ -861,8 +861,19 @@
 
 .pcard__foot { margin-top: auto; padding-top: var(--space-s); }
 
-.pcard__price { font-size: var(--step--1); }
+/* The price and the MRP it is struck from, on one line. */
+.pcard__price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.15rem 0.45rem;
+  font-size: var(--step--1);
+}
+
 .pcard__price-value { font-weight: 700; color: var(--text); }
+
+.pcard__price-mrp { color: var(--text-faint); }
+.pcard__price-mrp s { text-decoration-thickness: 1px; text-underline-offset: 0; }
 .pcard__price-tbc { color: var(--text-faint); letter-spacing: 0.03em; }
 
 /* At four-up the card is ~250px inside its padding, which is just enough for
@@ -1070,12 +1081,26 @@
 
 .footer__logo { padding: 0.6rem 0.4rem 0.6rem 0; }
 
-/* The lockup artwork is purple/orange — on the aubergine footer it needs the
-   approved Warm White holding shape rather than a recolour of the mark. */
-.footer__logo .logo__img {
-  background: var(--tatvyra-warm-white);
-  border-radius: var(--radius-m);
-  padding: 1.1rem 1.4rem;
+/* The lockup ships in a white colourway for dark grounds, so the aubergine
+   footer takes that artwork rather than a holding shape behind the purple one. */
+
+/* The parent company's monogram, set small against its own name. */
+.footer__company {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.footer__ffc {
+  width: 2.75rem;
+  height: auto;
+  opacity: 0.85;
+}
+
+/* The registration reads as a company fact, not as a link or a claim. */
+.footer__gstin {
+  white-space: nowrap;
+  opacity: 0.75;
 }
 
 .footer__positioning {

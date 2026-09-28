@@ -24,7 +24,8 @@
  *   pay(request) -> Promise<PaymentResult>
  *
  *     request  { amount, currency, method, fields, reference, onStage }
- *       amount    integer, whole rupees
+ *       amount    rupees; a few MRPs carry paise, so it is not always whole.
+ *                 A real provider that bills in paise converts on the way in.
  *       method    the chosen method id
  *       fields    { [fieldName]: value } for that method
  *       reference the order reference, for reconciliation

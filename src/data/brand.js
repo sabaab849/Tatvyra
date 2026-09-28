@@ -14,6 +14,8 @@ export const BRAND = {
   // Verbatim from the catalogue cover / closing page.
   promise: 'Your Trusted Source for Everyday Health & Wellness',
   certification: 'FSSAI certified',
+  // The company's GST registration, as supplied by Tatvyra.
+  gstin: '27AAHCF1032B1ZA',
   website: 'www.tatvyra.com',
   contact: {
     emails: ['connect@feynmanfoodcraft.com', 'vijeta.r@feynmanfoodcraft.com'],

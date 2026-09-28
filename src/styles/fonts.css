@@ -2,6 +2,12 @@
    TATVYRA — TYPEFACES
 
    SITE TYPOGRAPHY
+   Almost every piece of text uses --font-sans ("Helvetica Neue", Helvetica,
+   Arial). The exceptions are --font-script, on two margin notes, and
+   --font-serif, on the certification band's one line — a system serif, since
+   the brand's own serif is not licensed into this project. Neither is used for
+   running text.
+
    Every piece of text uses --font-sans ("Helvetica Neue", Helvetica, Arial)
    — see tokens.css. These are system faces on every platform the site ships
    to, so no @font-face and no web font download is needed for them.

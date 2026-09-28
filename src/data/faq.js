@@ -5,8 +5,8 @@
  * the brand facts and on-pack mark definitions in brand.js, the product-page
  * notes, and Our Policies — so the FAQ makes no claim, commitment or promise of
  * its own: no delivery times, charges, returns windows, dosages or health
- * outcomes. Where a policy is still being finalised, the answer says so and
- * points to the page that will carry it.
+ * outcomes. Each policy answer points to the section of Our Policies that
+ * carries the wording.
  *
  * Range facts (counts, formats, names, descriptors) are read from the
  * catalogue rather than typed out, so they cannot drift from the shop.
@@ -115,16 +115,16 @@ export const FAQ = [
       {
         q: 'What are the delivery charges and timelines?',
         a: [
-          'Our shipping policy — covering order processing, delivery locations, delivery timelines, shipping charges and order tracking — is being finalised and will be published on Our Policies.',
-          `Until then, write to us at ${email} and we will answer directly.`,
+          'Our shipping policy — covering order processing, delivery locations, delivery timelines, shipping charges and order tracking — is published on Our Policies. Applicable shipping charges, if any, are shown during checkout before the order is completed.',
+          `If you need help with an order, write to us at ${email}.`,
         ],
         links: [{ to: '/policies#shipping-policy', label: 'Shipping policy' }],
       },
       {
         q: 'Can I cancel or return an order?',
         a: [
-          'Our refund and cancellation policy — covering eligibility, timelines, damaged or incorrect orders, and refund processing — is being finalised and will be published on Our Policies.',
-          `If you need help with an order now, write to us at ${email}.`,
+          'Our refund and cancellation policy — covering cancellation, returns, damaged or incorrect products, and refund processing — is published on Our Policies.',
+          `If you need help with an order, write to us at ${email}.`,
         ],
         links: [{ to: '/policies#refund-and-cancellation-policy', label: 'Refund & cancellation policy' }],
       },

@@ -5,7 +5,7 @@ import { ArrowIcon } from '../components/Icons'
 import WhyTatvyra from '../sections/WhyTatvyra'
 import FinalCTA from '../sections/FinalCTA'
 import AboutBrand from '../sections/AboutBrand'
-import AboutFounder from '../sections/AboutFounder'
+import AboutLeaders from '../sections/AboutLeaders'
 import AboutPhilosophy from '../sections/AboutPhilosophy'
 import { BRAND, MARKS } from '../data/brand'
 import { CATEGORIES } from '../data/catalogue'
@@ -44,7 +44,7 @@ export default function About() {
 
   return (
     <div className="about">
-      <AboutFounder />
+      <AboutLeaders />
       <AboutBrand />
 
       {/* The approach shares the philosophy's ground, so the leaf mark and the
@@ -112,6 +112,10 @@ export default function About() {
               <div>
                 <dt>Registered office</dt>
                 <dd>{BRAND.contact.address.at(-1)}</dd>
+              </div>
+              <div>
+                <dt>GST</dt>
+                <dd>{BRAND.gstin}</dd>
               </div>
               <div>
                 <dt>Write to us</dt>

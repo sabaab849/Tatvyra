@@ -6,9 +6,21 @@
  * tables and reviews do not exist in the supplied material, so those fields are
  * intentionally empty and the UI omits them rather than inventing them.
  *
- * PRICES ARE PLACEHOLDERS. The catalogue publishes none, so the figures below
- * are indicative retail prices for the prototype, held as whole rupees, purely
- * so the cart can total an order. Replace them with the client's real pricing.
+ * PRICES are the MRPs from Tatvyra's supplied price structure ("OUR COST →
+ * DISTRIBUTOR → RETAILER → MRP"), one per pack size, transcribed exactly —
+ * some carry paise. That sheet lists eighteen packs; the six it does
+ * not list (almond and cashew butter, spirulina tablets, and the multifloral,
+ * Himalayan and Kashmiri honeys) are PLACEHOLDERS derived from it: the same
+ * size step between packs, anchored to the price of the nearest product the
+ * sheet does carry, keeping each one's position against that sibling. Being
+ * MRPs like the rest, they take the same discount below. They are marked where
+ * they appear and the product page calls them indicative, because Tatvyra has
+ * not priced them.
+ *
+ * Those MRPs carry a 10% increase, and the store takes it straight back off:
+ * every price is shown as a pair — mrpFor() struck through, priceFor() beside
+ * it — and priceFor() is what the cart charges. The placeholders are shown the
+ * same way, so one SKU never reads differently from the next.
  *
  * `price` is the canonical unit price, and is the price of the first size.
  * A product sold in several sizes also carries `prices`, with one entry per
@@ -198,11 +210,11 @@ export const PRODUCTS = [
       },
       {
         q: 'Is every jar size the same price?',
-        a: 'No — each size is priced on its own, and the price updates when you change size. The 500g and 1000g jars work out cheaper per gram than the 250g.',
+        a: 'No — each size is priced on its own, and the price updates when you change size. The 1000g jar works out cheapest per gram.',
       },
     ],
-    price: 299,
-    prices: { '250g': 299, '500g': 499, '1000g': 899 },
+    price: 154,
+    prices: { '250g': 154, '500g': 330, '1000g': 556.6 },
     featured: true,
   },
   {
@@ -262,8 +274,8 @@ export const PRODUCTS = [
       'Vegan',
     ],
     marks: ['clean-label', 'vegan', 'gluten-free', 'nutrition-forward'],
-    price: 349,
-    prices: { '250g': 349, '500g': 599, '1000g': 1099 },
+    price: 182.6,
+    prices: { '250g': 182.6, '500g': 367.4, '1000g': 671 },
   },
   {
     sku: 'TAT-NB03',
@@ -344,8 +356,12 @@ export const PRODUCTS = [
         },
       ],
     },
-    price: 799,
-    prices: { '250g': 799, '500g': 1449, '1000g': 2699 },
+    // Not on the supplied price sheet. The figure below is derived from it —
+    // the client's own size step and price level, keeping this product's
+    // position against its priced sibling — and priceTbc still says so.
+    priceTbc: true,
+    price: 412,
+    prices: { '250g': 412, '500g': 855, '1000g': 1500 },
   },
   {
     sku: 'TAT-NB04',
@@ -426,8 +442,12 @@ export const PRODUCTS = [
         },
       ],
     },
-    price: 749,
-    prices: { '250g': 749, '500g': 1349, '1000g': 2499 },
+    // Not on the supplied price sheet. The figure below is derived from it —
+    // the client's own size step and price level, keeping this product's
+    // position against its priced sibling — and priceTbc still says so.
+    priceTbc: true,
+    price: 386,
+    prices: { '250g': 386, '500g': 801, '1000g': 1406 },
   },
 
   // 02 — MORINGA
@@ -442,6 +462,17 @@ export const PRODUCTS = [
       {
         src: '/images/products/moringa-leaf-powder.webp',
         alt: 'A pouch of Tatvyra organic moringa leaf powder beside bowls of the green powder and fresh moringa leaves.',
+      },
+      {
+        src: '/images/products/moringa-leaf-powder-back.webp',
+        alt: 'The back of the Tatvyra organic moringa leaf powder pouch: how to use, what to try it in, storage instructions, allergen advice, ingredients and manufacturer details.',
+      },
+      {
+        /* The panel on its own, for anyone reading the numbers rather than the
+           pack. The alt carries the table as the close-up prints it, so it is
+           readable without the picture. */
+        src: '/images/products/moringa-leaf-powder-nutrition.webp',
+        alt: 'The nutritional facts panel from the pack, per 100g approximately: energy 86.45 Kcal, protein 5.61 g, carbohydrate 14.85 g, fat 0.33 g.',
       },
       {
         src: '/images/products/range-green.webp',
@@ -462,7 +493,7 @@ export const PRODUCTS = [
       'Vegan',
     ],
     marks: ['clean-label', 'vegan', 'gluten-free'],
-    price: 399,
+    price: 313.5,
     featured: true,
     // The process story (ProductStory). Every line is lifted verbatim from the
     // supplied copy; nothing here names a drying or milling technique, a
@@ -540,6 +571,17 @@ export const PRODUCTS = [
         src: '/images/products/moringa-acv-effervescent-tablets.webp',
         alt: 'A bottle of Tatvyra ACV and moringa effervescent tablets on a wooden board with moringa leaves and green powder.',
       },
+      /* The pack's other face and its panel, both supplied. Each is taller than
+         the gallery's 4:5 frame, so the file widens the canvas by extending its
+         own edge rather than cropping — nothing on the label is cut. */
+      {
+        src: '/images/products/moringa-acv-effervescent-tablets-back.webp',
+        alt: 'The back of the Tatvyra ACV Moringa Effervescent pack, its nutritional facts panel facing the camera.',
+      },
+      {
+        src: '/images/products/moringa-acv-effervescent-tablets-nutrition.webp',
+        alt: 'The nutritional facts panel from the Tatvyra ACV Moringa Effervescent pack, shown close up.',
+      },
       {
         src: '/images/products/range-green.webp',
         alt: 'The Tatvyra green range together — moringa leaf powder, tablets, capsules, gummies and spirulina — around bowls of green powder.',
@@ -550,14 +592,14 @@ export const PRODUCTS = [
     // cards keep the one-line descriptor above so the grid stays even.
     description:
       'A refreshing twist on two wellness staples—apple cider vinegar and moringa—combined into a fizzy, fast-dissolving tablet. Simply drop one into water for a tangy, energizing drink that fits easily into a busy day. A convenient alternative for those who find liquid ACV difficult to tolerate.',
-    sizes: ['15 tabs / bottle'],
+    sizes: ['15 tabs / pack'],
     benefits: [
       'ACV + Moringa in one fast-dissolving tablet',
       'Digestion support',
       'Portable single-dose',
     ],
     marks: ['clean-label', 'vegan'],
-    price: 449,
+    price: 275,
     // The process story (ProductStory). Every line is drawn from the supplied
     // description: nothing here states a dose, a tablet count, an ingredient
     // beyond ACV and moringa, a benefit or a process. A slot with `pending` in
@@ -700,10 +742,10 @@ export const PRODUCTS = [
       qualities: ['Compact', 'Precisely dosed', 'Easy to portion', 'Easy to store', 'Easy to carry'],
       line: 'An alternative for those who prefer tablets over powders or capsules.',
     },
-    sizes: ['60 caps / bottle'],
+    sizes: ['60 tabs x 500mg'],
     benefits: ['Compressed daily-dose format', 'Same benefits as leaf powder'],
     marks: ['clean-label', 'vegan'],
-    price: 549,
+    price: 275,
   },
   {
     sku: 'TAT-MO04',
@@ -779,10 +821,10 @@ export const PRODUCTS = [
         alt: 'Moringa capsules in a wooden dish and loose on a wooden table, beside a spray of fresh moringa leaves.',
       },
     },
-    sizes: ['60 caps / bottle'],
+    sizes: ['60 caps x 400mg'],
     benefits: ['Encapsulated daily-dose format', 'Same benefits as leaf powder'],
     marks: ['clean-label', 'vegan'],
-    price: 599,
+    price: 330,
   },
   {
     sku: 'TAT-MO05',
@@ -874,7 +916,7 @@ export const PRODUCTS = [
       'Alternative to tablets & capsules for taste-led buyers',
     ],
     marks: ['clean-label', 'vegan'],
-    price: 699,
+    price: 495,
     isNew: true,
   },
 
@@ -892,6 +934,17 @@ export const PRODUCTS = [
         alt: 'A pouch of Tatvyra organic spirulina powder beside a bowl of deep green powder and fresh leaves.',
       },
       {
+        src: '/images/products/spirulina-powder-back.webp',
+        alt: 'The back of the Tatvyra organic spirulina powder pouch: the phyto-nutrient panel, how to use, what to try it in, storage instructions, allergen advice, ingredients and manufacturer details.',
+      },
+      {
+        /* The phyto-nutrient panel, set in the pack’s own style and carrying the
+           figures from the certificate of analysis. The alt carries the table,
+           so it is readable without the picture. */
+        src: '/images/products/spirulina-powder-nutrition.webp',
+        alt: 'The phyto-nutrient panel, per 100g approximately: protein 65.02% against a standard of more than 60%, and total carbohydrate, fibre, total carotenoids and total chlorophyll each complying with their standard.',
+      },
+      {
         src: '/images/products/range-green.webp',
         alt: 'The Tatvyra green range together — moringa leaf powder, tablets, capsules, gummies and spirulina — around bowls of green powder.',
       },
@@ -904,7 +957,7 @@ export const PRODUCTS = [
       'Iron & magnesium',
     ],
     marks: ['clean-label', 'vegan', 'nutrition-forward'],
-    price: 549,
+    price: 385,
     featured: true,
   },
   {
@@ -928,7 +981,11 @@ export const PRODUCTS = [
     sizes: ['60 caps / bottle'],
     benefits: ['Compressed daily-dose format', 'Same benefits as powder'],
     marks: ['clean-label', 'vegan'],
-    price: 649,
+    // Not on the supplied price sheet. The figure below is derived from it —
+    // the client's own size step and price level, keeping this product's
+    // position against its priced sibling — and priceTbc still says so.
+    priceTbc: true,
+    price: 348,
   },
   {
     sku: 'TAT-SP03',
@@ -948,10 +1005,10 @@ export const PRODUCTS = [
       },
     ],
     descriptor: 'The powder, encapsulated. Straightforward to take daily.',
-    sizes: ['60 caps / bottle'],
+    sizes: ['60 caps x 500mg'],
     benefits: ['Encapsulated daily-dose format', 'Same benefits as powder'],
     marks: ['clean-label', 'vegan'],
-    price: 699,
+    price: 418,
   },
 
   // 04 — RAW HONEY
@@ -971,8 +1028,8 @@ export const PRODUCTS = [
     descriptor: 'Dark, dense forest florals.',
     sizes: ['250g', '500g'],
     marks: ['clean-label', 'single-origin'],
-    price: 449,
-    prices: { '250g': 449, '500g': 799 },
+    price: 385,
+    prices: { '250g': 385, '500g': 649 },
     featured: true,
     /* The "Origin & process" band on the product page (ProductOrigin). Copy is
        taken verbatim from the supplied layout reference, benefit lines
@@ -1081,8 +1138,12 @@ export const PRODUCTS = [
     descriptor: 'A balanced blend across many flowers.',
     sizes: ['250g', '500g'],
     marks: ['clean-label', 'single-origin'],
-    price: 399,
-    prices: { '250g': 399, '500g': 699 },
+    // Not on the supplied price sheet. The figure below is derived from it —
+    // the client's own size step and price level, keeping this product's
+    // position against its priced sibling — and priceTbc still says so.
+    priceTbc: true,
+    price: 342,
+    prices: { '250g': 342, '500g': 577 },
     /* The "Origin & process" map on the product page (ProductOriginMap). Copy
        is verbatim from the supplied layout reference, benefit lines included.
        The four photographs are cut from that reference; the map itself is
@@ -1191,8 +1252,12 @@ export const PRODUCTS = [
     descriptor: 'High-altitude harvest, thicker in the jar.',
     sizes: ['250g', '500g'],
     marks: ['clean-label', 'single-origin'],
-    price: 599,
-    prices: { '250g': 599, '500g': 1049 },
+    // Not on the supplied price sheet. The figure below is derived from it —
+    // the client's own size step and price level, keeping this product's
+    // position against its priced sibling — and priceTbc still says so.
+    priceTbc: true,
+    price: 514,
+    prices: { '250g': 514, '500g': 866 },
     // The illustrated benefit map. The drawing is the brand's infographic with
     // its lettering lifted out; the words below are set live over it. `at` is
     // where a label's first capital sits: left edge and top, as percentages of
@@ -1314,12 +1379,20 @@ export const PRODUCTS = [
         src: '/images/products/kashmiri-white-acacia-honey.webp',
         alt: 'A jar of Tatvyra Kashmiri white acacia honey with a honeycomb dipper above it and white blossom alongside.',
       },
+      {
+        src: '/images/products/kashmiri-white-acacia-honey-nutrition.webp',
+        alt: 'The label’s nutritional analysis of acacia honey per 100g: 328.80Kcal energy, no fat, 0.12gm protein, 0.10gm dietary fibre, 82.08gm carbohydrate, 81.98gm sugar, 48mg sodium, 745mg calcium, 0.0 IU vitamin A, 1.10mg iron and no cholesterol.',
+      },
     ],
     descriptor: 'Pale, delicate, slow to set.',
     sizes: ['250g', '500g'],
     marks: ['clean-label', 'single-origin'],
-    price: 699,
-    prices: { '250g': 699, '500g': 1249 },
+    // Not on the supplied price sheet. The figure below is derived from it —
+    // the client's own size step and price level, keeping this product's
+    // position against its priced sibling — and priceTbc still says so.
+    priceTbc: true,
+    price: 599,
+    prices: { '250g': 599, '500g': 1010 },
     // "Origin & process" (ProductOriginTrail). Copy is the brand's layout
     // reference, verbatim. The map is India's official outline, and every
     // position is in its units (see src/lib/indiaMap.js): the source pin from
@@ -1426,14 +1499,36 @@ export function benefitsFor(product) {
 export const getProduct = (slug) => PRODUCTS.find((p) => p.slug === slug)
 
 /**
- * The unit price of a product in a given size, in whole rupees.
+ * The MRP the pack lists at: the figure from Tatvyra's price sheet, or the
+ * placeholder standing in for one. Shown struck through, never charged.
  *
  * Single-size products carry only `price`; multi-size products carry a
- * `prices` entry per size. Every surface — cards, product page, cart — prices
- * through this, which is what keeps one product and size from showing two
- * different numbers. Returns null rather than NaN when a price is missing.
+ * `prices` entry per size.
  */
-export const priceFor = (product, size) => product?.prices?.[size] ?? product?.price ?? null
+export const mrpFor = (product, size) => product?.prices?.[size] ?? product?.price ?? null
+
+/**
+ * What the pack costs today. The sheet's MRPs carry a 10% increase, and the
+ * store gives that 10% straight back, so every price is shown as a pair — the
+ * MRP struck through and this beside it.
+ */
+export const STORE_DISCOUNT = 0.1
+
+/**
+ * The unit price of a product in a given size, in rupees — MRPs carry paise
+ * and a tenth off makes more of them, so this is rarely a whole number.
+ *
+ * Every surface — cards, product page, cart, checkout — prices through this,
+ * which is what keeps one product and size from being charged two ways, and
+ * what keeps the discount from being shown but not given. Returns null rather
+ * than NaN when a price is missing.
+ */
+export const priceFor = (product, size) => {
+  const mrp = mrpFor(product, size)
+  if (mrp === null) return null
+  // To the paise, so a cart of three never lands on ₹415.79999999999995.
+  return Math.round(mrp * (1 - STORE_DISCOUNT) * 100) / 100
+}
 
 export const productsByCategory = (slug) => PRODUCTS.filter((p) => p.category === slug)
 

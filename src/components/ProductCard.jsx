@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { getCategory, priceFor } from '../data/catalogue'
+import { getCategory, mrpFor, priceFor } from '../data/catalogue'
 import { formatINR } from '../lib/money'
 import { useCart } from '../context/useCart'
 
@@ -10,7 +10,8 @@ import { useCart } from '../context/useCart'
  * Deliberately spare: no ratings, no review counts, no invented badges. The
  * only chip shown is the product's format, which is printed in the catalogue.
  * The price follows the selected size chip and is read from the catalogue, so
- * the card, the product page and the cart cannot disagree.
+ * the card, the product page and the cart cannot disagree. It is shown as a
+ * pair: what the pack costs today, and the MRP it is struck from.
  */
 export default function ProductCard({ product, priority = false }) {
   const category = getCategory(product.category)
@@ -18,6 +19,7 @@ export default function ProductCard({ product, priority = false }) {
   const { addItem } = useCart()
   const hasSizeChoice = product.sizes.length > 1
   const price = formatINR(priceFor(product, size))
+  const mrp = formatINR(mrpFor(product, size))
 
   return (
     <article className="pcard">
@@ -62,7 +64,13 @@ export default function ProductCard({ product, priority = false }) {
         <div className="pcard__foot">
           <p className="pcard__price">
             {price ? (
-              <span className="pcard__price-value">{price}</span>
+              <>
+                <span className="pcard__price-value">{price}</span>
+                <span className="pcard__price-mrp">
+                  <span className="visually-hidden">MRP </span>
+                  <s>{mrp}</s>
+                </span>
+              </>
             ) : (
               <span className="pcard__price-tbc">Price on request</span>
             )}

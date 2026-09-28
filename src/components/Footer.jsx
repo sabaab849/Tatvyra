@@ -11,7 +11,7 @@ export default function Footer() {
     <footer className="footer on-dark">
       <div className="footer__top shell">
         <div className="footer__brand">
-          <Logo variant="full" width={180} className="footer__logo" />
+          <Logo reversed width={180} className="footer__logo" />
           <p className="footer__positioning">{BRAND.positioning}</p>
         </div>
         <div className="footer__signup">
@@ -94,9 +94,21 @@ export default function Footer() {
         {/* The policies sit with the copyright line, below the main footer
             navigation, and take no heading of their own. */}
         <div className="footer__legal">
-          <p>
+          {/* Tatvyra is Feynman Foodcraft's brand, so the parent company's
+              monogram opens the line its name is on, in the supplied white
+              colourway. The name follows it, so the mark needs no alt text. */}
+          <p className="footer__company">
+            <img
+              className="footer__ffc"
+              src="/brand/ffc-logo-reversed.svg"
+              alt=""
+              width={44}
+              height={26}
+              loading="lazy"
+            />
             {/* The company name ends on "Ltd.", which closes the sentence. */}
-            © {new Date().getFullYear()} {BRAND.company} All rights reserved.
+            <span>© {new Date().getFullYear()} {BRAND.company} All rights reserved.</span>
+            <span className="footer__gstin">GST: {BRAND.gstin}</span>
           </p>
           <nav aria-label="Policies">
             <ul className="footer__policies">

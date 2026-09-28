@@ -53,6 +53,7 @@ export default function Contact() {
                 {BRAND.contact.address.map((line) => (
                   <span key={line}>{line}</span>
                 ))}
+                <span className="contact__gstin">GST: {BRAND.gstin}</span>
               </address>
             </li>
           </ul>

@@ -15,8 +15,10 @@ import { CartContext } from './useCart'
  * the enquiry route rather than faking a payment step.
  */
 
-/* Placeholder delivery rule, alongside the placeholder prices in the
-   catalogue: free over a threshold, a flat fee below it. */
+/* Placeholder delivery rule — free over a threshold, a flat fee below it.
+   Unlike the product prices, which are Tatvyra's own MRPs, these two figures
+   are invented: the supplied price structure covers products only. Replace
+   them with the real rates, or drop the line, once shipping is settled. */
 const FREE_DELIVERY_FROM = 999
 const DELIVERY_FLAT = 79
 

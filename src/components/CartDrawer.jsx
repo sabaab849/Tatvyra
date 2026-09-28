@@ -125,11 +125,13 @@ export default function CartDrawer() {
                   <dd>{formatINR(total)}</dd>
                 </div>
               </dl>
-              {/* Prices are placeholders and the payment step runs against a
-                  stand-in provider until the client confirms a real one. */}
+              {/* Product prices are Tatvyra's own MRPs, bar the few packs
+                  marked on their product page. Delivery is still a placeholder
+                  rule, and the payment step runs against a stand-in provider
+                  until the client confirms a real one. */}
               <p className="cart__note">
                 {delivery > 0 && `Free delivery over ${formatINR(freeDeliveryFrom)}. `}
-                Placeholder pricing — no live payment provider is connected yet.
+                Delivery is a placeholder rate and no live payment provider is connected yet.
               </p>
               <Button to="/checkout" variant="primary" full onClick={closeCart}>
                 Checkout

@@ -2514,3 +2514,73 @@
   gap: var(--space-s);
   margin-top: var(--space-l);
 }
+
+/* --- Certified. Trusted. Transparent. ---------------------------------------
+   The marks the range is made under (CertificationProof), as a trust band: one
+   centred line, the four marks in a single centred row under it, and a rule
+   closing the section. No names, numbers or descriptions.
+
+   The marks are the official artwork and are left alone — no frame, tint or
+   filter. The four files share one canvas height with the artwork centred and
+   trimmed to the same optical area, so one height renders them at one scale
+   and the wide mark simply stays wider. It is the height they have carried
+   through every version of this section. */
+
+.proof {
+  padding-block: clamp(2.5rem, 1.8rem + 2.4vw, 4rem);
+  background: var(--surface);
+  /* The rule that closes the band, across its full width. */
+  border-bottom: 1px solid var(--line);
+}
+
+/* The one place --font-serif is used. Three words, spaced rather than
+   punctuated: the gap does the separating. */
+.proof__title {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5em clamp(1.75rem, 0.9rem + 2.8vw, 4rem);
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: clamp(1rem, 0.75rem + 0.85vw, 1.5rem);
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--tatvyra-purple);
+}
+
+/* One centred row, evenly spaced. It wraps rather than shrinking the marks, so
+   a narrow screen gets two rows of two at the same size instead of four
+   crowded ones. */
+.proof__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(2.5rem, 0.5rem + 6.5vw, 7.5rem);
+  margin: clamp(2rem, 1.3rem + 2.2vw, 3.25rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.proof__row img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: clamp(4.5rem, 2.2rem + 5vw, 7.5rem);
+}
+
+/* Narrow: four across would wrap three and one, so the row becomes two by two
+   at the same mark size rather than a broken line. */
+@media (max-width: 32rem) {
+  .proof__row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, auto));
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+    gap: clamp(2rem, 1rem + 4vw, 3rem) clamp(2.5rem, 1rem + 6vw, 4rem);
+  }
+}

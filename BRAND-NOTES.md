@@ -20,27 +20,44 @@ Nothing else was invented. See **What is deliberately missing** below.
 
 ## Logo
 
-`public/brand/tatvyra-logo.svg` (roundel + wordmark) and
-`public/brand/tatvyra-logo-full.svg` (adds the brand line) were extracted as
-**vector paths** from the catalogue artwork — not redrawn, not traced, not set
-as live text. Proportions, spacing, the leaf mark and the wordmark are exactly
-as supplied. The only change is that the CMYK-converted values in the PDF
-(`#592d85`, `#e64630`) were restored to the official brand hexes (`#5A218A`,
-`#F26422`).
+All of it was extracted as **vector paths** from the supplied
+`final logo.pdf` — not redrawn, not traced, not set as live text. Proportions,
+spacing, the leaf mark, the gold rule and the wordmark are exactly as supplied,
+and so are the artwork's own colours (see the note below).
 
-`public/favicon.svg` is the Feynman Foodcraft roundel from the same lockup. The
-guidelines say the **leaf mark must not appear on its own** until the brand is
-established, so the favicon keeps the leaf inside the roundel rather than
-isolating it.
+| File | What it is |
+| --- | --- |
+| `public/brand/tatvyra-logo.svg` | The lockup: wordmark, leaf mark, gold rule. For light grounds. |
+| `public/brand/tatvyra-logo-reversed.svg` | The same lockup with the wordmark in white, for dark grounds. |
+| `public/brand/tatvyra-mark.svg` | The leaf mark on its own. |
+| `public/brand/ffc-logo.svg` | The Feynman Foodcraft `ffc` monogram. |
+| `public/brand/ffc-logo-reversed.svg` | The monogram in white, for dark grounds. |
+| `public/favicon.svg` | The leaf mark, centred in a square. |
+
+**Colours are the artwork's own**, unlike the previous lockup, whose
+CMYK-converted values were restored to the official brand hexes. This artwork
+introduces colours the seven-hex palette does not name — the green leaf
+(`#60974e`), the gold rule (`#be944c`) and the red dot (`#d4533c`) — so
+normalising only its purple (`#5a2d88`, against the palette's `#5A218A`) would
+leave the lockup half-converted. Ask Tatvyra before changing any of them.
+
+**The favicon isolates the leaf mark.** The old guidelines said the mark must
+not appear alone until the brand is established, and the old favicon used the
+roundel instead. This lockup has no roundel, and a favicon cannot carry the
+wordmark legibly at 16px, so the mark stands alone there. Worth confirming.
 
 Rules enforced in `src/components/Logo.jsx`:
 
-- Intrinsic aspect ratio is fixed per variant and never distorted.
+- Intrinsic aspect ratio is fixed and never distorted.
 - Width is clamped to the 120px digital minimum for the full lockup.
 - Clear space is applied as padding on `.logo` (roughly the leaf-mark height).
 - No shadow, glow, outline, bevel, rotation, or placement over busy imagery.
-- On the aubergine footer the lockup sits on a Warm White holding shape — the
-  mark itself is never recoloured.
+- A dark ground takes the supplied white colourway (`reversed`), never a CSS
+  recolour of the purple one and no longer a holding shape behind it.
+
+`public/brand/tatvyra-logo-full.svg` and `tatvyra-logo-mark.png`/`.webp` are
+the **superseded** lockup. Nothing references them; they are kept only until
+Tatvyra confirms the new artwork replaces them everywhere.
 
 ---
 

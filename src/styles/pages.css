@@ -138,7 +138,28 @@
 .pinfo__descriptor--long { font-size: var(--step-0); line-height: 1.65; max-width: 50ch; }
 
 .pinfo__price { margin-top: var(--space-m); display: grid; gap: 0.25rem; }
+
+/* What it costs today, the MRP it is struck from, and what that is off. */
+.pinfo__price-now {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.75rem;
+}
+
 .pinfo__price-value { font-size: var(--step-2); font-weight: 700; }
+
+.pinfo__price-mrp { font-size: var(--step-0); color: var(--text-faint); }
+.pinfo__price-mrp s { text-decoration-thickness: 1px; }
+
+/* Orange as a mark, never as small body text: the saving is a label. */
+.pinfo__price-off {
+  font-size: var(--step--2);
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+}
 .pinfo__price-tbc { font-size: var(--step-1); color: var(--tatvyra-purple); font-weight: 700; }
 .pinfo__price-note { font-size: var(--step--2); color: var(--text-faint); }
 
@@ -496,32 +517,77 @@
   .about-brand__range { scroll-snap-align: start; }
 }
 
-/* --- Founder story ---------------------------------------------------------
-   Typography carries the whole section: no photograph, no cards, no icons.
-   An asymmetric grid — the headline in the narrower left column, the story set
-   wider on the right — opens under a single hairline. Charcoal carries the
-   type; Purple appears only in the eyebrow and the quotation marks below. */
+/* --- The people -------------------------------------------------------------
+   The founder and the co-founder, each a portrait beside their story under a
+   single hairline. The portrait changes sides between them, so the two read as
+   a spread. Charcoal carries the type; Purple appears only in the eyebrows and
+   the founder's statement. */
 
-.about-founder {
+.leaders {
   /* It opens the page, so it takes the full opening band; "The brand"
      follows on the same ground, which is why it closes short. */
   padding-block: clamp(2.5rem, 1.5rem + 3.5vw, 5rem) clamp(2.5rem, 1.6rem + 2.5vw, 3.5rem);
   background: var(--surface);
 }
 
-/* One grid for the story and the quotation, so the quote always lands on the
-   story column's left edge. */
-.about-founder__grid,
-.about-philosophy__inner {
+.leader {
   display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-  column-gap: clamp(2rem, 0.5rem + 6vw, 7.5rem);
+  grid-template-columns: minmax(0, 6fr) minmax(0, 7fr);
+  column-gap: clamp(2rem, 0.5rem + 5vw, 5.5rem);
+  row-gap: clamp(1.75rem, 1.2rem + 1.6vw, 2.75rem);
+  align-items: start;
+  padding-top: clamp(2rem, 1.3rem + 2.2vw, 3.25rem);
   border-top: 1px solid rgb(var(--ink-rgb) / 0.14);
 }
 
-.about-founder__grid { padding-top: clamp(2rem, 1.3rem + 2.2vw, 3.25rem); }
+/* The heading opens across both columns, so nothing starts beside it and the
+   page is read in one order: who this is, then their face, then their story. */
+.leader__head {
+  grid-column: 1 / -1;
+  max-width: 46rem;
+}
 
-.about-founder__eyebrow {
+/* The portrait's column and the story begin on the same line. */
+.leader__aside { grid-column: 1; grid-row: 2; }
+.leader__body { grid-column: 2; grid-row: 2; }
+
+/* The second portrait sits on the other side. The columns swap with it, so
+   both portraits are the same size and neither leader is the larger of the
+   two. */
+.leader--flip {
+  grid-template-columns: minmax(0, 7fr) minmax(0, 6fr);
+  margin-top: clamp(2.5rem, 1.6rem + 2.8vw, 4.25rem);
+}
+
+.leader--flip .leader__aside { grid-column: 2; grid-row: 2; }
+.leader--flip .leader__body { grid-column: 1; grid-row: 2; }
+
+.leader__portrait {
+  min-width: 0;
+  margin: 0;
+}
+
+/* The frame, not the figure, so the caption below it stays on the page's own
+   ground rather than inside the picture. The photographs are shown whole —
+   both are 4:3, so the ratio holds the space rather than cropping to it. */
+.leader__portrait img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-image);
+  background: var(--surface-lilac);
+}
+
+/* Who this is, directly under their photograph: the name as a label, the
+   title under it in the reading voice. */
+.leader__caption {
+  display: grid;
+  gap: 0.35rem;
+  margin-top: var(--space-m);
+}
+
+.leader__eyebrow {
   font-size: 12px;
   font-weight: var(--type-label-weight);
   letter-spacing: 0.22em;
@@ -529,7 +595,7 @@
   color: var(--tatvyra-purple);
 }
 
-.about-founder__title {
+.leader__title {
   margin-top: var(--space-m);
   font-size: clamp(2rem, 1.2rem + 2.4vw, 3.25rem);
   font-weight: var(--type-heading-weight);
@@ -538,32 +604,62 @@
   color: var(--text);
 }
 
-.about-founder__body {
-  max-width: 38rem;
+.leader__body {
+  max-width: 40rem;
   font-size: var(--step-1);
   line-height: 1.7;
   color: var(--text-muted);
 }
 
-.about-founder__body p + p { margin-top: var(--space-m); }
+.leader__body > p:first-child { text-box: trim-start cap alphabetic; }
 
-/* The sign-off, under a short rule rather than a full-width one. Scoped to
-   the body so it outranks the paragraph spacing above. */
-.about-founder__body .about-founder__sign {
-  display: grid;
-  gap: 0.4rem;
-  margin-top: clamp(2rem, 1.4rem + 1.8vw, 3rem);
+.leader__body p + p { margin-top: var(--space-m); }
+
+/* The founder's own words: held off the biography by a Purple rule down the
+   left, the way a quotation is set elsewhere on the site. */
+/* His statement opens under the portrait and runs across the foot of the
+   spread, so the page closes on his voice rather than on a gap. The long
+   paragraph is set in two columns: it fills the band the portrait leaves
+   without any line running past a comfortable measure. */
+.leader__statement {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  max-width: 68rem;
+  margin: clamp(2rem, 1.3rem + 1.8vw, 3rem) 0 0;
+  padding-left: clamp(1rem, 0.6rem + 1.2vw, 1.75rem);
+  border-left: 2px solid color-mix(in srgb, var(--tatvyra-purple) 35%, transparent);
+  font-size: var(--step-0);
+  line-height: 1.8;
+  color: var(--text-muted);
 }
 
-.about-founder__sign::before {
-  content: '';
-  width: 2.5rem;
-  height: 1px;
-  margin-bottom: var(--space-m);
-  background: rgb(var(--ink-rgb) / 0.3);
+/* Two columns where there is room for two of a decent width, one where there
+   is not — so the measure never runs long, whatever the screen. */
+.leader__statement > p:first-child {
+  columns: 2 22rem;
+  column-gap: clamp(1.75rem, 1rem + 3vw, 3.5rem);
+  column-rule: 1px solid rgb(var(--ink-rgb) / 0.1);
+  orphans: 2;
+  widows: 2;
 }
 
-.about-founder__name {
+.leader__statement-line {
+  margin-top: var(--space-m);
+  font-size: var(--step-1);
+  line-height: 1.4;
+  color: var(--tatvyra-purple);
+}
+
+/* His sign-off, set as he wrote it rather than in the label style used for
+   the full name below — it reads as a signature under the statement. */
+.leader__statement-sign {
+  margin-top: var(--space-s);
+  font-size: var(--step--1);
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+}
+
+.leader__name {
   font-size: 13px;
   font-weight: var(--type-label-weight);
   letter-spacing: 0.18em;
@@ -571,7 +667,7 @@
   color: var(--text);
 }
 
-.about-founder__role {
+.leader__role {
   font-size: var(--step--1);
   line-height: 1.4;
   color: var(--text-muted);
@@ -644,8 +740,11 @@
 .about-philosophy__section { padding-bottom: 1.25rem; }
 
 .about-philosophy__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  column-gap: clamp(2rem, 0.5rem + 6vw, 7.5rem);
   padding-top: clamp(1.5rem, 1rem + 1.2vw, 2.125rem);
-  border-top-color: var(--line-strong);
+  border-top: 1px solid var(--line-strong);
 }
 
 /* The quote and the brand line share the story column: the quote sits low
@@ -699,10 +798,36 @@
 }
 
 @media (max-width: 62rem) {
-  .about-founder__grid,
+  /* .leader--flip sets its own columns, so it has to be named here to be
+     put back into one. */
+  .leader,
+  .leader--flip,
   .about-philosophy__inner { grid-template-columns: minmax(0, 1fr); }
 
-  .about-founder__body { max-width: 42rem; margin-top: var(--space-l); }
+  /* Stacked, the caption and the story meet, so they need more air
+     between them than the columns do side by side. */
+  .leader,
+  .leader--flip { row-gap: clamp(2.25rem, 1.6rem + 2vw, 3rem); }
+
+  .leader__body { max-width: 42rem; }
+
+  /* Stacked, the photograph leads and the story follows, both ways round. */
+  .leader__head,
+  .leader__aside,
+  .leader__body,
+  .leader__statement,
+  .leader--flip .leader__head,
+  .leader--flip .leader__aside,
+  .leader--flip .leader__body {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  /* Stacked, the portrait and the caption lead, the story follows, and his
+     statement closes — the order it was read in before the columns split. */
+  .leader__statement { order: 1; max-width: none; }
+
+  .leader__portrait { max-width: 26rem; }
 
   .about-philosophy__row {
     grid-column: auto;
@@ -1090,6 +1215,10 @@
 .contact__list svg { flex: none; margin-top: 3px; color: var(--tatvyra-purple); }
 .contact__list div,
 .contact__list address { display: grid; gap: 0.25rem; font-style: normal; font-size: var(--step--1); color: var(--text-muted); }
+
+/* The registration is a company fact rather than part of the street
+   address, so it sits a little clear of the lines above it. */
+.contact__gstin { margin-top: 0.4rem; white-space: nowrap; }
 .contact__list a:hover { color: var(--tatvyra-purple); }
 
 .contact__form {
