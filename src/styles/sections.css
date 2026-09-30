@@ -289,7 +289,7 @@
 .philosophy__eyebrow {
   font-size: var(--step--2);
   font-weight: var(--type-label-weight);
-  letter-spacing: 0.32em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--tatvyra-purple);
 }
@@ -321,7 +321,7 @@
 .philosophy__text {
   max-width: 44ch;
   font-size: var(--step-0);
-  line-height: 1.75;
+  line-height: 1.65;
   color: var(--text-muted);
 }
 
@@ -483,9 +483,9 @@
 }
 
 .pillars__eyebrow {
-  font-size: 14px;
+  font-size: var(--step--2);
   font-weight: var(--type-label-weight);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--tatvyra-purple);
 }
@@ -501,8 +501,8 @@
 
 .pillars__intro {
   max-width: 44ch;
-  font-size: 16px;
-  line-height: 1.55;
+  font-size: var(--step-0);
+  line-height: 1.65;
   color: rgb(var(--ink-rgb) / 0.7);
 }
 
@@ -962,7 +962,7 @@
   display: flex;
   align-items: baseline;
   gap: 0.6rem;
-  font-size: 11px;
+  font-size: var(--step--2);
   font-weight: var(--type-label-weight);
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -971,9 +971,17 @@
 .pillar__index {
   font-variant-numeric: tabular-nums;
   color: rgb(var(--ink-rgb) / 0.38);
+  font-size: var(--step--2);
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.18em;
 }
 
-.pillar__benefit { color: var(--tatvyra-purple); }
+.pillar__benefit {
+  color: var(--tatvyra-purple);
+  font-size: var(--step--2);
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.18em;
+}
 
 .pillar__name {
   margin-top: 0.45rem;
@@ -987,8 +995,8 @@
 .pillar__note {
   margin-top: 0.35rem;
   max-width: 26ch;
-  font-size: 13px;
-  line-height: 1.55;
+  font-size: var(--step--1);
+  line-height: 1.6;
   color: var(--text-muted);
 }
 
@@ -997,7 +1005,7 @@
   align-items: center;
   gap: 0.4rem;
   margin-top: 0.7rem;
-  font-size: 13px;
+  font-size: var(--step--1);
   font-weight: var(--type-button-weight);
   letter-spacing: 0.02em;
   color: var(--tatvyra-purple);
@@ -1155,9 +1163,9 @@
 }
 
 .categories__eyebrow {
-  font-size: 14px;
+  font-size: var(--step--2);
   font-weight: var(--type-label-weight);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--tatvyra-purple);
 }
@@ -1181,8 +1189,8 @@
 .categories__intro {
   width: 25rem;
   max-width: 100%;
-  font-size: 16px;
-  line-height: 1.5;
+  font-size: var(--step-0);
+  line-height: 1.65;
   color: rgb(var(--ink-rgb) / 0.7);
 }
 
@@ -1244,9 +1252,9 @@
 /* Soft Peach, not Purple: these sit on a darkened photograph, which is the
    one place the palette asks for its light accent instead of its primary. */
 .catcard__eyebrow {
-  font-size: 13px;
+  font-size: var(--step--2);
   font-weight: var(--type-label-weight);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--tatvyra-peach);
 }
@@ -1263,9 +1271,10 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 14px;
+  font-size: var(--step--1);
   font-weight: var(--type-button-weight);
   color: #fff;
+  letter-spacing: 0.02em;
 }
 
 .catcard__cta svg {
@@ -1363,9 +1372,9 @@
   justify-content: center;
   gap: 0.8rem;
   margin-bottom: 0.65rem;
-  font-size: 15px;
+  font-size: var(--step--2);
   font-weight: var(--type-label-weight);
-  letter-spacing: 0.12em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--shelf-gold);
 }
@@ -1504,7 +1513,7 @@
   box-shadow:
     inset 0 1px 1px color-mix(in srgb, var(--tatvyra-warm-white) 28%, transparent),
     inset 0 -3px 6px rgb(var(--ink-rgb) / 0.16);
-  font-size: 13px;
+  font-size: var(--step--1);
   font-weight: var(--weight-bold);
   font-variant-numeric: tabular-nums;
   line-height: 1;
@@ -1525,7 +1534,7 @@
   padding-top: 1rem;
   border-top: 1px solid var(--card-rule);
   font-size: var(--step--1);
-  line-height: 1.45;
+  line-height: 1.6;
 }
 
 /* The motto sits on the card's floor; the mark stands beside it and runs off
@@ -1540,9 +1549,9 @@
 }
 
 .shelf__motto {
-  font-size: 10px;
+  font-size: var(--step--2);
   font-style: italic;
-  font-weight: var(--weight-medium);
+  font-weight: var(--type-label-weight);
   line-height: 1.5;
   letter-spacing: 0.26em;
   text-transform: uppercase;
@@ -1722,7 +1731,12 @@
   color: var(--tatvyra-purple);
 }
 
-.why__body { margin-top: 0.6rem; font-size: var(--step--1); line-height: 1.6; color: var(--text-muted); }
+.why__body {
+  margin-top: 0.6rem;
+  font-size: var(--step--1);
+  line-height: 1.6;
+  color: var(--text-muted);
+}
 
 @media (max-width: 62rem) { .why__list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 34rem) { .why__list { grid-template-columns: minmax(0, 1fr); } }
@@ -1867,7 +1881,7 @@
   gap: 1rem;
   font-size: var(--step--2);
   font-weight: var(--type-label-weight);
-  letter-spacing: 0.24em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--tatvyra-purple);
 }
@@ -1924,7 +1938,7 @@
   font-size: var(--step--2);
   font-weight: var(--type-label-weight);
   line-height: 1.8;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.26em;
   text-transform: uppercase;
   color: rgb(var(--ink-rgb) / 0.78);
 }
@@ -2288,9 +2302,9 @@
 
 .orbit__tab-name {
   display: block;
-  font-size: 12px;
+  font-size: var(--step--2);
   font-weight: var(--type-label-weight);
-  letter-spacing: 0.26em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--text);
 }
@@ -2301,7 +2315,7 @@
   display: block;
   margin-top: 0.35rem;
   font-size: var(--step--1);
-  line-height: 1.45;
+  line-height: 1.6;
   color: rgb(var(--ink-rgb) / 0.62);
 }
 
@@ -2348,9 +2362,9 @@
   margin-top: 0.4rem;
   padding-bottom: 0.2rem;
   border-bottom: 1px solid currentColor;
-  font-size: 12px;
+  font-size: var(--step--1);
   font-weight: var(--type-button-weight);
-  letter-spacing: 0.14em;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
   white-space: nowrap;
   color: var(--tatvyra-purple);
@@ -2372,9 +2386,9 @@
   display: none;
   align-items: center;
   gap: 1rem;
-  font-size: 11px;
+  font-size: var(--step--2);
   font-weight: var(--type-label-weight);
-  letter-spacing: 0.3em;
+  letter-spacing: 0.26em;
   text-transform: uppercase;
   color: rgb(var(--ink-rgb) / 0.7);
 }
@@ -2412,10 +2426,10 @@
   margin-left: auto;
   padding-left: 1.25rem;
   border-left: 1px solid var(--hair);
-  font-size: 11px;
+  font-size: var(--step--2);
   font-weight: var(--type-label-weight);
   line-height: 1.9;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.26em;
   text-transform: uppercase;
   color: rgb(var(--ink-rgb) / 0.7);
 }
@@ -2505,7 +2519,7 @@
 .cta { padding-block: var(--section-y); }
 .cta__inner { text-align: center; }
 .cta__title { color: var(--text-on-dark); margin-top: 0.75rem; }
-.cta__body { margin-top: var(--space-m); color: var(--text-on-dark-muted); max-width: 44ch; margin-inline: auto; }
+.cta__body { margin-top: var(--space-m); line-height: 1.65; color: var(--text-on-dark-muted); max-width: 44ch; margin-inline: auto; }
 
 .cta__actions {
   display: flex;

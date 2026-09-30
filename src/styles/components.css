@@ -168,11 +168,18 @@
   grid-column: 2;
   justify-self: center;
   color: var(--tatvyra-purple);
-  font-weight: 600;
-  letter-spacing: 0.22em;
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.18em;
+  font-size: var(--step--2);
 }
 
-.announce__item--end { grid-column: 3; justify-self: end; }
+.announce__item--end {
+  grid-column: 3;
+  justify-self: end;
+  font-size: var(--step--2);
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.18em;
+}
 
 @media (max-width: 62rem) {
   .announce__inner { grid-template-columns: minmax(0, 1fr); justify-items: center; }
@@ -254,7 +261,7 @@
   position: relative;
   display: inline-block;
   padding-block: 0.5rem;
-  font-size: 15px;
+  font-size: var(--step-0);
   font-weight: 400;
   color: rgb(var(--ink-rgb) / 0.7);
   white-space: nowrap;
@@ -300,7 +307,7 @@
   border-radius: 10px;
   background: var(--tatvyra-orange);
   color: #fff;
-  font-size: 11px;
+  font-size: var(--step--2);
   font-weight: 600;
   line-height: 1;
 }
@@ -312,7 +319,7 @@
   border-radius: var(--radius-pill);
   background: var(--tatvyra-purple);
   color: #fff;
-  font-size: 14px;
+  font-size: var(--step--1);
   font-weight: var(--type-button-weight);
   white-space: nowrap;
   transition: background-color var(--dur) var(--ease), translate var(--dur) var(--ease);
@@ -459,9 +466,10 @@
 .drawer__line {
   margin-top: var(--space-s);
   font-size: var(--step--2);
-  letter-spacing: 0.2em;
+  letter-spacing: 0.26em;
   text-transform: uppercase;
   color: var(--tatvyra-purple);
+  font-weight: var(--type-label-weight);
 }
 
 /* The drawer keeps the ranges below the primary links now that the bar no
@@ -792,8 +800,8 @@
   background: color-mix(in srgb, var(--tatvyra-warm-white) 92%, transparent);
   color: var(--tatvyra-purple);
   font-size: var(--step--2);
-  font-weight: 700;
-  letter-spacing: 0.09em;
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
@@ -808,9 +816,10 @@
 
 .pcard__category {
   font-size: var(--step--2);
-  letter-spacing: 0.13em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-faint);
+  font-weight: var(--type-label-weight);
 }
 
 .pcard__name {
@@ -829,7 +838,7 @@
 .pcard__descriptor {
   margin-top: 0.4rem;
   font-size: var(--step--1);
-  line-height: 1.5;
+  line-height: 1.6;
   color: var(--text-muted);
 }
 
@@ -899,7 +908,7 @@
   color: var(--tatvyra-purple);
   font-size: var(--step--2);
   font-weight: var(--type-button-weight);
-  letter-spacing: 0.07em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
 }
@@ -908,13 +917,14 @@
 
 .pcard__view {
   font-size: var(--step--2);
-  letter-spacing: 0.07em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-muted);
   white-space: nowrap;
   box-shadow: inset 0 -1px 0 0 var(--line-strong);
   padding-bottom: 2px;
   transition: color var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease);
+  font-weight: var(--type-label-weight);
 }
 
 .pcard__view:hover { color: var(--tatvyra-aubergine); box-shadow: inset 0 -1px 0 0 var(--tatvyra-orange); }
@@ -1020,7 +1030,7 @@
 
 /* Measure is set on the individual lines: `ch` on the wrapper would be sized
    by the body font, not the display face, and choke long headlines. */
-.sheading .eyebrow { font-size: var(--step--1); letter-spacing: 0.16em; }
+.sheading .eyebrow { font-size: var(--step--2); letter-spacing: 0.18em; }
 .sheading__title { margin-top: 0.75rem; max-width: 18ch; }
 .sheading__intro { margin-top: var(--space-s); max-width: 46ch; }
 .sheading__action { flex: none; padding-bottom: 0.35rem; }
@@ -1105,10 +1115,11 @@
 
 .footer__positioning {
   margin-top: var(--space-s);
-  font-size: var(--step--1);
-  letter-spacing: 0.14em;
+  font-size: var(--step--2);
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--tatvyra-peach);
+  font-weight: var(--type-label-weight);
 }
 
 .footer__signup { flex: 1 1 24rem; max-width: 34rem; }
@@ -1122,8 +1133,8 @@
 
 .footer__heading {
   font-size: var(--step--2);
-  font-weight: 700;
-  letter-spacing: 0.16em;
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--tatvyra-peach);
   margin-bottom: var(--space-s);
@@ -1153,7 +1164,13 @@
   color: var(--text-on-dark-muted);
 }
 
-.footer__line { letter-spacing: 0.2em; text-transform: uppercase; color: var(--tatvyra-peach); }
+.footer__line {
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--tatvyra-peach);
+  font-size: var(--step--2);
+  font-weight: var(--type-label-weight);
+}
 
 .footer__legal {
   display: flex;

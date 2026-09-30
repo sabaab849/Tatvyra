@@ -70,9 +70,10 @@
 
 .shop__filter-label {
   font-size: var(--step--2);
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-faint);
+  font-weight: var(--type-label-weight);
 }
 
 .shop__filter-set { display: flex; flex-wrap: wrap; gap: 0.4rem; }
@@ -123,13 +124,19 @@
   align-items: baseline;
   gap: var(--space-s);
   font-size: var(--step--2);
-  letter-spacing: 0.14em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
+  font-weight: var(--type-label-weight);
 }
 
-.pinfo__category a { color: var(--tatvyra-purple); font-weight: 700; }
+.pinfo__category a { color: var(--tatvyra-purple); font-weight: var(--type-label-weight); }
 .pinfo__category a:hover { color: var(--tatvyra-aubergine); }
-.pinfo__sku { color: var(--text-faint); letter-spacing: 0.1em; }
+.pinfo__sku {
+  color: var(--text-faint);
+  letter-spacing: 0.12em;
+  font-size: var(--step--2);
+  font-weight: var(--type-label-weight);
+}
 
 .pinfo__name { margin-top: var(--space-s); }
 .pinfo__descriptor { margin-top: var(--space-s); font-size: var(--step-1); color: var(--text-muted); max-width: 44ch; }
@@ -156,7 +163,7 @@
 .pinfo__price-off {
   font-size: var(--step--2);
   font-weight: var(--type-label-weight);
-  letter-spacing: 0.16em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--accent-ink);
 }
@@ -176,10 +183,11 @@
 .pinfo__legend {
   padding: 0;
   font-size: var(--step--2);
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-faint);
   margin-bottom: 0.6rem;
+  font-weight: var(--type-label-weight);
 }
 
 .pinfo__size-set { display: flex; flex-wrap: wrap; gap: 0.5rem; }
@@ -192,8 +200,8 @@
 
 .pinfo__block-title {
   font-size: var(--step--2);
-  font-weight: 700;
-  letter-spacing: 0.14em;
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--tatvyra-purple);
 }
@@ -288,9 +296,9 @@
   align-items: center;
   /* The label holds its line; the rule after it is what gives way. */
   white-space: nowrap;
-  font-size: 12px;
+  font-size: var(--step--2);
   font-weight: var(--type-label-weight);
-  letter-spacing: 0.2em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--text-muted);
 }
@@ -317,7 +325,7 @@
   padding-left: var(--story-inset);
   border-left: 1px solid transparent;
   font-size: var(--step-0);
-  line-height: 1.6;
+  line-height: 1.65;
   color: var(--text-muted);
 }
 
@@ -363,9 +371,9 @@
 
 .about-brand__name {
   margin-top: var(--space-m);
-  font-size: 11px;
+  font-size: var(--step--2);
   font-weight: var(--type-label-weight);
-  letter-spacing: 0.2em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
 }
 
@@ -409,9 +417,9 @@
 
 .about-brand__kicker,
 .about-brand__note {
-  font-size: 12px;
+  font-size: var(--step--2);
   font-weight: var(--type-label-weight);
-  letter-spacing: 0.2em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
 }
 
@@ -588,9 +596,9 @@
 }
 
 .leader__eyebrow {
-  font-size: 12px;
+  font-size: var(--step--2);
   font-weight: var(--type-label-weight);
-  letter-spacing: 0.22em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--tatvyra-purple);
 }
@@ -606,8 +614,8 @@
 
 .leader__body {
   max-width: 40rem;
-  font-size: var(--step-1);
-  line-height: 1.7;
+  font-size: var(--step-0);
+  line-height: 1.65;
   color: var(--text-muted);
 }
 
@@ -629,7 +637,7 @@
   padding-left: clamp(1rem, 0.6rem + 1.2vw, 1.75rem);
   border-left: 2px solid color-mix(in srgb, var(--tatvyra-purple) 35%, transparent);
   font-size: var(--step-0);
-  line-height: 1.8;
+  line-height: 1.65;
   color: var(--text-muted);
 }
 
@@ -646,7 +654,7 @@
 .leader__statement-line {
   margin-top: var(--space-m);
   font-size: var(--step-1);
-  line-height: 1.4;
+  line-height: 1.45;
   color: var(--tatvyra-purple);
 }
 
@@ -660,7 +668,7 @@
 }
 
 .leader__name {
-  font-size: 13px;
+  font-size: var(--step--2);
   font-weight: var(--type-label-weight);
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -669,7 +677,7 @@
 
 .leader__role {
   font-size: var(--step--1);
-  line-height: 1.4;
+  line-height: 1.6;
   color: var(--text-muted);
 }
 
@@ -781,11 +789,12 @@
   width: min-content;
   padding: 0.25rem 0 0.125rem 1.0625rem;
   border-left: 1px solid var(--line-strong);
-  font-size: 10px;
+  font-size: var(--step--2);
   line-height: 1.7;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.26em;
   text-transform: uppercase;
   color: var(--text-faint);
+  font-weight: var(--type-label-weight);
 }
 
 .about-philosophy__brand::before {
@@ -853,9 +862,9 @@
    and heading-weight section titles, all in Purple. */
 
 .about-eyebrow {
-  font-size: 13px;
+  font-size: var(--step--2);
   font-weight: var(--type-label-weight);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--tatvyra-purple);
 }
@@ -974,9 +983,9 @@
 
 .about-story__facts dt {
   padding-top: 0.15em;
-  font-size: 12px;
+  font-size: var(--step--2);
   font-weight: var(--type-label-weight);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-muted);
 }
@@ -1008,8 +1017,8 @@
 
 .about-head__intro {
   max-width: 25rem;
-  font-size: 16px;
-  line-height: 1.55;
+  font-size: var(--step-0);
+  line-height: 1.65;
   color: var(--text-muted);
 }
 
@@ -1053,8 +1062,8 @@
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  font-size: 12px;
-  font-weight: 600;
+  font-size: var(--step--2);
+  font-weight: var(--type-label-weight);
   letter-spacing: 0.12em;
   color: var(--text-muted);
 }
@@ -1088,7 +1097,7 @@
   align-items: center;
   gap: 0.4rem;
   margin-top: 0.4rem;
-  font-size: 13px;
+  font-size: var(--step--1);
   font-weight: var(--type-button-weight);
   letter-spacing: 0.02em;
   color: var(--tatvyra-purple);
@@ -1235,6 +1244,7 @@
 .field { display: grid; gap: 0.4rem; }
 
 .field label {
+  font-weight: var(--type-label-weight);
   font-size: var(--step--2);
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -1300,7 +1310,7 @@
 .legal__aside-title {
   font-size: var(--step--2);
   font-weight: var(--type-label-weight);
-  letter-spacing: 0.16em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--tatvyra-purple);
 }
@@ -1487,7 +1497,7 @@
   gap: var(--space-s);
   font-size: var(--step--2);
   font-weight: var(--type-label-weight);
-  letter-spacing: 0.16em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--tatvyra-purple);
 }
@@ -1520,7 +1530,7 @@
   margin-top: var(--space-s);
   max-width: 44ch;
   font-size: var(--step-0);
-  line-height: 1.6;
+  line-height: 1.65;
   color: var(--text-muted);
 }
 
@@ -1529,7 +1539,7 @@
   margin-bottom: var(--space-s);
   font-size: var(--step--2);
   font-weight: var(--type-label-weight);
-  letter-spacing: 0.16em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--tatvyra-purple);
 }
@@ -1568,7 +1578,7 @@
 .spotlight__benefit-body {
   margin-top: 0.2rem;
   font-size: var(--step--1);
-  line-height: 1.55;
+  line-height: 1.6;
   color: var(--text-muted);
 }
 
@@ -1633,7 +1643,7 @@
 .campaign__eyebrow {
   font-size: var(--step--2);
   font-weight: var(--type-label-weight);
-  letter-spacing: 0.16em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--tatvyra-purple);
 }
@@ -1651,7 +1661,7 @@
   margin-top: var(--space-s);
   max-width: 52ch;
   font-size: var(--step-0);
-  line-height: 1.6;
+  line-height: 1.65;
   color: var(--text-muted);
 }
 
@@ -1741,7 +1751,7 @@
 
 .faqpage__outro-body {
   font-size: var(--step-0);
-  line-height: 1.6;
+  line-height: 1.65;
   color: var(--text-muted);
 }
 
@@ -1770,7 +1780,7 @@
 .faq__eyebrow {
   font-size: var(--step--2);
   font-weight: var(--type-label-weight);
-  letter-spacing: 0.16em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--tatvyra-purple);
 }
@@ -1839,7 +1849,7 @@
   padding-bottom: var(--space-m);
   max-width: 62ch;
   font-size: var(--step--1);
-  line-height: 1.65;
+  line-height: 1.6;
   color: var(--text-muted);
 }
 
@@ -1869,7 +1879,7 @@
   max-width: 26rem;
   font-size: var(--step--2);
   font-weight: var(--type-label-weight);
-  letter-spacing: 0.16em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--tatvyra-purple);
 }
@@ -1945,7 +1955,7 @@
   margin-top: var(--space-m);
   font-size: var(--step--2);
   font-weight: var(--type-label-weight);
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   color: var(--tatvyra-purple);
 }
 
@@ -1958,10 +1968,10 @@
 
 .pstory__label {
   margin-top: var(--space-s);
-  font-size: var(--step--1);
+  font-size: var(--step--2);
   font-weight: var(--type-label-weight);
   line-height: 1.35;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--text);
 }
@@ -1970,7 +1980,7 @@
   margin-top: var(--space-2xs);
   max-width: 26ch;
   font-size: var(--step-0);
-  line-height: 1.55;
+  line-height: 1.65;
   color: var(--text-muted);
 }
 
@@ -1995,7 +2005,7 @@
   border-right: 1px solid rgb(var(--ink-rgb) / 0.18);
   font-size: var(--step--2);
   font-weight: var(--type-label-weight);
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-faint);
 }
@@ -2053,7 +2063,7 @@
   font-size: var(--step--2);
   font-weight: var(--type-label-weight);
   line-height: 1.4;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text);
 }
@@ -4389,8 +4399,8 @@
   align-items: center;
   gap: 1.1rem;
   font-size: var(--step--2);
-  font-weight: 700;
-  letter-spacing: 0.24em;
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--text-muted);
 }
@@ -4447,8 +4457,8 @@
   padding-top: var(--space-xl);
   padding-left: clamp(0rem, -3rem + 6vw, 4rem);
   white-space: nowrap;
-  font-size: 0.6875rem;
-  font-weight: 500;
+  font-size: var(--step--2);
+  font-weight: var(--type-label-weight);
   letter-spacing: 0.26em;
   text-transform: uppercase;
   color: var(--text);
@@ -4537,22 +4547,25 @@
   translate: -50% -50%;
   text-transform: uppercase;
   white-space: nowrap;
+  font-size: var(--step--2);
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.26em;
 }
 
 .trail__country {
   padding-left: 0.42em;
-  font-size: var(--step--1);
-  font-weight: 500;
-  letter-spacing: 0.42em;
+  font-size: var(--step--2);
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.26em;
   color: var(--text-muted);
 }
 
 /* Ending at its point, up and to the left of the pin, on plain paper. */
 .trail__place {
   translate: -100% -50%;
-  font-size: 0.625rem;
-  font-weight: 700;
-  letter-spacing: 0.3em;
+  font-size: var(--step--2);
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.26em;
   color: var(--tatvyra-aubergine);
   /* Held off the painted mountains behind it. */
   text-shadow: 0 0 6px var(--surface), 0 0 2px var(--surface);
@@ -4605,10 +4618,10 @@
 }
 
 .trail__label-title {
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-size: var(--step--2);
+  font-weight: var(--type-label-weight);
   line-height: 1.5;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--text);
 }
@@ -4617,8 +4630,9 @@
 
 .trail__label-body {
   margin-top: 0.45rem;
-  line-height: 1.5;
+  line-height: 1.6;
   color: var(--text-muted);
+  font-size: var(--step--1);
 }
 
 .trail__label-body + .trail__label-body { margin-top: 0.35rem; }
@@ -4627,6 +4641,8 @@
   margin-top: 0.5rem;
   font-weight: 500;
   color: var(--text);
+  font-size: var(--step--1);
+  line-height: 1.6;
 }
 
 .trail__label-list {
@@ -4690,9 +4706,9 @@
     display: flex;
     align-items: center;
     gap: 0.6rem;
-    font-size: 0.6875rem;
-    font-weight: 500;
-    letter-spacing: 0.22em;
+    font-size: var(--step--2);
+    font-weight: var(--type-label-weight);
+    letter-spacing: 0.26em;
     text-transform: uppercase;
     color: var(--text-muted);
     transition: opacity var(--dur) var(--ease);

@@ -117,6 +117,18 @@
   --type-label-weight: var(--weight-medium);      /* eyebrows, metadata */
   --type-button-weight: var(--weight-semibold);   /* buttons and CTA links */
 
+  /* Small text comes in three settings, and nothing else. Each is
+     --step--2 at --type-label-weight, uppercase; only the tracking and the
+     colour change, so the same role reads the same way in every section:
+
+       0.18em  eyebrows, block titles, names   — a section's kicker
+       0.12em  metadata                        — category, format, SKU, legend
+       0.26em  ornament                        — mottos, rails, map plates
+
+     Buttons and the quiet text links are the fourth setting, at --step--1.
+     Running copy is --step-0 at 1.65; the small copy beneath it --step--1 at
+     1.6; a lede --step-1 or --step-2 at 1.55. Use the scale, not raw px. */
+
   /* Tracking. A bold grotesque reads looser than it is at display sizes, so
      headings are drawn in; labels keep their own wider tracking. */
   --display-tracking: -0.022em;
