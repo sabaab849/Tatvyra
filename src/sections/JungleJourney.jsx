@@ -81,6 +81,17 @@ export default function JungleJourney() {
   // scroll handlers below work from these and window.scrollY alone, so a
   // scroll never makes the browser lay the page out again mid-frame.
   const geometry = useRef({ top: 0, height: 0, stage: 0 })
+  // Whether the page is within a screen of the track (inRange), and whether
+  // any of it is on screen at all (onScreen). Both are worked out in the same
+  // scroll handler as the walk, from the measures above, so they change in
+  // the very frame the page moves (an observer reports a moment later, and a
+  // jump to the top of the page left the tunnel drawing, unseen, meanwhile).
+  // Away from the track nothing of the walk can be seen, so it is not
+  // animated and the page's wheel and touch are left entirely to the browser
+  // (see below); off screen, the tunnel and the sky stop drawing.
+  const [inRange, setInRange] = useState(false)
+  const inRangeRef = useRef(false)
+  const [onScreen, setOnScreen] = useState(false)
   useEffect(() => {
     if (reduce) return undefined
     const track = trackRef.current
@@ -105,6 +116,15 @@ export default function JungleJourney() {
     const measure = () => {
       frame = 0
       const { top, height, stage } = geometry.current
+      const y = window.scrollY
+      const screen = window.innerHeight
+      const near = height > 0 && y + screen * 2 > top && y < top + height + screen
+      if (near !== inRangeRef.current) {
+        inRangeRef.current = near
+        setInRange(near)
+      }
+      const visible = height > 0 && y + screen > top && y < top + height
+      setOnScreen((current) => (current === visible ? current : visible))
       const span = height - stage
       scrollYProgress.set(span > 0 ? Math.min(1, Math.max(0, (window.scrollY - top) / span)) : 0)
     }
@@ -136,25 +156,6 @@ export default function JungleJourney() {
       cancelAnimationFrame(frame)
     }
   }, [reduce, scrollYProgress])
-
-  // Whether the page is within a screen of the track. Away from it nothing of
-  // the walk can be seen, so it is not animated and the page's wheel and touch
-  // are left entirely to the browser (see below).
-  const [inRange, setInRange] = useState(false)
-  const inRangeRef = useRef(false)
-  useEffect(() => {
-    const track = trackRef.current
-    if (!track || reduce || typeof IntersectionObserver === 'undefined') return undefined
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        inRangeRef.current = entry.isIntersecting
-        setInRange(entry.isIntersecting)
-      },
-      { rootMargin: '100% 0px' },
-    )
-    observer.observe(track)
-    return () => observer.disconnect()
-  }, [reduce])
 
   // THE WALK. The scroll says where the walk should be; the walk goes there
   // at one steady pace and no faster, however hard the page is scrolled. It
@@ -353,7 +354,6 @@ export default function JungleJourney() {
   // background before the first frame needs them; set up a screen away, the
   // first frame had to wait for them, and the scroll froze.
   const [near, setNear] = useState(false)
-  const [onScreen, setOnScreen] = useState(false)
   useEffect(() => {
     const section = sectionRef.current
     if (!section || reduce || typeof IntersectionObserver === 'undefined') return undefined
@@ -366,7 +366,6 @@ export default function JungleJourney() {
       },
       { rootMargin: '500% 0px' },
     )
-    const runner = new IntersectionObserver(([entry]) => setOnScreen(entry.isIntersecting))
     // The code itself is fetched and parsed further out still, eight screens
     // away, while the reader is on the sections above.
     const fetcher = new IntersectionObserver(
@@ -379,11 +378,9 @@ export default function JungleJourney() {
       { rootMargin: '800% 0px' },
     )
     loader.observe(section)
-    runner.observe(section)
     fetcher.observe(section)
     return () => {
       loader.disconnect()
-      runner.disconnect()
       fetcher.disconnect()
     }
   }, [reduce])

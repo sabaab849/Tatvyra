@@ -235,6 +235,10 @@ export const PRODUCTS = [
         src: '/images/products/packs/moringa-acv-effervescent-tablets-4.webp',
         alt: 'A tube of Tatvyra Moringa ACV Tablets beside a bowl of yoghurt and fruit, green apples behind.',
       },
+      {
+        src: '/images/products/packs/moringa-acv-effervescent-tablets-nutrition.webp',
+        alt: 'The label of Tatvyra Moringa ACV Effervescent Tablets showing nutritional facts per tablet, cautions and ingredients.',
+      },
     ],
     descriptor: 'Apple cider vinegar and moringa in one fast-dissolving tablet.',
     // The full supplied description. The PDP shows this in the descriptor's slot;
@@ -519,6 +523,10 @@ export const PRODUCTS = [
         src: '/images/products/packs/moringa-gummies-5.webp',
         alt: 'A hand lifting a tub of Tatvyra Moringa Gummies out of a gym bag.',
       },
+      {
+        src: '/images/products/packs/moringa-gummies-nutrition.webp',
+        alt: 'The label of Tatvyra Moringa Gummies showing nutritional information per gummy, ingredients and allergen information.',
+      },
     ],
     descriptor: 'A taste-led daily format for people who skip tablets.',
     /* The format story, in the same row as the capsules and tablets. The
@@ -661,6 +669,10 @@ export const PRODUCTS = [
       {
         src: '/images/products/packs/spirulina-capsules-4.webp',
         alt: 'A hand holding a bottle of Tatvyra Spirulina Capsules over a desk with a laptop.',
+      },
+      {
+        src: '/images/products/packs/spirulina-capsules-nutrition.webp',
+        alt: 'The label of Tatvyra Spirulina Capsules showing nutritional information per capsule, cautions and usage notes.',
       },
     ],
     descriptor: 'The powder, encapsulated. Straightforward to take daily.',
