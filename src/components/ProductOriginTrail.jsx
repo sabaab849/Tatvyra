@@ -75,7 +75,6 @@ export default function ProductOriginTrail({ product }) {
             </span>
           </h2>
           <p className="trail__lede">{trail.intro}</p>
-          <p className="trail__tagline">{trail.tagline}</p>
         </Reveal>
 
         {/* Focusable so the labels can be brought in from the keyboard too. */}

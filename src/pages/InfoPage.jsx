@@ -12,7 +12,7 @@ import usePageMeta from '../lib/usePageMeta'
  * real contact instead.
  */
 export default function InfoPage({ title, eyebrow, summary }) {
-  usePageMeta({ title: `${title} — Tatvyra`, description: summary })
+  usePageMeta({ title: `${title} | Tatvyra`, description: summary })
 
   return (
     <div className="info">
@@ -34,11 +34,7 @@ export default function InfoPage({ title, eyebrow, summary }) {
           </p>
           <p>
             For anything you need in the meantime, write to{' '}
-            <a href={`mailto:${BRAND.contact.emails[0]}`}>{BRAND.contact.emails[0]}</a> or call{' '}
-            <a href={`tel:${BRAND.contact.phones[0].replace(/\s/g, '')}`}>
-              {BRAND.contact.phones[0]}
-            </a>
-            . You will get a direct answer.
+            <a href={`mailto:${BRAND.contact.emails[0]}`}>{BRAND.contact.emails[0]}</a>. You will get a direct answer.
           </p>
           <Button to="/contact" variant="outline">
             Contact us

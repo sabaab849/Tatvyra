@@ -15,7 +15,6 @@
   position: relative;
   overflow: hidden;
   padding-block: var(--section-y);
-  border-top: 1px solid var(--line);
   background: var(--surface);
 }
 
@@ -35,25 +34,20 @@
   align-items: center;
   gap: 1.1rem;
   font-size: var(--step--2);
-  font-weight: 700;
+  font-weight: var(--type-label-weight);
   letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--text-muted);
 }
 
-.omap__eyebrow::after {
-  content: '';
-  width: clamp(3rem, 1rem + 6vw, 8rem);
-  height: 1px;
-  background: var(--line-strong);
-}
-
 .omap__title {
   margin-top: var(--space-l);
-  font-size: clamp(2.75rem, 1.3rem + 4.6vw, 5.5rem);
-  font-weight: 400;
-  line-height: 0.98;
-  letter-spacing: -0.045em;
+  font-size: var(--step-5);
+  font-weight: var(--type-heading-weight);
+  --weight-stroke: var(--heading-stroke);
+  paint-order: stroke fill;
+  line-height: var(--leading-display);
+  letter-spacing: var(--heading-tracking);
   color: var(--tatvyra-aubergine);
 }
 
@@ -64,7 +58,7 @@
   max-width: 34ch;
   margin-top: clamp(1.75rem, 1rem + 2vw, 2.5rem);
   font-size: var(--step-1);
-  line-height: 1.55;
+  line-height: var(--leading-lede);
   color: var(--text-muted);
 }
 
@@ -134,7 +128,7 @@
   translate: -50% -50%;
   padding-left: 0.5em;
   font-size: var(--step--1);
-  font-weight: 500;
+  font-weight: var(--type-label-weight);
   letter-spacing: 0.5em;
   text-transform: uppercase;
   color: var(--text-muted);
@@ -194,8 +188,8 @@
 
 .omap__label-title {
   font-size: 0.75rem;
-  font-weight: 600;
-  line-height: 1.5;
+  font-weight: var(--type-label-weight);
+  line-height: var(--leading-lede);
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--text);
@@ -206,7 +200,7 @@
   position: relative;
   z-index: 2;
   margin-top: 0.6rem;
-  padding: 0.85rem 1rem 0.9rem;
+  padding: 0.85rem var(--space-s) 0.9rem;
   border: 1px solid var(--line);
   border-radius: var(--radius-image);
   background: var(--surface);
@@ -245,7 +239,7 @@
 
 .omap__label-body {
   font-size: 0.8125rem;
-  line-height: 1.5;
+  line-height: var(--leading-lede);
   color: var(--text-muted);
 }
 
@@ -255,7 +249,7 @@
   gap: 0.4rem;
   margin-top: 0.6rem;
   font-size: 0.6875rem;
-  font-weight: 600;
+  font-weight: var(--type-label-weight);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--tatvyra-purple);
@@ -266,7 +260,7 @@
 .omap__hint {
   margin-top: 1.25rem;
   font-size: var(--step--2);
-  font-weight: 500;
+  font-weight: var(--type-label-weight);
   letter-spacing: 0.2em;
   text-align: center;
   text-transform: uppercase;
@@ -281,10 +275,9 @@
 .is-list .omap__points {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.75rem 1.5rem;
+  gap: 1.75rem var(--space-m);
   margin-top: 1.75rem;
   padding-top: 1.75rem;
-  border-top: 1px solid var(--line);
 }
 
 .is-list .omap__num {
@@ -319,32 +312,11 @@
 
 .omap__aside { padding-top: 0.35rem; }
 
-.omap__tagline {
-  font-size: 0.8125rem;
-  font-weight: 500;
-  line-height: 1.95;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: var(--text);
-}
-
-.omap__tagline span { display: block; }
-
-/* Burnt Orange for rules and dots, as the palette allows: the honey's note. */
-.omap__tagline::after {
-  content: '';
-  display: block;
-  width: 3.25rem;
-  height: 1px;
-  margin-top: 1.1rem;
-  background: var(--tatvyra-orange);
-}
-
 .omap__note { margin-top: clamp(2rem, 1.2rem + 2vw, 2.75rem); }
 
 .omap__note-title {
   font-size: var(--step--2);
-  font-weight: 700;
+  font-weight: var(--type-label-weight);
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--text);
@@ -353,7 +325,7 @@
 .omap__note-body {
   margin-top: 0.6rem;
   font-size: var(--step--1);
-  line-height: 1.6;
+  line-height: var(--leading-body);
   color: var(--text-muted);
 }
 
@@ -370,7 +342,7 @@
   position: relative;
   padding-left: 1.25rem;
   font-size: var(--step--1);
-  line-height: 1.5;
+  line-height: var(--leading-lede);
   color: var(--text-muted);
 }
 
@@ -420,7 +392,6 @@
   .omap__aside {
     margin-top: 0;
     padding: 1.75rem 0 0;
-    border-top: 1px solid var(--line);
   }
 }
 

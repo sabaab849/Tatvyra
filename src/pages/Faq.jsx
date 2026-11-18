@@ -47,13 +47,12 @@ function AnswerLink({ link }) {
 
 export default function Faq() {
   usePageMeta({
-    title: 'Frequently asked questions — Tatvyra',
+    title: 'Frequently Asked Questions | Tatvyra',
     description:
-      'Answers about the Tatvyra range, ingredients and labels, ordering, and how to reach us.',
+      'Answers about Tatvyra products, ingredients and labels, ordering, and how to reach us.',
   })
 
   const [email] = BRAND.contact.emails
-  const [phone] = BRAND.contact.phones
 
   return (
     <div className="faqpage">
@@ -70,9 +69,9 @@ export default function Faq() {
         <div className="shell">
           <Reveal>
             <p className="eyebrow">Support</p>
-            <h1 className="display display--l">Frequently asked questions</h1>
+            <h1 className="display display--l">Frequently Asked Questions</h1>
             <p className="lede page-head__lede">
-              About the range, what is on the label, ordering, and how to reach us.
+              About our products, what is on the label, ordering, and how to reach us.
             </p>
           </Reveal>
         </div>
@@ -98,9 +97,6 @@ export default function Faq() {
             <ul>
               <li>
                 <a href={`mailto:${email}`}>{email}</a>
-              </li>
-              <li>
-                <a href={`tel:${phone.replace(/\s/g, '')}`}>{phone}</a>
               </li>
             </ul>
           </div>
@@ -143,7 +139,7 @@ export default function Faq() {
           <Reveal className="faqpage__outro">
             <p className="faqpage__outro-title">Didn’t find your answer?</p>
             <p className="faqpage__outro-body">
-              Write to us at <a href={`mailto:${email}`}>{email}</a> — you will get a direct
+              Write to us at <a href={`mailto:${email}`}>{email}</a> and you will get a direct
               answer.
             </p>
             <Button to="/contact" variant="outline">

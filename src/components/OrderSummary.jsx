@@ -9,7 +9,7 @@ import { formatINR } from '../lib/money'
  * passed in already computed — this component never does arithmetic of its
  * own, which is what keeps every step showing the same numbers.
  */
-export default function OrderSummary({ lines, subtotal, delivery, total, title = 'Order summary' }) {
+export default function OrderSummary({ lines, subtotal, delivery, total, title = 'Order Summary' }) {
   return (
     <section className="osum" aria-label={title}>
       <h2 className="osum__title">{title}</h2>
@@ -35,9 +35,17 @@ export default function OrderSummary({ lines, subtotal, delivery, total, title =
           <dd>{formatINR(subtotal)}</dd>
         </div>
         <div className="osum__row">
-          <dt>Delivery</dt>
-          <dd>{delivery === 0 ? 'Free' : formatINR(delivery)}</dd>
+          <dt>GST</dt>
+          <dd>Included</dd>
         </div>
+        {/* Only orders saved while a placeholder delivery fee was charged
+            carry one; new orders are MRP × quantity and nothing else. */}
+        {delivery > 0 && (
+          <div className="osum__row">
+            <dt>Delivery</dt>
+            <dd>{formatINR(delivery)}</dd>
+          </div>
+        )}
         <div className="osum__row osum__row--total">
           <dt>Total</dt>
           <dd>{formatINR(total)}</dd>

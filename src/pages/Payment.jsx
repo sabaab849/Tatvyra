@@ -13,7 +13,7 @@ import usePageMeta from '../lib/usePageMeta'
 
 export default function Payment() {
   const navigate = useNavigate()
-  const { items, subtotal, delivery, total, clearCart } = useCart()
+  const { items, subtotal, total, clearCart } = useCart()
   const gateway = useMemo(() => getPaymentGateway(), [])
   const draft = useMemo(() => getDraft(), [])
 
@@ -33,7 +33,7 @@ export default function Payment() {
   const [reference] = useState(makeReference)
 
   usePageMeta({
-    title: 'Payment — Tatvyra',
+    title: 'Payment | Tatvyra',
     description: 'Pay for your Tatvyra order.',
   })
 
@@ -82,6 +82,8 @@ export default function Payment() {
         method: method.id,
         fields: values,
         reference,
+        lines: items,
+        customer: draft,
         onStage: setStage,
       })
     } catch {
@@ -102,11 +104,11 @@ export default function Payment() {
         placedAt: new Date().toISOString(),
         lines: toOrderLines(items),
         subtotal,
-        delivery,
         total,
         /* The method label only — no card, UPI or bank detail is stored. */
-        paymentMethod: method.label,
+        paymentMethod: result.methodLabel ?? method.label,
         gateway: gateway.label,
+        paymentId: result.paymentId ?? null,
         delivery_to: draft,
       })
       clearDraft()
@@ -137,15 +139,15 @@ export default function Payment() {
           {gateway.isDemo && (
             <p className="pay__demo">
               <strong>Demo mode.</strong> No payment provider is connected yet, so nothing is sent
-              anywhere and no money moves. Any details are accepted — to see the failure path, use a
+              anywhere and no money moves. Any details are accepted. To see the failure path, use a
               card number ending <code>0000</code>, a UPI ID beginning <code>fail</code>, or the
               declining bank.
             </p>
           )}
 
-          <h2 className="checkout__subtitle">Payment method</h2>
+          <h2 className="checkout__subtitle">Payment Method</h2>
 
-          <div className="pay__methods" role="radiogroup" aria-label="Payment method">
+          <div className="pay__methods" role="radiogroup" aria-label="Payment Method">
             {gateway.methods.map((m) => (
               <button
                 key={m.id}
@@ -238,7 +240,7 @@ export default function Payment() {
               {status === PaymentStatus.Succeeded && (
                 <p className="pay__success">
                   <span className="pay__tick" aria-hidden="true">✓</span>
-                  <span>Payment authorised — opening your order…</span>
+                  <span>Payment authorised. Opening your order…</span>
                 </p>
               )}
             </div>
@@ -246,7 +248,7 @@ export default function Payment() {
             {status === PaymentStatus.Succeeded ? null : status === PaymentStatus.Failed ? (
               <div className="checkout__actions">
                 <Button type="submit" variant="primary">
-                  Try again — {formatINR(total)}
+                  Try again: {formatINR(total)}
                 </Button>
                 <button
                   type="button"
@@ -276,11 +278,10 @@ export default function Payment() {
           <OrderSummary
             lines={toOrderLines(items)}
             subtotal={subtotal}
-            delivery={delivery}
             total={total}
           />
           <section className="checkout__recap" aria-label="Delivery address">
-            <h2 className="osum__title">Delivering to</h2>
+            <h2 className="osum__title">Delivering To</h2>
             <p className="checkout__recap-body">
               {draft.name}
               <br />

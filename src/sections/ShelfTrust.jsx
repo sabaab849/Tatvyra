@@ -17,8 +17,8 @@ const POINTS = [
   {
     id: 'clean-label',
     tone: 'coral',
-    title: 'True Clean Label',
-    body: 'No hydrogenated oils, added sugar, salt or preservatives across the entire range; verifiable, not just claimed.',
+    title: 'Nothing Hidden',
+    body: 'No hydrogenated oils, salt or preservatives across every product; verifiable, not just claimed.',
     motto: ['Cleaner', 'choices', 'brighter days'],
     Art: CleanLabelArt,
   },
@@ -26,7 +26,7 @@ const POINTS = [
     id: 'formats',
     tone: 'lime',
     title: 'Format Innovation',
-    body: 'The only range offering powder, tablet, capsule and effervescent formats across moringa and spirulina.',
+    body: 'The only brand offering powder, tablet, capsule and effervescent formats across moringa and spirulina.',
     motto: ['Different', 'formats', 'same goodness'],
     Art: FormatsArt,
   },
@@ -61,8 +61,8 @@ export default function ShelfTrust() {
             <Sparkle />
           </p>
           <h2 id="shelf-title" className="shelf__title">
-            <span>Built to be trusted on the shelf,</span>{' '}
-            <span className="shelf__title-turn">not just tried once</span>
+            <span>Built to Be Trusted on the Shelf,</span>{' '}
+            <span className="shelf__title-turn">Not Just Tried Once</span>
           </h2>
         </div>
 

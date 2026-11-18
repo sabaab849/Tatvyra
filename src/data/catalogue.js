@@ -6,21 +6,21 @@
  * tables and reviews do not exist in the supplied material, so those fields are
  * intentionally empty and the UI omits them rather than inventing them.
  *
- * PRICES are the MRPs from Tatvyra's supplied price structure ("OUR COST →
- * DISTRIBUTOR → RETAILER → MRP"), one per pack size, transcribed exactly —
- * some carry paise. That sheet lists eighteen packs; the six it does
- * not list (almond and cashew butter, spirulina tablets, and the multifloral,
- * Himalayan and Kashmiri honeys) are PLACEHOLDERS derived from it: the same
- * size step between packs, anchored to the price of the nearest product the
- * sheet does carry, keeping each one's position against that sibling. Being
- * MRPs like the rest, they take the same discount below. They are marked where
- * they appear and the product page calls them indicative, because Tatvyra has
- * not priced them.
- *
- * Those MRPs carry a 10% increase, and the store takes it straight back off:
- * every price is shown as a pair — mrpFor() struck through, priceFor() beside
- * it — and priceFor() is what the cart charges. The placeholders are shown the
- * same way, so one SKU never reads differently from the next.
+ * PRICES are the "MRP (₹)" column of Tatvyra's price structure ("FFC /
+ * TATVYRA – PRICE STRUCTURE: OUR COST → DISTRIBUTOR → RETAILER → MRP"), one
+ * per pack size, transcribed exactly. That column is the only source for the
+ * customer price. The MRP includes GST, and the site charges it as listed —
+ * on cards, the product page, the cart and checkout — with no markup, tax or
+ * delivery added. The sheet's other columns ("Final MRP", landed cost,
+ * distributor and retailer margins, profit) are internal costing and are
+ * deliberately not used here. That sheet lists eighteen
+ * packs; the products it does not list (the multifloral and Kashmiri
+ * honeys) are PLACEHOLDERS derived from it: the same size step
+ * between packs, anchored to the price of the nearest product the sheet does
+ * carry, keeping each one's position against that sibling, taken back off
+ * GST and rounded to the rupee. They are marked
+ * with priceTbc and the product page calls them indicative, because Tatvyra
+ * has not priced them.
  *
  * `price` is the canonical unit price, and is the price of the first size.
  * A product sold in several sizes also carries `prices`, with one entry per
@@ -30,21 +30,8 @@
 
 export const CATEGORIES = [
   {
-    slug: 'nut-butters',
-    number: '01',
-    name: 'Nut Butters',
-    // Short line for the homepage category grid.
-    teaser: 'Peanut, almond & cashew milled into clean-label spreads.',
-    // Verbatim catalogue description.
-    description:
-      'Peanut, almond & cashew milled into clean-label spreads — no hydrogenated oils, no added sugar or preservatives.',
-    image: '/images/cat-nut-butters.webp',
-    imageAlt: 'A stoneware bowl of Tatvyra creamy peanut butter with a spoonful lifted from it, beside toast.',
-    accent: 'peach',
-  },
-  {
     slug: 'moringa',
-    number: '02',
+    number: '01',
     name: 'Moringa',
     teaser: 'Traditional superfood in convenient everyday formats.',
     description:
@@ -56,7 +43,7 @@ export const CATEGORIES = [
        held once here and every moringa product page shows the same four lines,
        beside that SKU's own catalogue benefits. */
     highlights: {
-      title: 'Why moringa',
+      title: 'Why Moringa',
       points: [
         'Moringa has 100+ bioactive plant compounds in a single leaf',
         'Rich in iron, calcium, and vitamin C for daily vitality',
@@ -67,11 +54,11 @@ export const CATEGORIES = [
   },
   {
     slug: 'spirulina',
-    number: '03',
+    number: '02',
     name: 'Spirulina',
     teaser: 'Plant-based spirulina crafted for everyday nutrition.',
     description:
-      'Plant-based spirulina in powder, tablet & capsule formats, crafted for convenient everyday nutrition.',
+      'Plant-based spirulina in powder & capsule formats, crafted for convenient everyday nutrition.',
     image: '/images/cat-spirulina.webp',
     imageAlt: 'Deep green Tatvyra spirulina powder heaped in a speckled ceramic bowl.',
     accent: 'lilac',
@@ -79,14 +66,27 @@ export const CATEGORIES = [
        is held once here and every spirulina product page shows the same four
        lines, beside that SKU's own catalogue benefits. */
     highlights: {
-      title: 'Why spirulina',
+      title: 'Why Spirulina',
       points: [
         'Spirulina is among the most protein-dense whole foods available',
         'Rich in B vitamins for everyday energy metabolism',
         'High in phycocyanin and chlorophyll antioxidant pigments',
-        'A genuine, vegan-friendly plant protein source',
+        'A genuine plant protein source',
       ],
     },
+  },
+  {
+    slug: 'nut-butters',
+    number: '03',
+    name: 'Nut Butters',
+    // Short line for the homepage category grid.
+    teaser: 'Peanut butters milled into honest spreads.',
+    // Verbatim catalogue description.
+    description:
+      'Peanut butters milled with no hydrogenated oils or preservatives.',
+    image: '/images/cat-nut-butters.webp',
+    imageAlt: 'A stoneware bowl of Tatvyra creamy peanut butter with a spoonful lifted from it, beside toast.',
+    accent: 'peach',
   },
   {
     slug: 'raw-honey',
@@ -94,7 +94,7 @@ export const CATEGORIES = [
     name: 'Raw Honey',
     teaser: 'Single-origin honeys from distinct natural harvests.',
     description:
-      'Four single-origin honeys, from dense forest florals to high-altitude Himalayan harvests.',
+      'Three single-origin honeys, from dense forest florals to pale Kashmiri acacia.',
     image: '/images/cat-raw-honey.webp',
     imageAlt: 'Raw honey running from a piece of honeycomb.',
     accent: 'peach',
@@ -102,398 +102,50 @@ export const CATEGORIES = [
 ]
 
 export const PRODUCTS = [
-  // 01 — NUT BUTTERS
-  {
-    sku: 'TAT-NB01',
-    slug: 'natural-peanut-butter-creamy',
-    name: 'Natural Peanut Butter, Creamy',
-    category: 'nut-butters',
-    format: 'Spread',
-    image: '/images/products/peanut-butter-creamy-1.webp',
-    images: [
-      {
-        src: '/images/products/peanut-butter-creamy-1.webp',
-        alt: 'An open jar of Tatvyra Organic Premium peanut butter on a green mat, with a spoonful drizzling into a glass bowl beside peanut-buttered toast and whole peanuts.',
-      },
-      {
-        src: '/images/products/peanut-butter-creamy-2.webp',
-        alt: 'A hand dipping an apple slice loaded with Tatvyra premium peanut butter into the open jar, against a lilac ground.',
-      },
-      {
-        src: '/images/products/range-nut-butters.webp',
-        alt: 'The four Tatvyra nut butters together — peanut, chocolate crunchy, almond and cashew — with peanuts and buttered toast.',
-      },
-    ],
-    descriptor: 'Peanuts, milled creamy. Nothing hydrogenated, nothing added.',
-    /* What the label says and does not say, as supplied for this SKU, set
-       verbatim. The product page lists them under the catalogue benefits. */
-    claims: [
-      {
-        label: 'Single Ingredient',
-        body: 'Often made with 100% roasted peanuts and no other additives.',
-      },
-      {
-        label: 'No Added Oils',
-        body: 'Contains zero palm oil or hydrogenated vegetable oils.',
-      },
-      {
-        label: 'Zero Refined Sugar',
-        body: 'Free from added sugars, corn syrup, or artificial sweeteners.',
-      },
-      {
-        label: 'No Preservatives',
-        body: 'Contains no chemical preservatives, stabilizers, or emulsifiers',
-      },
-    ],
-    sizes: ['250g', '500g', '1000g'],
-    benefits: [
-      'High-protein (~25g/100g)',
-      'No hydrogenated oils or added sugar',
-      'Rich in Vitamin E, Magnesium & Potassium',
-    ],
-    marks: ['clean-label', 'vegan', 'nutrition-forward'],
-    /* Long-form ingredients-and-benefits block for the product page. Only
-       this SKU has one so far; the section renders when it is present. */
-    spotlight: {
-      eyebrow: 'Ingredients and benefits',
-      title: 'Goodness in every spoon.',
-      intro:
-        'Made with simple, real ingredients, our Natural Peanut Butter is packed with plant-based protein, healthy fats and essential nutrients — nothing more, nothing less.',
-      image: '/images/products/peanut-butter-spoon.webp',
-      imageAlt:
-        'An open jar of Tatvyra natural peanut butter photographed from above on a stone slab, ringed with whole and shelled peanuts.',
-      benefits: [
-        { icon: 'protein', title: 'High Protein', body: '~25g per 100g' },
-        {
-          icon: 'nothing-added',
-          title: 'No Hydrogenated Oils or Added Sugar',
-          body: 'Just pure, honest nutrition.',
-        },
-        {
-          icon: 'micronutrients',
-          title: 'Rich in Vitamin E, Magnesium & Potassium',
-          body: 'Supports energy, heart health and overall well-being.',
-        },
-      ],
-    },
-    campaign: {
-      eyebrow: 'In use',
-      title: 'One jar, three ways.',
-      body:
-        'Spooned over apple, spread across toast, or taken straight from the jar. The same creamy mill either way — nothing hydrogenated, nothing added.',
-      image: '/images/products/peanut-butter-campaign-1400.webp',
-      imageAlt:
-        'Three campaign panels for Tatvyra Organic Premium peanut butter: poured over a bowl of apple slices, jarred beside apple-topped toast, and mid-pour with peanuts and apple peel.',
-    },
-    /* Answers are held to what this catalogue states about the SKU — no
-       storage, shelf-life or sourcing claims it does not make. */
-    faq: [
-      {
-        q: 'What is actually in it?',
-        a: 'Peanuts, milled creamy. No hydrogenated oils, no added sugar and no preservatives — the clean-label standard held across every SKU in this catalogue.',
-      },
-      {
-        q: 'Why has the oil risen to the top?',
-        a: 'Because there is nothing in it to stop that happening. With no hydrogenated oils or stabilisers, a natural nut butter separates as it stands. Stir it back through and it returns to a creamy spread.',
-      },
-      {
-        q: 'How much protein does it have?',
-        a: 'Roughly 25g per 100g, alongside Vitamin E, Magnesium and Potassium.',
-      },
-      {
-        q: 'Is it vegan?',
-        a: 'Yes. It carries the Vegan mark, meaning it contains no animal-derived ingredients.',
-      },
-      {
-        q: 'What sizes does it come in?',
-        a: 'Three jar sizes — 250g, 500g and 1000g.',
-      },
-      {
-        q: 'Is every jar size the same price?',
-        a: 'No — each size is priced on its own, and the price updates when you change size. The 1000g jar works out cheapest per gram.',
-      },
-    ],
-    price: 154,
-    prices: { '250g': 154, '500g': 330, '1000g': 556.6 },
-    featured: true,
-  },
-  {
-    sku: 'TAT-NB02',
-    slug: 'chocolate-peanut-butter',
-    name: 'Chocolate Peanut Butter, Cream & Crunchy',
-    category: 'nut-butters',
-    format: 'Spread',
-    image: '/images/products/chocolate-peanut-butter-1.webp',
-    images: [
-      {
-        src: '/images/products/chocolate-peanut-butter-1.webp',
-        alt: 'A jar of Tatvyra chocolate peanut butter, cream and crunchy, on a green mat beside a bowl of the spread topped with cocoa, peanuts and chocolate chips.',
-      },
-      {
-        src: '/images/products/chocolate-peanut-butter-2.webp',
-        alt: 'A hand dipping an apple slice loaded with Tatvyra chocolate crunchy peanut butter into the open jar, against a lilac ground.',
-      },
-      {
-        src: '/images/products/range-nut-butters.webp',
-        alt: 'The four Tatvyra nut butters together — peanut, chocolate crunchy, almond and cashew — with peanuts and buttered toast.',
-      },
-    ],
-    spotlight: {
-      eyebrow: 'Ingredients and benefits',
-      title: 'The best of both worlds.',
-      intro:
-        'Creamy, chocolatey, and packed with goodness. Our Chocolate Peanut Butter Crunchy is made with roasted peanuts, rich cocoa and natural crunch — for a deliciously satisfying, nutrient-packed spread.',
-      image: '/images/products/chocolate-peanut-butter-spoon.webp',
-      imageAlt:
-        'A glass bowl of Tatvyra chocolate crunchy peanut butter photographed from above, with chocolate chunks, loose peanuts, a bowl of crunch and a loaded spoon around it.',
-      benefits: [
-        { icon: 'protein', title: 'High Protein', body: '~25g per 100g' },
-        {
-          icon: 'nothing-added',
-          title: 'No Hydrogenated Oils or Added Sugar',
-          body: 'Just pure, honest nutrition.',
-        },
-        {
-          icon: 'micronutrients',
-          title: 'Rich in Vitamin E, Magnesium & Potassium',
-          body: 'Supports energy, heart health and overall well-being.',
-        },
-      ],
-    },
-    descriptor: 'Cocoa and peanuts, in creamy or crunchy.',
-    // The supplied product description, verbatim. The product page sets it in
-    // place of the descriptor; cards and page metadata keep the short line.
-    description:
-      'An indulgent blend of roasted peanuts and rich chocolate, finished with a satisfying crunch. This spread brings together nutty depth and cocoa sweetness in one jar, perfect for spreading on toast, pairing with fruit, or enjoying as a treat on its own.',
-    sizes: ['250g', '500g', '1000g'],
-    benefits: [
-      'Protein-rich indulgence',
-      'Cocoa Antioxidant flavonoids',
-      'Lower added sugar than typical spreads',
-      'Gluten free',
-      'Vegan',
-    ],
-    marks: ['clean-label', 'vegan', 'gluten-free', 'nutrition-forward'],
-    price: 182.6,
-    prices: { '250g': 182.6, '500g': 367.4, '1000g': 671 },
-  },
-  {
-    sku: 'TAT-NB03',
-    slug: 'almond-butter-creamy',
-    name: 'Almond Butter, Creamy',
-    category: 'nut-butters',
-    format: 'Spread',
-    image: '/images/products/almond-butter-creamy.webp',
-    images: [
-      {
-        src: '/images/products/almond-butter-creamy.webp',
-        alt: 'A jar of Tatvyra almond butter, creamy, on a green mat beside a bowl of the spread with whole and flaked almonds.',
-      },
-      {
-        src: '/images/products/almond-butter-creamy-2.webp',
-        alt: 'A hand dipping an apple slice loaded with Tatvyra almond butter into the open jar, against a lilac ground.',
-      },
-      {
-        src: '/images/products/range-nut-butters.webp',
-        alt: 'The four Tatvyra nut butters together — peanut, chocolate crunchy, almond and cashew — with peanuts and buttered toast.',
-      },
-    ],    descriptor: 'Almonds, milled smooth.',
-    sizes: ['250g', '500g', '1000g'],
-    benefits: ['High Vitamin E & Magnesium', 'Natural Calcium'],
-    marks: ['clean-label', 'vegan'],
-    /* The ingredients-and-benefits block (ProductSpotlight). Every line, icon
-       and the photograph are taken word for word from the supplied layout
-       reference; it carries no eyebrow, so none is set. Its on-pack mark copy
-       is the reference's own, so it is listed here rather than read from
-       MARKS. The photograph is cut from that reference at about 710x560 real
-       pixels and enlarged 1.5x; swap in a full-size original when one exists. */
-    spotlight: {
-      title: ['Pure Almonds.', 'Pure Goodness.'],
-      intro:
-        'Our Almond Butter is made from carefully selected premium almonds, slow-ground to a smooth, creamy texture — with no added sugars, oils or preservatives. Just pure, wholesome nutrition in every spoon.',
-      image: '/images/products/almond-butter-spoon.webp',
-      imageWidth: 1086,
-      imageHeight: 861,
-      imageAlt:
-        'An open glass jar of smooth almond butter seen from above, ringed with whole and halved almonds, a bowl of almonds and a heaped spoonful of almond butter.',
-      benefits: [
-        {
-          icon: 'protein',
-          title: 'Good Source of Plant Protein',
-          body: 'Supports muscle health and keeps you fuller for longer.',
-        },
-        {
-          icon: 'healthy-fats',
-          title: 'Rich in Healthy Fats',
-          body: 'Contains heart-healthy unsaturated fats for sustained energy.',
-        },
-        {
-          icon: 'essential-nutrients',
-          title: 'Naturally Rich in Essential Nutrients',
-          body: 'A good source of vitamin E, magnesium and fibre.',
-        },
-      ],
-      marks: [
-        {
-          icon: 'clean-label',
-          title: 'Clean Label',
-          body: 'Made with 100% almonds and nothing else. Free from unnecessary additives.',
-        },
-        {
-          icon: 'vegan',
-          title: 'Vegan',
-          body: 'Completely plant-based, with no animal-derived ingredients.',
-        },
-        {
-          icon: 'nothing-added',
-          title: 'No Added Sugar or Oils',
-          body: 'Just pure almonds, slow-ground to creamy perfection.',
-        },
-        {
-          icon: 'nutrition-forward',
-          title: 'Naturally Nutrient-Rich',
-          body: 'A natural source of protein, healthy fats, magnesium, vitamin E and fibre.',
-        },
-      ],
-    },
-    // Not on the supplied price sheet. The figure below is derived from it —
-    // the client's own size step and price level, keeping this product's
-    // position against its priced sibling — and priceTbc still says so.
-    priceTbc: true,
-    price: 412,
-    prices: { '250g': 412, '500g': 855, '1000g': 1500 },
-  },
-  {
-    sku: 'TAT-NB04',
-    slug: 'cashew-butter-creamy',
-    name: 'Cashew Butter, Creamy',
-    category: 'nut-butters',
-    format: 'Spread',
-    image: '/images/products/cashew-butter-creamy.webp',
-    images: [
-      {
-        src: '/images/products/cashew-butter-creamy.webp',
-        alt: 'A jar of Tatvyra cashew butter, creamy, on a green mat beside a bowl of the spread with whole and chopped cashews.',
-      },
-      {
-        src: '/images/products/cashew-butter-creamy-2.webp',
-        alt: 'A hand dipping an apple slice loaded with Tatvyra cashew butter into the open jar, against a lilac ground.',
-      },
-      {
-        src: '/images/products/range-nut-butters.webp',
-        alt: 'The four Tatvyra nut butters together — peanut, chocolate crunchy, almond and cashew — with peanuts and buttered toast.',
-      },
-    ],    descriptor: 'Cashews, milled to a softer, sweeter spread.',
-    sizes: ['250g', '500g', '1000g'],
-    benefits: ['Naturally sweet & smoother texture', 'Rich in Copper & Magnesium'],
-    marks: ['clean-label', 'vegan'],
-    /* The ingredients-and-benefits block (ProductSpotlight). Every line, icon
-       and the photograph are taken word for word from the supplied layout
-       reference; it carries no eyebrow, so none is set. Its on-pack mark copy
-       is the reference's own, so it is listed here rather than read from
-       MARKS. The photograph is cut from that reference at about 726x581 real
-       pixels and enlarged 1.5x; swap in a full-size original when one exists. */
-    spotlight: {
-      title: ['Pure Cashews.', 'Pure Goodness.'],
-      intro:
-        'Our Cashew Butter is made from carefully selected premium cashews, slow-ground to a smooth, creamy texture — with no added sugars, oils or preservatives. Just pure, wholesome nutrition in every spoon.',
-      image: '/images/products/cashew-butter-spoon.webp',
-      imageWidth: 1089,
-      imageHeight: 893,
-      imageAlt:
-        'An open glass bowl of smooth, swirled cashew butter seen from above, ringed with whole cashews, a small bowl of cashews and a heaped spoonful of cashew butter.',
-      benefits: [
-        {
-          icon: 'plant-protein',
-          title: 'Good Source of Plant Protein',
-          body: 'Supports muscle health and keeps you fuller for longer.',
-        },
-        {
-          icon: 'healthy-fats',
-          title: 'Rich in Healthy Fats',
-          body: 'Contains heart-healthy unsaturated fats for sustained energy.',
-        },
-        {
-          icon: 'essential-nutrients',
-          title: 'Naturally Rich in Essential Nutrients',
-          body: 'A good source of magnesium, zinc and iron.',
-        },
-      ],
-      marks: [
-        {
-          icon: 'clean-label',
-          title: 'Clean Label',
-          body: 'Made with 100% cashews and nothing else. Free from unnecessary additives.',
-        },
-        {
-          icon: 'vegan',
-          title: 'Vegan',
-          body: 'Completely plant-based, with no animal-derived ingredients.',
-        },
-        {
-          icon: 'nothing-added',
-          title: 'No Added Sugar or Oils',
-          body: 'Just pure cashews, slow-ground to creamy perfection.',
-        },
-        {
-          icon: 'nutrition-forward',
-          title: 'Naturally Nutrient-Rich',
-          body: 'A natural source of protein, healthy fats, magnesium, zinc and iron.',
-        },
-      ],
-    },
-    // Not on the supplied price sheet. The figure below is derived from it —
-    // the client's own size step and price level, keeping this product's
-    // position against its priced sibling — and priceTbc still says so.
-    priceTbc: true,
-    price: 386,
-    prices: { '250g': 386, '500g': 801, '1000g': 1406 },
-  },
-
-  // 02 — MORINGA
+  // 01 — MORINGA
   {
     sku: 'TAT-MO01',
     slug: 'moringa-leaf-powder',
     name: 'Moringa Leaf Powder',
     category: 'moringa',
     format: 'Powder',
-    image: '/images/products/moringa-leaf-powder.webp',
+    image: '/images/products/packs/moringa-leaf-powder-1.webp',
     images: [
       {
-        src: '/images/products/moringa-leaf-powder.webp',
-        alt: 'A pouch of Tatvyra organic moringa leaf powder beside bowls of the green powder and fresh moringa leaves.',
+        src: '/images/products/packs/moringa-leaf-powder-1.webp',
+        alt: 'A pouch of Tatvyra Natural Moringa Powder on a table with nuts, a glass of water and fresh leaves.',
       },
       {
-        src: '/images/products/moringa-leaf-powder-back.webp',
-        alt: 'The back of the Tatvyra organic moringa leaf powder pouch: how to use, what to try it in, storage instructions, allergen advice, ingredients and manufacturer details.',
+        src: '/images/products/packs/moringa-leaf-powder-2.webp',
+        alt: 'A scoop of green moringa powder lifted from an open pouch of Tatvyra Natural Moringa Powder, nuts and water beside it.',
       },
       {
-        /* The panel on its own, for anyone reading the numbers rather than the
-           pack. The alt carries the table as the close-up prints it, so it is
-           readable without the picture. */
-        src: '/images/products/moringa-leaf-powder-nutrition.webp',
-        alt: 'The nutritional facts panel from the pack, per 100g approximately: energy 86.45 Kcal, protein 5.61 g, carbohydrate 14.85 g, fat 0.33 g.',
+        src: '/images/products/packs/moringa-leaf-powder-3.webp',
+        alt: 'A scoop of green moringa powder lifted from an open pouch of Tatvyra Natural Moringa Powder.',
       },
       {
-        src: '/images/products/range-green.webp',
-        alt: 'The Tatvyra green range together — moringa leaf powder, tablets, capsules, gummies and spirulina — around bowls of green powder.',
+        src: '/images/products/packs/moringa-leaf-powder-4.webp',
+        alt: 'A scoop tipping moringa powder into a glass of water beside a pouch of Tatvyra Natural Moringa Powder.',
+      },
+      {
+        src: '/images/products/packs/moringa-leaf-powder-5.webp',
+        alt: 'A heaped scoop of green moringa powder held over an open pouch of Tatvyra Natural Moringa Powder.',
       },
     ],
     descriptor: 'Moringa leaf, milled fine. Stir it into whatever you already drink.',
     // The supplied product description, verbatim. The story below breaks the
     // same copy into its stages; this is the paragraph as written.
     description:
-      'Made from carefully dried and finely milled moringa leaves, this powder is a simple way to add a nutrient-dense boost to your daily routine. Stir it into smoothies, juices, soups, or baked goods for an earthy, slightly grassy flavour. Each batch is processed to preserve the natural color and nutrient profile of the leaf, giving you a versatile everyday superfood in one convenient jar.',
+      'Finely milled moringa leaf powder with naturally preserved nutrients and an earthy flavour, perfect for smoothies, juices, soups, and everyday recipes.',
     sizes: ['100g pouch'],
     benefits: [
       '100+ Bioactive plant compounds',
       'Iron + Vitamin C',
       'Antioxidant-rich',
       'Gluten free',
-      'Vegan',
     ],
-    marks: ['clean-label', 'vegan', 'gluten-free'],
-    price: 313.5,
+    marks: ['gluten-free'],
+    price: 285,
     featured: true,
     // The process story (ProductStory). Every line is lifted verbatim from the
     // supplied copy; nothing here names a drying or milling technique, a
@@ -501,7 +153,7 @@ export const PRODUCTS = [
     // what each photograph shows.
     story: {
       eyebrow: 'Moringa Powder',
-      title: 'Carefully dried and finely milled.',
+      title: 'Carefully Dried and Finely Milled.',
       intro: 'A simple way to add a nutrient-dense boost to your daily routine.',
       stages: [
         {
@@ -535,7 +187,7 @@ export const PRODUCTS = [
         {
           label: 'One convenient jar',
           body: 'A versatile everyday superfood in one convenient jar.',
-          image: '/images/products/moringa-leaf-powder.webp',
+          image: '/images/products/packs/moringa-leaf-powder-1.webp',
           width: 800,
           height: 1000,
           alt: 'A pouch of Tatvyra organic moringa leaf powder beside bowls of the green powder and fresh moringa leaves.',
@@ -565,41 +217,38 @@ export const PRODUCTS = [
     name: 'ACV Moringa Effervescent',
     category: 'moringa',
     format: 'Effervescent',
-    image: '/images/products/moringa-acv-effervescent-tablets.webp',
+    image: '/images/products/packs/moringa-acv-effervescent-tablets-1.webp',
     images: [
       {
-        src: '/images/products/moringa-acv-effervescent-tablets.webp',
-        alt: 'A bottle of Tatvyra ACV and moringa effervescent tablets on a wooden board with moringa leaves and green powder.',
-      },
-      /* The pack's other face and its panel, both supplied. Each is taller than
-         the gallery's 4:5 frame, so the file widens the canvas by extending its
-         own edge rather than cropping — nothing on the label is cut. */
-      {
-        src: '/images/products/moringa-acv-effervescent-tablets-back.webp',
-        alt: 'The back of the Tatvyra ACV Moringa Effervescent pack, its nutritional facts panel facing the camera.',
+        src: '/images/products/packs/moringa-acv-effervescent-tablets-1.webp',
+        alt: 'A tube of Tatvyra Moringa ACV Tablets on a kitchen counter with green apples and a glass of the drink.',
       },
       {
-        src: '/images/products/moringa-acv-effervescent-tablets-nutrition.webp',
-        alt: 'The nutritional facts panel from the Tatvyra ACV Moringa Effervescent pack, shown close up.',
+        src: '/images/products/packs/moringa-acv-effervescent-tablets-2.webp',
+        alt: 'A hand tipping a tablet from a tube of Tatvyra Moringa ACV Tablets into a glass of water.',
       },
       {
-        src: '/images/products/range-green.webp',
-        alt: 'The Tatvyra green range together — moringa leaf powder, tablets, capsules, gummies and spirulina — around bowls of green powder.',
+        src: '/images/products/packs/moringa-acv-effervescent-tablets-3.webp',
+        alt: 'A tablet in an open palm beside a tube of Tatvyra Moringa ACV Tablets and a glass of the drink.',
+      },
+      {
+        src: '/images/products/packs/moringa-acv-effervescent-tablets-4.webp',
+        alt: 'A tube of Tatvyra Moringa ACV Tablets beside a bowl of yoghurt and fruit, green apples behind.',
       },
     ],
     descriptor: 'Apple cider vinegar and moringa in one fast-dissolving tablet.',
     // The full supplied description. The PDP shows this in the descriptor's slot;
     // cards keep the one-line descriptor above so the grid stays even.
     description:
-      'A refreshing twist on two wellness staples—apple cider vinegar and moringa—combined into a fizzy, fast-dissolving tablet. Simply drop one into water for a tangy, energizing drink that fits easily into a busy day. A convenient alternative for those who find liquid ACV difficult to tolerate.',
+      'A refreshing twist on two wellness staples, apple cider vinegar and moringa, combined into a fizzy, fast-dissolving tablet. Simply drop one into water for a tangy, energizing drink that fits easily into a busy day. A convenient alternative for those who find liquid ACV difficult to tolerate.',
     sizes: ['15 tabs / pack'],
     benefits: [
       'ACV + Moringa in one fast-dissolving tablet',
       'Digestion support',
       'Portable single-dose',
     ],
-    marks: ['clean-label', 'vegan'],
-    price: 275,
+    marks: [],
+    price: 250,
     // The process story (ProductStory). Every line is drawn from the supplied
     // description: nothing here states a dose, a tablet count, an ingredient
     // beyond ACV and moringa, a benefit or a process. A slot with `pending` in
@@ -676,7 +325,7 @@ export const PRODUCTS = [
             alt: 'A glass of the finished pale golden drink.',
           },
           {
-            image: '/images/products/moringa-acv-effervescent-tablets.webp',
+            image: '/images/products/packs/moringa-acv-effervescent-tablets-1.webp',
             width: 800,
             height: 1000,
             alt: 'A bottle of Tatvyra ACV and moringa effervescent tablets on a wooden board with moringa leaves and green powder.',
@@ -699,7 +348,7 @@ export const PRODUCTS = [
       },
       {
         src: '/images/products/range-green.webp',
-        alt: 'The Tatvyra green range together — moringa leaf powder, tablets, capsules, gummies and spirulina — around bowls of green powder.',
+        alt: 'The Tatvyra green products together (moringa leaf powder, tablets, capsules, gummies and spirulina) around bowls of green powder.',
       },
     ],
     descriptor: 'The leaf powder, compressed into a daily dose.',
@@ -716,7 +365,7 @@ export const PRODUCTS = [
        photograph, so the packaging appears exactly as supplied. */
     journey: {
       eyebrow: 'Moringa Tablets',
-      title: 'From moringa leaf powder to a compact daily form.',
+      title: 'From Moringa Leaf Powder to a Compact Daily Form.',
       stages: [
         {
           title: 'Moringa leaf powder',
@@ -744,8 +393,8 @@ export const PRODUCTS = [
     },
     sizes: ['60 tabs x 500mg'],
     benefits: ['Compressed daily-dose format', 'Same benefits as leaf powder'],
-    marks: ['clean-label', 'vegan'],
-    price: 275,
+    marks: [],
+    price: 250,
   },
   {
     sku: 'TAT-MO04',
@@ -753,15 +402,27 @@ export const PRODUCTS = [
     name: 'Moringa Capsules',
     category: 'moringa',
     format: 'Capsules',
-    image: '/images/products/moringa-capsules.webp',
+    image: '/images/products/packs/moringa-capsules-1.webp',
     images: [
       {
-        src: '/images/products/moringa-capsules.webp',
-        alt: 'A bottle of Tatvyra moringa capsules on a wooden board beside bowls of moringa powder and fresh leaves, with loose capsules in a wooden dish.',
+        src: '/images/products/packs/moringa-capsules-1.webp',
+        alt: 'A bottle of Tatvyra Moringa Capsules on a desk beside a laptop, a plant and a bowl of dried fruit.',
       },
       {
-        src: '/images/products/range-green.webp',
-        alt: 'The Tatvyra green range together — moringa leaf powder, tablets, capsules, gummies and spirulina — around bowls of green powder.',
+        src: '/images/products/packs/moringa-capsules-2.webp',
+        alt: 'A bottle of Tatvyra Moringa Capsules beside a breakfast plate and a glass of orange juice.',
+      },
+      {
+        src: '/images/products/packs/moringa-capsules-3.webp',
+        alt: 'A hand lifting a capsule from an open bottle of Tatvyra Moringa Capsules on a desk.',
+      },
+      {
+        src: '/images/products/packs/moringa-capsules-4.webp',
+        alt: 'A hand holding a bottle of Tatvyra Moringa Capsules over a desk with a laptop.',
+      },
+      {
+        src: '/images/products/packs/moringa-capsules-5.webp',
+        alt: 'Hands opening a bottle of Tatvyra Moringa Capsules at a desk.',
       },
     ],
     descriptor: 'The leaf powder, encapsulated. No taste, no measuring.',
@@ -769,7 +430,7 @@ export const PRODUCTS = [
     // effervescent carry theirs. The journey band below draws its stages from
     // this copy rather than repeating the paragraph.
     description:
-      'For those who want the benefits of moringa without the taste, these easy-to-swallow capsules deliver pure, finely ground moringa leaf powder in a convenient daily dose. No mixing, no mess—just a quick addition to your morning or evening routine. Ideal for on-the-go lifestyles and travel.',
+      'For those who want the benefits of moringa without the taste, these easy-to-swallow capsules deliver pure, finely ground moringa leaf powder in a convenient daily dose. No mixing, no mess: just a quick addition to your morning or evening routine. Ideal for on-the-go lifestyles and travel.',
     /* The "from leaf to daily ritual" band on the product page. Every line is
        taken from the copy supplied for this SKU: no nutritional, medical,
        dosage, sourcing or process claim goes beyond it, and the drying stage
@@ -778,7 +439,7 @@ export const PRODUCTS = [
        own product photograph, so the packaging appears exactly as supplied. */
     journey: {
       eyebrow: 'Moringa Capsules',
-      title: 'From leaf to daily ritual.',
+      title: 'From Leaf to Daily Ritual.',
       stages: [
         {
           title: 'Moringa leaves',
@@ -801,7 +462,7 @@ export const PRODUCTS = [
         {
           title: 'Moringa capsules',
           body: 'Easy-to-swallow capsules, in a convenient daily dose.',
-          image: '/images/products/moringa-capsules.webp',
+          image: '/images/products/packs/moringa-capsules-1.webp',
           alt: 'A jar of Tatvyra Moringa Capsules, 60 capsules per bottle, on a wooden board with moringa leaves, a bowl of powder and loose capsules.',
           product: true,
         },
@@ -815,7 +476,7 @@ export const PRODUCTS = [
       ],
       closing: {
         label: 'On the go',
-        body: 'The benefits of moringa, without the taste — ideal for on-the-go lifestyles and travel.',
+        body: 'The benefits of moringa, without the taste. Ideal for on-the-go lifestyles and travel.',
         statement: 'Easy to swallow. Convenient daily dose.',
         image: '/images/products/moringa-capsules-journey/lifestyle.webp',
         alt: 'Moringa capsules in a wooden dish and loose on a wooden table, beside a spray of fresh moringa leaves.',
@@ -823,8 +484,8 @@ export const PRODUCTS = [
     },
     sizes: ['60 caps x 400mg'],
     benefits: ['Encapsulated daily-dose format', 'Same benefits as leaf powder'],
-    marks: ['clean-label', 'vegan'],
-    price: 330,
+    marks: [],
+    price: 300,
   },
   {
     sku: 'TAT-MO05',
@@ -832,15 +493,27 @@ export const PRODUCTS = [
     name: 'Moringa Gummies',
     category: 'moringa',
     format: 'Gummies',
-    image: '/images/products/moringa-gummies.webp',
+    image: '/images/products/packs/moringa-gummies-1.webp',
     images: [
       {
-        src: '/images/products/moringa-gummies.webp',
-        alt: 'A jar of Tatvyra organic moringa gummies on a wooden board with moringa leaves and a bowl of green powder.',
+        src: '/images/products/packs/moringa-gummies-1.webp',
+        alt: 'A tub of Tatvyra Sugar Free Moringa Gummies on a yoga mat with dumbbells and loose gummies.',
       },
       {
-        src: '/images/products/range-green.webp',
-        alt: 'The Tatvyra green range together — moringa leaf powder, tablets, capsules, gummies and spirulina — around bowls of green powder.',
+        src: '/images/products/packs/moringa-gummies-2.webp',
+        alt: 'A tub of Tatvyra Moringa Gummies on a yoga mat beside dumbbells, a tennis ball and gummies.',
+      },
+      {
+        src: '/images/products/packs/moringa-gummies-3.webp',
+        alt: 'A hand taking a gummy from an open tub of Tatvyra Moringa Gummies.',
+      },
+      {
+        src: '/images/products/packs/moringa-gummies-4.webp',
+        alt: 'A hand taking a gummy from an open tub of Tatvyra Moringa Gummies, the lid set aside.',
+      },
+      {
+        src: '/images/products/packs/moringa-gummies-5.webp',
+        alt: 'A hand lifting a tub of Tatvyra Moringa Gummies out of a gym bag.',
       },
     ],
     descriptor: 'A taste-led daily format for people who skip tablets.',
@@ -863,7 +536,7 @@ export const PRODUCTS = [
     journey: {
       eyebrow: 'The Tatvyra way',
       // A no-break space holds "a little" together, so no line ends on "a".
-      title: 'Make daily wellness a little more enjoyable.',
+      title: 'Make Daily Wellness a Little More Enjoyable.',
       stages: [
         {
           title: 'The gummy',
@@ -893,7 +566,7 @@ export const PRODUCTS = [
         },
         {
           title: 'The daily format',
-          body: 'Another format in the Tatvyra moringa range.',
+          body: 'Another format of Tatvyra moringa.',
           image: '/images/products/moringa-gummies-journey/jar.webp',
           width: 706,
           height: 882,
@@ -904,7 +577,7 @@ export const PRODUCTS = [
       finale: {
         lines: ['Moringa,', 'in a format', 'you’ll want to reach for.'],
         callout: 'A taste-led daily format',
-        image: '/images/products/moringa-gummies.webp',
+        image: '/images/products/packs/moringa-gummies-1.webp',
         width: 800,
         height: 1000,
         alt: 'A jar of Tatvyra organic moringa gummies on a wooden board with moringa leaves and a bowl of green powder.',
@@ -915,38 +588,39 @@ export const PRODUCTS = [
       'New easy-to-take daily format',
       'Alternative to tablets & capsules for taste-led buyers',
     ],
-    marks: ['clean-label', 'vegan'],
-    price: 495,
+    marks: [],
+    price: 450,
     isNew: true,
   },
 
-  // 03 — SPIRULINA
+  // 02 — SPIRULINA
   {
     sku: 'TAT-SP01',
     slug: 'spirulina-powder',
     name: 'Spirulina Powder',
     category: 'spirulina',
     format: 'Powder',
-    image: '/images/products/spirulina-powder.webp',
+    image: '/images/products/packs/spirulina-powder-1.webp',
     images: [
       {
-        src: '/images/products/spirulina-powder.webp',
-        alt: 'A pouch of Tatvyra organic spirulina powder beside a bowl of deep green powder and fresh leaves.',
+        src: '/images/products/packs/spirulina-powder-1.webp',
+        alt: 'A pouch of Tatvyra Natural Spirulina Powder on a table with nuts, a glass of water and fresh leaves.',
       },
       {
-        src: '/images/products/spirulina-powder-back.webp',
-        alt: 'The back of the Tatvyra organic spirulina powder pouch: the phyto-nutrient panel, how to use, what to try it in, storage instructions, allergen advice, ingredients and manufacturer details.',
+        src: '/images/products/packs/spirulina-powder-2.webp',
+        alt: 'A scoop of blue-green spirulina powder lifted from an open pouch of Tatvyra Natural Spirulina Powder, nuts and water beside it.',
       },
       {
-        /* The phyto-nutrient panel, set in the pack’s own style and carrying the
-           figures from the certificate of analysis. The alt carries the table,
-           so it is readable without the picture. */
-        src: '/images/products/spirulina-powder-nutrition.webp',
-        alt: 'The phyto-nutrient panel, per 100g approximately: protein 65.02% against a standard of more than 60%, and total carbohydrate, fibre, total carotenoids and total chlorophyll each complying with their standard.',
+        src: '/images/products/packs/spirulina-powder-3.webp',
+        alt: 'A scoop of blue-green spirulina powder lifted from an open pouch of Tatvyra Natural Spirulina Powder.',
       },
       {
-        src: '/images/products/range-green.webp',
-        alt: 'The Tatvyra green range together — moringa leaf powder, tablets, capsules, gummies and spirulina — around bowls of green powder.',
+        src: '/images/products/packs/spirulina-powder-4.webp',
+        alt: 'A scoop tipping spirulina powder into a glass of water beside a pouch of Tatvyra Natural Spirulina Powder.',
+      },
+      {
+        src: '/images/products/packs/spirulina-powder-5.webp',
+        alt: 'A heaped scoop of blue-green spirulina powder held over an open pouch of Tatvyra Natural Spirulina Powder.',
       },
     ],
     descriptor: 'Dense, deep-green spirulina for smoothies and everyday mixing.',
@@ -956,36 +630,9 @@ export const PRODUCTS = [
       'Rich in B-vitamins (B1, B2, B3, B6, B9)',
       'Iron & magnesium',
     ],
-    marks: ['clean-label', 'vegan', 'nutrition-forward'],
-    price: 385,
+    marks: ['nutrition-forward'],
+    price: 350,
     featured: true,
-  },
-  {
-    sku: 'TAT-SP02',
-    slug: 'spirulina-tablets',
-    name: 'Spirulina Tablets',
-    category: 'spirulina',
-    format: 'Tablets',
-    image: '/images/products/spirulina-tablets.webp',
-    images: [
-      {
-        src: '/images/products/spirulina-tablets.webp',
-        alt: 'A bottle of Tatvyra spirulina tablets on a wooden board with loose tablets and a bowl of green powder.',
-      },
-      {
-        src: '/images/products/range-green.webp',
-        alt: 'The Tatvyra green range together — moringa leaf powder, tablets, capsules, gummies and spirulina — around bowls of green powder.',
-      },
-    ],
-    descriptor: 'The powder, compressed into a daily dose.',
-    sizes: ['60 caps / bottle'],
-    benefits: ['Compressed daily-dose format', 'Same benefits as powder'],
-    marks: ['clean-label', 'vegan'],
-    // Not on the supplied price sheet. The figure below is derived from it —
-    // the client's own size step and price level, keeping this product's
-    // position against its priced sibling — and priceTbc still says so.
-    priceTbc: true,
-    price: 348,
   },
   {
     sku: 'TAT-SP03',
@@ -993,22 +640,282 @@ export const PRODUCTS = [
     name: 'Spirulina Capsules',
     category: 'spirulina',
     format: 'Capsules',
-    image: '/images/products/spirulina-capsules.webp',
+    image: '/images/products/packs/spirulina-capsules-1.webp',
     images: [
       {
-        src: '/images/products/spirulina-capsules.webp',
-        alt: 'A bottle of Tatvyra spirulina capsules on a wooden board beside a bowl of deep green powder.',
+        src: '/images/products/packs/spirulina-capsules-1.webp',
+        alt: 'A bottle of Tatvyra Spirulina Capsules beside a breakfast plate and a glass of orange juice.',
       },
       {
-        src: '/images/products/range-green.webp',
-        alt: 'The Tatvyra green range together — moringa leaf powder, tablets, capsules, gummies and spirulina — around bowls of green powder.',
+        src: '/images/products/packs/spirulina-capsules-2.webp',
+        alt: 'A hand lifting a capsule from an open bottle of Tatvyra Spirulina Capsules on a desk.',
+      },
+      {
+        src: '/images/products/packs/spirulina-capsules-3.webp',
+        alt: 'A bottle of Tatvyra Spirulina Capsules on a desk beside a laptop, a plant and a bowl of dried fruit.',
+      },
+      {
+        src: '/images/products/packs/spirulina-capsules-4.webp',
+        alt: 'A hand holding a bottle of Tatvyra Spirulina Capsules over a desk with a laptop.',
       },
     ],
     descriptor: 'The powder, encapsulated. Straightforward to take daily.',
     sizes: ['60 caps x 500mg'],
     benefits: ['Encapsulated daily-dose format', 'Same benefits as powder'],
-    marks: ['clean-label', 'vegan'],
-    price: 418,
+    marks: [],
+    price: 380,
+  },
+
+  // 03 — NUT BUTTERS
+  {
+    sku: 'TAT-NB01',
+    slug: 'natural-peanut-butter-creamy',
+    name: 'Natural Peanut Butter Creamy',
+    category: 'nut-butters',
+    format: 'Spread',
+    image: '/images/products/packs/natural-peanut-butter-creamy-1.webp',
+    images: [
+      {
+        src: '/images/products/packs/natural-peanut-butter-creamy-1.webp',
+        alt: 'A jar of Tatvyra Natural Peanut Butter Creamy on a green checked cloth, with creamy toast and a bowl of oats.',
+      },
+      {
+        src: '/images/products/packs/natural-peanut-butter-creamy-2.webp',
+        alt: 'A spoon lifting creamy peanut butter from an open jar of Tatvyra Natural Peanut Butter Creamy, its lid beside it.',
+      },
+      {
+        src: '/images/products/packs/natural-peanut-butter-creamy-3.webp',
+        alt: 'Hands spreading Tatvyra Natural Peanut Butter Creamy on toast topped with banana slices, the jar beside the plate.',
+      },
+      {
+        src: '/images/products/packs/natural-peanut-butter-creamy-4.webp',
+        alt: 'A spoonful of Tatvyra Natural Peanut Butter Creamy ribboning back into the open jar.',
+      },
+      {
+        src: '/images/products/packs/natural-peanut-butter-creamy-nutrition.webp',
+        alt: 'The label of Tatvyra Natural Peanut Butter Creamy showing nutrition information per 100g and per serve, ingredients (roasted peanuts 100%) and allergens (peanuts, soy).',
+      },
+    ],
+    descriptor: 'Peanuts, milled creamy. Nothing hydrogenated, nothing added.',
+    /* What the label says and does not say, as supplied for this SKU, set
+       verbatim. The product page lists them under the catalogue benefits. */
+    claims: [
+      {
+        label: 'Single Ingredient',
+        body: 'Often made with 100% roasted peanuts and no other additives.',
+      },
+      {
+        label: 'No Added Oils',
+        body: 'Contains zero palm oil or hydrogenated vegetable oils.',
+      },
+      {
+        label: 'No Preservatives',
+        body: 'Contains no chemical preservatives, stabilizers, or emulsifiers',
+      },
+    ],
+    sizes: ['250g', '500g', '1000g'],
+    benefits: [
+      'High-protein (~25g/100g)',
+      'No hydrogenated oils',
+      'Rich in Vitamin E, Magnesium & Potassium',
+    ],
+    marks: ['nutrition-forward'],
+    /* Long-form ingredients-and-benefits block for the product page. Only
+       this SKU has one so far; the section renders when it is present. */
+    spotlight: {
+      eyebrow: 'Ingredients and benefits',
+      title: 'Goodness in Every Spoon.',
+      intro:
+        'Made with simple, real ingredients, our Natural Peanut Butter is packed with plant-based protein, healthy fats and essential nutrients. Nothing more, nothing less.',
+      image: '/images/products/peanut-butter-spoon.webp',
+      imageAlt:
+        'An open jar of Tatvyra natural peanut butter photographed from above on a stone slab, ringed with whole and shelled peanuts.',
+      benefits: [
+        { icon: 'protein', title: 'High Protein', body: '~25g per 100g' },
+        {
+          icon: 'nothing-added',
+          title: 'No Hydrogenated Oils',
+          body: 'Just pure, honest nutrition.',
+        },
+        {
+          icon: 'micronutrients',
+          title: 'Rich in Vitamin E, Magnesium & Potassium',
+          body: 'Supports energy, heart health and overall well-being.',
+        },
+      ],
+    },
+    campaign: {
+      eyebrow: 'In use',
+      title: 'Make It Your Way',
+      body:
+        'Spooned over apple, spread across toast, or taken straight from the jar. The same creamy mill either way: nothing hydrogenated, nothing added.',
+      image: '/images/products/peanut-butter-triptych-1400.webp',
+      imageAlt:
+        'Three panels for Tatvyra Natural Peanut Butter Creamy: poured from a spoon over a bowl of apple slices on the jar, the open jar beside its lid and apple-topped toast, and the jar mid-air among peanuts, apple peel and a swirl of peanut butter.',
+    },
+    /* Answers are held to what this catalogue states about the SKU — no
+       storage, shelf-life or sourcing claims it does not make. */
+    faq: [
+      {
+        q: 'What is actually in it?',
+        a: 'Peanuts, milled creamy. No hydrogenated oils and no preservatives, the same standard held across every product.',
+      },
+      {
+        q: 'Why has the oil risen to the top?',
+        a: 'Because there is nothing in it to stop that happening. With no hydrogenated oils or stabilisers, a natural nut butter separates as it stands. Stir it back through and it returns to a creamy spread.',
+      },
+      {
+        q: 'How much protein does it have?',
+        a: 'Roughly 25g per 100g, alongside Vitamin E, Magnesium and Potassium.',
+      },
+      {
+        q: 'What sizes does it come in?',
+        a: 'Three jar sizes: 250g, 500g and 1000g.',
+      },
+      {
+        q: 'Is every jar size the same price?',
+        a: 'No. Each size is priced on its own, and the price updates when you change size. The 1000g jar works out cheapest per gram.',
+      },
+    ],
+    price: 140,
+    prices: { '250g': 140, '500g': 300, '1000g': 506 },
+    featured: true,
+  },
+  {
+    sku: 'TAT-NB02',
+    slug: 'chocolate-peanut-butter',
+    name: 'Chocolate Peanut Butter Crunchy',
+    category: 'nut-butters',
+    format: 'Spread',
+    image: '/images/products/packs/chocolate-peanut-butter-1.webp',
+    images: [
+      {
+        src: '/images/products/packs/chocolate-peanut-butter-1.webp',
+        alt: 'A jar of Tatvyra Chocolate Peanut Butter Crunchy on a green checked cloth, with chocolate toast and a bowl of oats.',
+      },
+      {
+        src: '/images/products/packs/chocolate-peanut-butter-2.webp',
+        alt: 'A spoon lifting chocolate peanut butter from an open jar of Tatvyra Chocolate Peanut Butter Crunchy, its lid beside it.',
+      },
+      {
+        src: '/images/products/packs/chocolate-peanut-butter-3.webp',
+        alt: 'Hands spreading Tatvyra Chocolate Peanut Butter Crunchy on toast topped with banana slices, the jar beside the plate.',
+      },
+      {
+        src: '/images/products/packs/chocolate-peanut-butter-4.webp',
+        alt: 'A spoonful of Tatvyra Chocolate Peanut Butter Crunchy ribboning back into the open jar.',
+      },
+      {
+        src: '/images/products/packs/chocolate-peanut-butter-nutrition.webp',
+        alt: 'The label of Tatvyra Chocolate Peanut Butter Crunchy showing nutrition information per 100g and per serve, ingredients (roasted peanuts 100%) and allergens (peanuts, soy).',
+      },
+    ],
+    spotlight: {
+      eyebrow: 'Ingredients and benefits',
+      title: 'The Best of Both Worlds.',
+      intro:
+        'Creamy, chocolatey, and packed with goodness. Our Chocolate Peanut Butter Crunchy is made with roasted peanuts, rich cocoa and natural crunch, for a deliciously satisfying, nutrient-packed spread.',
+      image: '/images/products/chocolate-peanut-butter-spoon.webp',
+      imageAlt:
+        'A glass bowl of Tatvyra chocolate crunchy peanut butter photographed from above, with chocolate chunks, loose peanuts, a bowl of crunch and a loaded spoon around it.',
+      benefits: [
+        { icon: 'protein', title: 'High Protein', body: '~25g per 100g' },
+        {
+          icon: 'nothing-added',
+          title: 'No Hydrogenated Oils',
+          body: 'Just pure, honest nutrition.',
+        },
+        {
+          icon: 'micronutrients',
+          title: 'Rich in Vitamin E, Magnesium & Potassium',
+          body: 'Supports energy, heart health and overall well-being.',
+        },
+      ],
+    },
+    descriptor: 'Cocoa and peanuts, with a satisfying crunch.',
+    // The supplied product description, verbatim. The product page sets it in
+    // place of the descriptor; cards and page metadata keep the short line.
+    description:
+      'An indulgent blend of roasted peanuts and rich chocolate, finished with a satisfying crunch. This spread brings together nutty depth and cocoa sweetness in one jar, perfect for spreading on toast, pairing with fruit, or enjoying as a treat on its own.',
+    sizes: ['250g', '500g', '1000g'],
+    benefits: [
+      'Protein-rich indulgence',
+      'Cocoa Antioxidant flavonoids',
+      'Gluten free',
+    ],
+    marks: ['gluten-free', 'nutrition-forward'],
+    price: 166,
+    prices: { '250g': 166, '500g': 334, '1000g': 610 },
+  },
+  {
+    /* The creamy jar on its own. Its label prints TAT-NB01, which is already
+       the natural creamy SKU, so this carries the next free code until
+       Tatvyra confirms one. Benefits and prices follow TAT-NB02, the same
+       spread; no crunchy photography is shown here. */
+    sku: 'TAT-NB03',
+    slug: 'chocolate-peanut-butter-creamy',
+    name: 'Chocolate Peanut Butter Creamy',
+    category: 'nut-butters',
+    format: 'Spread',
+    image: '/images/products/packs/chocolate-peanut-butter-creamy-1.webp',
+    images: [
+      {
+        src: '/images/products/packs/chocolate-peanut-butter-creamy-1.webp',
+        alt: 'A jar of Tatvyra Chocolate Peanut Butter Creamy on a green checked cloth, with chocolate toast and a bowl of oats.',
+      },
+      {
+        src: '/images/products/packs/chocolate-peanut-butter-creamy-2.webp',
+        alt: 'A spoon lifting chocolate peanut butter from an open jar of Tatvyra Chocolate Peanut Butter Creamy, its lid beside it.',
+      },
+      {
+        src: '/images/products/packs/chocolate-peanut-butter-creamy-3.webp',
+        alt: 'Hands spreading Tatvyra Chocolate Peanut Butter Creamy on toast topped with banana slices, the jar beside the plate.',
+      },
+      {
+        src: '/images/products/packs/chocolate-peanut-butter-creamy-4.webp',
+        alt: 'A spoonful of Tatvyra Chocolate Peanut Butter Creamy ribboning back into the open jar.',
+      },
+      {
+        src: '/images/products/packs/chocolate-peanut-butter-creamy-nutrition.webp',
+        alt: 'The label of Tatvyra Chocolate Peanut Butter Creamy showing nutrition information per 100g and per serve, ingredients (roasted peanuts 100%) and allergens (peanuts, soy).',
+      },
+    ],
+    spotlight: {
+      eyebrow: 'Ingredients and benefits',
+      title: 'The Best of Both Worlds.',
+      intro:
+        'Creamy, chocolatey, and packed with goodness. Our Chocolate Peanut Butter Creamy is made with roasted peanuts, rich cocoa and natural ingredients, for a deliciously satisfying, nutrient-packed spread.',
+      image: '/images/products/chocolate-peanut-butter-creamy-spoon.webp',
+      imageWidth: 900,
+      imageHeight: 714,
+      imageAlt:
+        'A glass jar of Tatvyra creamy chocolate peanut butter photographed from above on a stone board, swirled smooth, with dark chocolate pieces, a bowl of cocoa powder and a loaded spoon around it.',
+      benefits: [
+        { icon: 'protein', title: 'High Protein', body: '~25g per 100g' },
+        {
+          icon: 'nothing-added',
+          title: 'No Hydrogenated Oils',
+          body: 'Just pure, honest nutrition.',
+        },
+        {
+          icon: 'micronutrients',
+          title: 'Rich in Vitamin E, Magnesium & Potassium',
+          body: 'Supports energy, heart health and overall well-being.',
+        },
+      ],
+    },
+    descriptor: 'Cocoa and peanuts, milled smooth.',
+    description:
+      'An indulgent blend of roasted peanuts and rich chocolate, milled smooth and creamy. This spread brings together nutty depth and cocoa sweetness in one jar, perfect for spreading on toast, pairing with fruit, or enjoying as a treat on its own.',
+    sizes: ['250g', '500g', '1000g'],
+    benefits: [
+      'Protein-rich indulgence',
+      'Cocoa Antioxidant flavonoids',
+      'Gluten free',
+    ],
+    marks: ['gluten-free', 'nutrition-forward'],
+    price: 166,
+    prices: { '250g': 166, '500g': 334, '1000g': 610 },
   },
 
   // 04 — RAW HONEY
@@ -1018,24 +925,40 @@ export const PRODUCTS = [
     name: 'Wild Forest Honey',
     category: 'raw-honey',
     format: 'Raw honey',
-    image: '/images/products/wild-forest-honey.webp',
+    image: '/images/products/packs/wild-forest-honey-1.webp',
     images: [
       {
-        src: '/images/products/wild-forest-honey.webp',
-        alt: 'A jar of Tatvyra wild forest honey with a honeycomb dipper lifted above it, moss and heather alongside.',
+        src: '/images/products/packs/wild-forest-honey-1.webp',
+        alt: 'A jar of Tatvyra Wild Forest Honey beside a cup of tea and a bowl of fruit, on honeycomb tiles.',
+      },
+      {
+        src: '/images/products/packs/wild-forest-honey-2.webp',
+        alt: 'A wooden dipper drizzling honey into an open jar of Tatvyra Wild Forest Honey, its lid beside it.',
+      },
+      {
+        src: '/images/products/packs/wild-forest-honey-3.webp',
+        alt: 'A honey dipper held over an open jar of Tatvyra Wild Forest Honey, with tea and fruit behind.',
+      },
+      {
+        src: '/images/products/packs/wild-forest-honey-4.webp',
+        alt: 'Honey drizzled over a fruit and yoghurt bowl, a jar of Tatvyra Wild Forest Honey beside it.',
+      },
+      {
+        src: '/images/products/packs/wild-forest-honey-5.webp',
+        alt: 'Honey running from a dipper into an open jar of Tatvyra Wild Forest Honey.',
       },
     ],
     descriptor: 'Dark, dense forest florals.',
     sizes: ['250g', '500g'],
-    marks: ['clean-label', 'single-origin'],
-    price: 385,
-    prices: { '250g': 385, '500g': 649 },
+    marks: ['single-origin'],
+    price: 350,
+    prices: { '250g': 350, '500g': 590 },
     featured: true,
     /* The "Origin & process" band on the product page (ProductOrigin). Copy is
        taken verbatim from the supplied layout reference, benefit lines
        included. The illustrated map, the four photographs and the honey drip
-       are cut from that same reference; the map's labels, "INDIA" and the
-       tagline are set live by the page instead.
+       are cut from that same reference; the map’s labels and "INDIA" are set
+       live by the page instead.
 
        Positions are in hundredths of the illustration's width (the reference's
        1044px right-hand panel), so everything scales together:
@@ -1055,8 +978,6 @@ export const PRODUCTS = [
         { icon: 'respiratory', body: 'Traditionally used to relieve cough and cold symptoms' },
         { icon: 'liver', body: 'May support liver detoxification' },
       ],
-      tagline: ['Pure honey.', 'Wild origins.', 'Real goodness.'],
-      signoff: 'Nature’s finest. From our forests to you.',
       // The painted map of India (IndiaMapArt), seen through `view` — x, y and
       // width in the outline's units; the height follows the stage. Painted
       // forest stands where India's forests are: central India, the hills of
@@ -1128,22 +1049,38 @@ export const PRODUCTS = [
     name: 'Multifloral Honey',
     category: 'raw-honey',
     format: 'Raw honey',
-    image: '/images/products/multifloral-honey.webp',
+    image: '/images/products/packs/multifloral-honey-1.webp',
     images: [
       {
-        src: '/images/products/multifloral-honey.webp',
-        alt: 'A jar of Tatvyra multifloral honey with a honeycomb dipper above it, chamomile flowers and honeycomb alongside.',
+        src: '/images/products/packs/multifloral-honey-1.webp',
+        alt: 'A jar of Tatvyra Multifloral Honey beside a cup of tea and a bowl of fruit, on honeycomb tiles.',
+      },
+      {
+        src: '/images/products/packs/multifloral-honey-2.webp',
+        alt: 'A wooden dipper drizzling honey into an open jar of Tatvyra Multifloral Honey.',
+      },
+      {
+        src: '/images/products/packs/multifloral-honey-3.webp',
+        alt: 'A honey dipper held over an open jar of Tatvyra Multifloral Honey, its lid beside it.',
+      },
+      {
+        src: '/images/products/packs/multifloral-honey-4.webp',
+        alt: 'Honey drizzled over a bowl of yoghurt, granola and berries, a jar of Tatvyra Multifloral Honey beside it.',
+      },
+      {
+        src: '/images/products/packs/multifloral-honey-5.webp',
+        alt: 'Honey running from a dipper into an open jar of Tatvyra Multifloral Honey.',
       },
     ],
     descriptor: 'A balanced blend across many flowers.',
     sizes: ['250g', '500g'],
-    marks: ['clean-label', 'single-origin'],
+    marks: ['single-origin'],
     // Not on the supplied price sheet. The figure below is derived from it —
     // the client's own size step and price level, keeping this product's
     // position against its priced sibling — and priceTbc still says so.
     priceTbc: true,
-    price: 342,
-    prices: { '250g': 342, '500g': 577 },
+    price: 311,
+    prices: { '250g': 311, '500g': 525 },
     /* The "Origin & process" map on the product page (ProductOriginMap). Copy
        is verbatim from the supplied layout reference, benefit lines included.
        The four photographs are cut from that reference; the map itself is
@@ -1217,7 +1154,6 @@ export const PRODUCTS = [
           align: 'end',
         },
       ],
-      tagline: ['Pure honey.', 'Wild origins.', 'Real goodness.'],
       about: {
         title: 'Multifloral honey',
         body: 'Blend of nectar from multiple flower sources. Balanced flavour and nutrient profile.',
@@ -1237,162 +1173,47 @@ export const PRODUCTS = [
     },
   },
   {
-    sku: 'TAT-HN03',
-    slug: 'himalayan-honey',
-    name: 'Himalayan Honey',
-    category: 'raw-honey',
-    format: 'Raw honey',
-    image: '/images/products/himalayan-honey.webp',
-    images: [
-      {
-        src: '/images/products/himalayan-honey.webp',
-        alt: 'A jar of Tatvyra Himalayan honey with its gold lid off, honey drizzling in, pink rhododendron flowers and river stones alongside.',
-      },
-    ],
-    descriptor: 'High-altitude harvest, thicker in the jar.',
-    sizes: ['250g', '500g'],
-    marks: ['clean-label', 'single-origin'],
-    // Not on the supplied price sheet. The figure below is derived from it —
-    // the client's own size step and price level, keeping this product's
-    // position against its priced sibling — and priceTbc still says so.
-    priceTbc: true,
-    price: 514,
-    prices: { '250g': 514, '500g': 866 },
-    // The illustrated benefit map. The drawing is the brand's infographic with
-    // its lettering lifted out; the words below are set live over it. `at` is
-    // where a label's first capital sits: left edge and top, as percentages of
-    // the drawing's width and height. `lines` keeps the drawing's line breaks.
-    //
-    // `hotspot` makes a benefit explorable on the drawing, measured in the
-    // drawing's own pixels (1605 × 980). `drop` is its honey drop and `ring`
-    // its icon, each [cx, cy, r]. `route` is traced over the drawn line in the
-    // order the story runs: from where the line starts on the map (`source`,
-    // where that is out on the paper), through the honey, to the icon. `card`
-    // pins a corner of the benefit's card — 't'/'b' then 'l'/'r' — to a point
-    // clear of its route, for wide screens. `title` and `detail` fill the card.
-    // `drops` are the other drops along the range, which only breathe in.
-    benefitMap: {
-      title: 'Himalayan Honey',
-      notes: [
-        ['Harvested from high-altitude', 'regions'],
-        ['Thicker consistency,', 'mineral-dense'],
-      ],
-      image: {
-        src: '/images/products/himalayan-honey-map/map.webp',
-        width: 1605,
-        height: 980,
-        alt: 'A hand-drawn map of the Himalaya on torn paper, drops of honey set along the range, a line running from each drop to one of the benefits.',
-      },
-      benefits: [
-        {
-          icon: '/images/products/himalayan-honey-map/respiratory.webp',
-          lines: ['Supports respiratory', 'health and eases', 'breathing issues'],
-          at: [66.48, 12.76],
-          title: 'Respiratory support',
-          detail: 'Long taken warm for the throat and chest.',
-          hotspot: {
-            drop: [899, 277.5, 37.5],
-            ring: [994, 159.5, 52.5],
-            source: [736, 411],
-            route:
-              'M736 411C739.1 408 749 399.5 754.9 393.2C760.7 386.8 765.9 379.8 771.1 372.9C776.3 366 781.2 358.8 786.1 351.7C791.1 344.6 795.9 337.4 800.9 330.3C806 323.3 811 316.2 816.4 309.4C821.7 302.6 825.9 296 833.1 289.5C840.3 283 851.6 278.2 859.5 270.4C867.4 262.5 875.7 251.1 880.5 242.4C885.3 233.7 884.2 225.2 888.5 217.9C892.7 210.7 899.2 204 906 198.9C912.7 193.8 922.4 189.7 929.1 187.2C935.7 184.7 943.2 184.5 946 184',
-            card: [778, 352, 'br'],
-          },
-        },
-        {
-          icon: '/images/products/himalayan-honey-map/minerals.webp',
-          lines: ['Rich in trace minerals', 'that support bone and', 'metabolic health'],
-          at: [80.12, 29.49],
-          title: 'Trace minerals',
-          detail: 'From high-altitude flora, denser in minerals.',
-          hotspot: {
-            drop: [948, 429.5, 34],
-            ring: [1211, 320.5, 53],
-            source: [977, 492],
-            route:
-              'M977 492C978.3 487.9 981.6 475.2 984.8 467.2C988 459.2 991.9 451.4 996.2 443.9C1000.5 436.4 1005.4 429.1 1010.7 422.3C1016 415.5 1022 409.1 1028.2 403.2C1034.5 397.2 1041.3 391.7 1048.3 386.6C1055.3 381.6 1062.6 376.9 1070.2 372.6C1077.7 368.4 1085.5 364.5 1093.5 361.2C1101.4 357.8 1109.7 354.9 1118 352.4C1126.3 350 1135.9 348.1 1143.3 346.6C1150.7 345.1 1159.2 344.1 1162.4 343.6',
-            card: [984, 510, 'tl'],
-          },
-        },
-        {
-          icon: '/images/products/himalayan-honey-map/heart.webp',
-          lines: ['Traditionally used', 'to support', 'heart health'],
-          at: [84.74, 64.69],
-          title: 'Heart health',
-          detail: 'A daily spoonful in the Ayurvedic tradition.',
-          hotspot: {
-            drop: [1266, 551, 37],
-            ring: [1291, 668.5, 52],
-            source: [1216, 473],
-            route:
-              'M1216 473C1217.7 476.2 1223.2 487.2 1226.2 492.3C1229.1 497.5 1231.3 499.7 1233.9 504C1236.4 508.3 1236.8 510 1241.5 518C1246.2 526 1255.4 540.8 1262 552C1268.6 563.2 1277.5 577.5 1281.2 584.9C1284.8 592.3 1283 592.7 1283.9 596.6C1284.8 600.5 1285.9 604.9 1286.7 608.3C1287.5 611.7 1288.6 615.5 1289 617',
-            card: [1216, 532, 'tr'],
-          },
-        },
-        {
-          icon: '/images/products/himalayan-honey-map/stamina.webp',
-          lines: ['Helps improve stamina', 'and reduce fatigue'],
-          at: [48.1, 76.43],
-          title: 'Stamina',
-          detail: 'A spoonful before a long day or a mountain walk.',
-          hotspot: {
-            drop: [917, 544, 37.5],
-            ring: [698.5, 768, 53],
-            route:
-              'M917 544C908.3 548.8 874.9 564.1 864.6 573C854.3 581.8 858.7 589.3 855.4 597.3C852.1 605.3 848.7 613.3 844.7 621C840.8 628.7 836.3 636.1 831.5 643.3C826.7 650.5 821.5 657.5 816 664.2C810.5 670.9 804.7 677.4 798.5 683.4C792.4 689.5 785.8 695.3 779 700.5C772.1 705.8 762.8 711.5 757.3 714.9C751.8 718.3 747.9 720 746 721',
-            card: [970, 530, 'tl'],
-          },
-        },
-        {
-          icon: '/images/products/himalayan-honey-map/energy.webp',
-          lines: ['Provides sustained,', 'slow-release energy'],
-          at: [14.77, 73.37],
-          title: 'Sustained energy',
-          detail: 'Thick and raw, for energy that lasts.',
-          hotspot: {
-            drop: [393, 627.5, 49],
-            ring: [164.5, 728.5, 52.5],
-            route:
-              'M535 457C530.7 457.3 517.7 457.2 509.4 459C501.1 460.9 492.9 464.5 485 468C477.1 471.5 469.4 475.6 462 480.1C454.6 484.5 447.5 489.6 440.7 495C434 500.4 427.6 506.4 421.7 512.7C415.8 519 410.2 525.7 405.3 532.8C400.4 539.9 395.8 547.7 392.3 555.3C388.8 562.9 387.6 567.7 384.3 578.5C380.9 589.2 376.8 606.5 372 620C367.2 633.5 361.4 650.1 355.4 659.6C349.4 669.1 343.1 671.9 336.1 676.9C329.1 681.9 321.4 686.2 313.5 689.7C305.7 693.3 297.3 696 288.9 698.1C280.6 700.2 272 701.6 263.3 702.4C254.7 703.2 241.4 702.9 237 703',
-            card: [330, 604, 'br'],
-          },
-        },
-      ],
-      drops: [
-        [562.5, 454, 27],
-        [645.5, 474.5, 20],
-        [677.5, 400, 35],
-        [702, 509.5, 19.5],
-        [764.5, 531.5, 21.5],
-      ],
-    },
-  },
-  {
     sku: 'TAT-HN04',
     slug: 'kashmiri-white-acacia-honey',
     name: 'Kashmiri White Acacia Honey',
     category: 'raw-honey',
     format: 'Raw honey',
-    image: '/images/products/kashmiri-white-acacia-honey.webp',
+    image: '/images/products/packs/kashmiri-white-acacia-honey-1.webp',
     images: [
       {
-        src: '/images/products/kashmiri-white-acacia-honey.webp',
-        alt: 'A jar of Tatvyra Kashmiri white acacia honey with a honeycomb dipper above it and white blossom alongside.',
+        src: '/images/products/packs/kashmiri-white-acacia-honey-1.webp',
+        alt: 'A jar of Tatvyra Kashmiri White Acacia Honey beside a cup of tea and a bowl of fruit, on honeycomb tiles.',
       },
       {
-        src: '/images/products/kashmiri-white-acacia-honey-nutrition.webp',
-        alt: 'The label’s nutritional analysis of acacia honey per 100g: 328.80Kcal energy, no fat, 0.12gm protein, 0.10gm dietary fibre, 82.08gm carbohydrate, 81.98gm sugar, 48mg sodium, 745mg calcium, 0.0 IU vitamin A, 1.10mg iron and no cholesterol.',
+        src: '/images/products/packs/kashmiri-white-acacia-honey-2.webp',
+        alt: 'A wooden dipper drizzling honey into an open jar of Tatvyra Kashmiri White Acacia Honey, its lid beside it.',
+      },
+      {
+        src: '/images/products/packs/kashmiri-white-acacia-honey-3.webp',
+        alt: 'A honey dipper held over an open jar of Tatvyra Kashmiri White Acacia Honey, with tea and fruit behind.',
+      },
+      {
+        src: '/images/products/packs/kashmiri-white-acacia-honey-4.webp',
+        alt: 'Honey drizzled over a smoothie bowl of berries and banana, a jar of Tatvyra Kashmiri White Acacia Honey beside it.',
+      },
+      {
+        src: '/images/products/packs/kashmiri-white-acacia-honey-5.webp',
+        alt: 'Honey running from a dipper into an open jar of Tatvyra Kashmiri White Acacia Honey.',
+      },
+      {
+        src: '/images/products/packs/kashmiri-white-acacia-honey-nutrition.webp',
+        alt: 'The label of Tatvyra Kashmiri White Acacia Honey showing nutrition facts per 1 tbsp (21g) serving, ingredients (raw honey) and allergen (pollen).',
       },
     ],
     descriptor: 'Pale, delicate, slow to set.',
     sizes: ['250g', '500g'],
-    marks: ['clean-label', 'single-origin'],
+    marks: ['single-origin'],
     // Not on the supplied price sheet. The figure below is derived from it —
     // the client's own size step and price level, keeping this product's
     // position against its priced sibling — and priceTbc still says so.
     priceTbc: true,
-    price: 599,
-    prices: { '250g': 599, '500g': 1010 },
+    price: 545,
+    prices: { '250g': 545, '500g': 918 },
     // "Origin & process" (ProductOriginTrail). Copy is the brand's layout
     // reference, verbatim. The map is India's official outline, and every
     // position is in its units (see src/lib/indiaMap.js): the source pin from
@@ -1405,7 +1226,6 @@ export const PRODUCTS = [
       accent: ['White Acacia', 'Blossoms'],
       intro:
         'Our Kashmiri White Acacia Honey is sourced from the pristine valleys of Kashmir, where White Acacia trees bloom in untouched landscapes, producing a light-coloured honey with a naturally delicate floral taste.',
-      tagline: 'Pure honey. Wild origins. Real goodness.',
       hint: 'Hover over the map to explore',
       mapLabel: 'Map of India: every point leads back to Kashmir, where this honey comes from',
       drip: '/images/products/wild-forest-honey-origin/drip.webp',
@@ -1459,7 +1279,6 @@ export const PRODUCTS = [
             title: 'Benefits:',
             items: [
               'Gentle on the stomach, ideal for sensitive digestion',
-              'Helps regulate blood sugar due to low glycaemic impact',
               'Soothes acidity and supports gut lining health',
               'Natural sweetener alternative for tea, milk, and desserts',
               'May help improve sleep quality when taken before bed',
@@ -1499,36 +1318,16 @@ export function benefitsFor(product) {
 export const getProduct = (slug) => PRODUCTS.find((p) => p.slug === slug)
 
 /**
- * The MRP the pack lists at: the figure from Tatvyra's price sheet, or the
- * placeholder standing in for one. Shown struck through, never charged.
+ * The unit price of a product in a given size, in rupees: the pack's MRP from
+ * the price sheet, GST included.
  *
  * Single-size products carry only `price`; multi-size products carry a
- * `prices` entry per size.
+ * `prices` entry per size. Every surface — cards, product page, cart,
+ * checkout — prices through this, which is what keeps one product and size
+ * from being charged two ways. Returns null rather than NaN when a price is
+ * missing.
  */
-export const mrpFor = (product, size) => product?.prices?.[size] ?? product?.price ?? null
-
-/**
- * What the pack costs today. The sheet's MRPs carry a 10% increase, and the
- * store gives that 10% straight back, so every price is shown as a pair — the
- * MRP struck through and this beside it.
- */
-export const STORE_DISCOUNT = 0.1
-
-/**
- * The unit price of a product in a given size, in rupees — MRPs carry paise
- * and a tenth off makes more of them, so this is rarely a whole number.
- *
- * Every surface — cards, product page, cart, checkout — prices through this,
- * which is what keeps one product and size from being charged two ways, and
- * what keeps the discount from being shown but not given. Returns null rather
- * than NaN when a price is missing.
- */
-export const priceFor = (product, size) => {
-  const mrp = mrpFor(product, size)
-  if (mrp === null) return null
-  // To the paise, so a cart of three never lands on ₹415.79999999999995.
-  return Math.round(mrp * (1 - STORE_DISCOUNT) * 100) / 100
-}
+export const priceFor = (product, size) => product?.prices?.[size] ?? product?.price ?? null
 
 export const productsByCategory = (slug) => PRODUCTS.filter((p) => p.category === slug)
 

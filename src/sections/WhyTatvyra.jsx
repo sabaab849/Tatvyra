@@ -12,8 +12,8 @@ export default function WhyTatvyra() {
         <SectionHeading
           id="why-title"
           eyebrow="Why Tatvyra"
-          title="Four things we hold ourselves to."
-          size="l"
+          title="Four Things We Hold Ourselves To."
+          size="m"
         />
 
         <ol className="why__list">

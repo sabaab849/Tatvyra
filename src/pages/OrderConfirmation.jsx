@@ -12,7 +12,7 @@ export default function OrderConfirmation() {
   const order = useMemo(() => getOrder(reference), [reference])
 
   usePageMeta({
-    title: order ? `Order ${order.reference} — Tatvyra` : 'Order — Tatvyra',
+    title: order ? `Order ${order.reference} | Tatvyra` : 'Order | Tatvyra',
     description: 'Your Tatvyra order confirmation.',
   })
 
@@ -22,7 +22,7 @@ export default function OrderConfirmation() {
         <header className="page-head">
           <div className="shell">
             <p className="eyebrow">Order</p>
-            <h1 className="display display--l">We cannot find that order.</h1>
+            <h1 className="display display--l">We Cannot Find That Order.</h1>
             <p className="lede page-head__lede">
               Orders are kept in this browser only, so the reference will not open on another
               device. If you have just paid and landed here, email{' '}
@@ -71,10 +71,16 @@ export default function OrderConfirmation() {
               <dt>Paid by</dt>
               <dd>{order.paymentMethod}</dd>
             </div>
+            {order.paymentId && (
+              <div>
+                <dt>Payment ID</dt>
+                <dd>{order.paymentId}</dd>
+              </div>
+            )}
           </dl>
 
           <section className="confirm__block">
-            <h2 className="checkout__subtitle">Delivering to</h2>
+            <h2 className="checkout__subtitle">Delivering To</h2>
             <p className="checkout__recap-body">
               {order.delivery_to.name}
               <br />
@@ -88,12 +94,11 @@ export default function OrderConfirmation() {
           </section>
 
           <section className="confirm__block">
-            <h2 className="checkout__subtitle">What happens next</h2>
-            {/* No fulfilment system is connected, so this says what is actually
-                true rather than promising a dispatch email that nothing sends. */}
+            <h2 className="checkout__subtitle">What Happens Next</h2>
+            {/* The order reaches the team through the Razorpay order notes; no
+                email system is connected, so nothing here promises one. */}
             <p className="confirm__note">
-              This store is a prototype: the payment step is a demonstration and no live provider is
-              connected yet, so nothing has been charged and no dispatch is scheduled. Quote{' '}
+              The team will pack and dispatch your order. Quote{' '}
               <strong>{order.reference}</strong> if you get in touch at{' '}
               <a href={`mailto:${BRAND.contact.emails[0]}`}>{BRAND.contact.emails[0]}</a>.
             </p>
@@ -111,7 +116,7 @@ export default function OrderConfirmation() {
             subtotal={order.subtotal}
             delivery={order.delivery}
             total={order.total}
-            title="What you ordered"
+            title="What You Ordered"
           />
         </div>
       </div>

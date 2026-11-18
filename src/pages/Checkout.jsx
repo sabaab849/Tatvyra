@@ -23,12 +23,12 @@ const EMPTY = { name: '', email: '', phone: '', address: '', address2: '', city:
 
 export default function Checkout() {
   const navigate = useNavigate()
-  const { items, subtotal, delivery, total } = useCart()
+  const { items, subtotal, total } = useCart()
   const [values, setValues] = useState(() => ({ ...EMPTY, ...(getDraft() ?? {}) }))
   const [errors, setErrors] = useState({})
 
   usePageMeta({
-    title: 'Checkout — Tatvyra',
+    title: 'Checkout | Tatvyra',
     description: 'Delivery details for your Tatvyra order.',
   })
 
@@ -61,12 +61,12 @@ export default function Checkout() {
         <header className="page-head">
           <div className="shell">
             <p className="eyebrow">Checkout</p>
-            <h1 className="display display--l">Your cart is empty.</h1>
+            <h1 className="display display--l">Your Cart Is Empty.</h1>
             <p className="lede page-head__lede">
-              There is nothing to check out yet. Have a look at the range and add something first.
+              There is nothing to check out yet. Have a look at our products and add something first.
             </p>
             <p className="checkout__empty-action">
-              <Button to="/shop" variant="primary">Browse the range</Button>
+              <Button to="/shop" variant="primary">Browse our products</Button>
             </p>
           </div>
         </header>
@@ -101,14 +101,14 @@ export default function Checkout() {
       <header className="page-head checkout__head">
         <div className="shell">
           <p className="eyebrow">Checkout</p>
-          <h1 className="display display--l">Where is it going?</h1>
+          <h1 className="display display--l">Where Is It Going?</h1>
           <CheckoutSteps current="details" />
         </div>
       </header>
 
       <div className="shell checkout__body">
         <form className="checkout__form" onSubmit={onSubmit} noValidate>
-          <h2 className="checkout__subtitle">Delivery details</h2>
+          <h2 className="checkout__subtitle">Delivery Details</h2>
 
           {field('name', 'Full name', { autoComplete: 'name' })}
           <div className="checkout__row">
@@ -133,7 +133,6 @@ export default function Checkout() {
           <OrderSummary
             lines={toOrderLines(items)}
             subtotal={subtotal}
-            delivery={delivery}
             total={total}
           />
         </div>

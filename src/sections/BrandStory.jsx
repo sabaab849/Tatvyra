@@ -13,28 +13,28 @@ import useMedia from '../lib/useMedia'
    range; names come from the catalogue too. */
 const RANGES = [
   {
-    slug: 'raw-honey',
-    tone: 'var(--tatvyra-orange)',
-    lines: ['Single origin.', 'Four natural harvests.'],
-    alt: 'Raw honey drizzling from a wooden dipper into a glass bowl of honey.',
-  },
-  {
-    slug: 'spirulina',
-    tone: 'var(--tatvyra-purple)',
-    lines: ['Plant-based.', 'Powder, tablet, capsule.'],
-    alt: 'A cone of deep green spirulina powder heaped on a wooden spoon, loose powder scattered around it.',
-  },
-  {
     slug: 'moringa',
     tone: 'var(--tatvyra-lilac)',
     lines: ['Nutrient-rich.', 'A traditional superfood.'],
     alt: 'Bright green moringa leaf powder filling a terracotta bowl, a small wooden scoop lying in it.',
   },
   {
+    slug: 'spirulina',
+    tone: 'var(--tatvyra-purple)',
+    lines: ['Plant-based.', 'Powder and capsule.'],
+    alt: 'A cone of deep green spirulina powder heaped on a wooden spoon, loose powder scattered around it.',
+  },
+  {
     slug: 'nut-butters',
     tone: 'var(--tatvyra-peach)',
-    lines: ['Peanut, almond, cashew.', 'Nothing hydrogenated.'],
+    lines: ['Creamy or crunchy.', 'Nothing hydrogenated.'],
     alt: 'Creamy cashew butter swirled in a glass bowl, a spoonful and whole cashews beside it.',
+  },
+  {
+    slug: 'raw-honey',
+    tone: 'var(--tatvyra-orange)',
+    lines: ['Single origin.', 'Four natural harvests.'],
+    alt: 'Raw honey drizzling from a wooden dipper into a glass bowl of honey.',
   },
 ].map((range) => ({
   ...range,
@@ -93,33 +93,69 @@ export default function BrandStory() {
     if (!pinned || !section || !sticky) return undefined
 
     let frame = 0
+    // The section's place on the page, its travel and the sticky offset are
+    // measured only when something changes size. Measuring them every frame,
+    // straight after the frame before had written --s, made the browser
+    // recalculate style and layout in the middle of each scrolled frame.
+    const geometry = { start: 0, travel: 1 }
+    const read = () => {
+      const top = parseFloat(getComputedStyle(sticky).top) || 0
+      geometry.travel = section.offsetHeight - sticky.offsetHeight
+      geometry.start = section.getBoundingClientRect().top + window.scrollY - top
+    }
+    const written = { s: '', progress: '' }
     const update = () => {
       frame = 0
-      const top = parseFloat(getComputedStyle(sticky).top) || 0
-      const travel = section.offsetHeight - sticky.offsetHeight
-      const progress = clamp((top - section.getBoundingClientRect().top) / travel, 0, 1)
+      const progress = clamp((window.scrollY - geometry.start) / geometry.travel, 0, 1)
       const s = magnet(progress * LAST)
-      section.style.setProperty('--s', s.toFixed(4))
-      section.style.setProperty('--progress', progress.toFixed(4))
+      // Nothing is written when nothing has moved. (--s holds still on each
+      // range's resting stretch while --progress, the cue, keeps going.)
+      const nextS = s.toFixed(4)
+      const nextProgress = progress.toFixed(4)
+      if (nextS !== written.s) {
+        written.s = nextS
+        section.style.setProperty('--s', nextS)
+      }
+      if (nextProgress !== written.progress) {
+        written.progress = nextProgress
+        section.style.setProperty('--progress', nextProgress)
+      }
       setActive(Math.round(s))
     }
     const onScroll = () => {
       if (!frame) frame = requestAnimationFrame(update)
     }
+    const onResize = () => {
+      read()
+      onScroll()
+    }
+    let listening = false
     const listen = (on) => {
+      if (on === listening) return
+      listening = on
       const method = on ? 'addEventListener' : 'removeEventListener'
       window[method]('scroll', onScroll, { passive: true })
-      window[method]('resize', onScroll)
+      window[method]('resize', onResize)
     }
 
+    read()
     update()
     const observer = new IntersectionObserver(([entry]) => {
       listen(entry.isIntersecting)
-      if (entry.isIntersecting) update()
+      if (entry.isIntersecting) {
+        read()
+        update()
+      }
     })
     observer.observe(section)
+    // Late images, fonts or a reflow above move the section without a resize
+    // event, so the page's own size is watched too.
+    const watcher = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(onResize)
+    watcher?.observe(section)
+    watcher?.observe(document.documentElement)
     return () => {
       observer.disconnect()
+      watcher?.disconnect()
       listen(false)
       cancelAnimationFrame(frame)
     }
@@ -178,15 +214,10 @@ export default function BrandStory() {
           <Reveal className="orbit__copy">
             <p className="orbit__eyebrow">The brand</p>
             <h2 id="orbit-title" className="orbit__title">
-              <span className="orbit__title-accent">Tatvyra,</span> <span>by Feynman</span>{' '}
+              <span className="orbit__title-accent">Tatvyra,</span> <span>By Feynman</span>{' '}
               <span>Foodcraft.</span>
             </h2>
             <p className="orbit__lede">{BRAND.promise}</p>
-            <p className="orbit__body">
-              Tatvyra started with a simple frustration: the foods that have been part of Indian
-              kitchens for generations — moringa, honey, ground nuts — kept turning up on shelves
-              padded with things nobody asked for. So we make them the plain way.
-            </p>
             <div className="orbit__sign">
               <p className="orbit__signoff">
                 <span>Real ingredients.</span> <span>Brighter days.</span>
@@ -263,7 +294,7 @@ export default function BrandStory() {
             <div
               className="orbit__tabs"
               role="tablist"
-              aria-label="The four Tatvyra ranges"
+              aria-label="Tatvyra products"
               aria-orientation="vertical"
               onKeyDown={onTabKey}
             >
@@ -311,7 +342,7 @@ export default function BrandStory() {
               <button
                 type="button"
                 className="orbit__arrow orbit__arrow--prev"
-                aria-label="Previous range"
+                aria-label="Previous product"
                 disabled={active === 0}
                 onClick={() => goTo(active - 1)}
               >
@@ -320,7 +351,7 @@ export default function BrandStory() {
               <button
                 type="button"
                 className="orbit__arrow"
-                aria-label="Next range"
+                aria-label="Next product"
                 disabled={active === LAST}
                 onClick={() => goTo(active + 1)}
               >

@@ -7,7 +7,7 @@ import FinalCTA from '../sections/FinalCTA'
 import AboutBrand from '../sections/AboutBrand'
 import AboutLeaders from '../sections/AboutLeaders'
 import AboutPhilosophy from '../sections/AboutPhilosophy'
-import { BRAND, MARKS } from '../data/brand'
+import { MARKS } from '../data/brand'
 import { CATEGORIES } from '../data/catalogue'
 import usePageMeta from '../lib/usePageMeta'
 
@@ -18,34 +18,34 @@ import usePageMeta from '../lib/usePageMeta'
  */
 const RANGE_PHOTOS = {
   'nut-butters': {
-    src: '/images/pillars/nut-butter.webp',
-    alt: 'An open jar of Tatvyra organic premium peanut butter, a spoon lifting a ribbon of it beside the jar.',
+    src: '/images/products/packs/natural-peanut-butter-creamy-2.webp',
+    alt: 'A spoon lifting creamy peanut butter from an open jar of Tatvyra Natural Peanut Butter Creamy.',
   },
   moringa: {
-    src: '/images/pillars/moringa.webp',
-    alt: 'An amber bottle of Tatvyra moringa tablets on a wooden board, fresh moringa leaves around it.',
+    src: '/images/products/packs/moringa-leaf-powder-1.webp',
+    alt: 'A pouch of Tatvyra Natural Moringa Powder on a table with nuts, a glass of water and fresh leaves.',
   },
   spirulina: {
-    src: '/images/pillars/spirulina.webp',
-    alt: 'An amber bottle of Tatvyra spirulina tablets on a wooden board beside a few loose tablets.',
+    src: '/images/products/packs/spirulina-powder-1.webp',
+    alt: 'A pouch of Tatvyra Natural Spirulina Powder on a table with nuts, a glass of water and fresh leaves.',
   },
   'raw-honey': {
-    src: '/images/pillars/honey.webp',
-    alt: 'An open jar of Tatvyra multifloral honey with honeycomb above it and chamomile flowers around it.',
+    src: '/images/products/packs/multifloral-honey-2.webp',
+    alt: 'A wooden dipper drizzling honey into an open jar of Tatvyra Multifloral Honey.',
   },
 }
 
 export default function About() {
   usePageMeta({
-    title: 'About — Tatvyra',
+    title: 'About | Tatvyra',
     description:
-      'Tatvyra is the clean-label wellness range from Feynman Foodcraft Pvt. Ltd. — nut butters, moringa, spirulina and single-origin raw honey.',
+      'Tatvyra is the wellness brand from Feynman Foodcraft Pvt. Ltd.: nut butters, moringa, spirulina and single-origin raw honey.',
   })
 
   return (
     <div className="about">
-      <AboutLeaders />
       <AboutBrand />
+      <AboutLeaders />
 
       {/* The approach shares the philosophy's ground, so the leaf mark and the
           wash run on behind it. */}
@@ -55,7 +55,7 @@ export default function About() {
             <Reveal className="about-intro__inner">
               <p className="about-eyebrow">Our approach</p>
               <h2 id="about-intro-title" className="about-intro__statement">
-                A simpler approach to better ingredients.
+                A Simpler Approach to Better Ingredients.
               </h2>
             </Reveal>
           </div>
@@ -67,21 +67,20 @@ export default function About() {
           <Reveal className="about-story__media">
             <img
               className="about-story__photo about-story__photo--main"
-              src="/images/products/range-nut-butters.webp"
-              alt="Jars of Tatvyra nut butter, peanut and cashew among them, with a spoon pouring peanut butter into a bowl beside toast and whole nuts."
-              width={800}
-              height={1000}
+              src="/images/about/story-peanut-butter-feast.webp"
+              alt="Jars of Tatvyra Chocolate Peanut Butter Crunchy, Chocolate Peanut Butter Creamy and Natural Peanut Butter Creamy on a green checked cloth, with chocolate pieces, peanuts, a spoon of peanut butter and chocolate peanut butter on toast."
+              width={946}
+              height={1183}
               loading="lazy"
               decoding="async"
             />
-            {/* The moringa range opens the page now, so the second photograph
-                here is the honey rather than the same shot twice. */}
+            {/* The honey inset sits over the corner of the jars photograph. */}
             <img
               className="about-story__photo about-story__photo--inset"
-              src="/images/categories/cat-wild-honey.webp"
-              alt="Honey running from a piece of honeycomb into an open jar of Tatvyra wild forest honey."
-              width={820}
-              height={1160}
+              src="/images/about/story-wild-forest-honey.webp"
+              alt="A jar of Tatvyra Wild Forest Honey on a honeycomb-patterned table, with a glass of tea and a bowl of fruit behind it."
+              width={880}
+              height={1100}
               loading="lazy"
               decoding="async"
             />
@@ -90,42 +89,22 @@ export default function About() {
           <Reveal className="about-story__copy" delay={110}>
             <p className="about-eyebrow">Our story</p>
             <h2 id="about-story-title" className="about-heading">
-              Made the plain way.
+              Thoughtfully Made, Naturally Good
             </h2>
             <p>
-              Tatvyra started with a simple frustration: the foods that have been part of Indian
-              kitchens for generations — moringa, honey, ground nuts — kept turning up on shelves
+              Tatvyra started with a simple observation: the foods that have been part of Indian
+              kitchens for generations (moringa, honey, ground nuts) kept turning up on shelves
               padded with things nobody asked for.
             </p>
             <p>
-              So the nut butters are milled from the nut, without hydrogenated oils, added sugar or
+              So the nut butters are milled from the nut, without hydrogenated oils or
               preservatives. Moringa leaf and spirulina go into powders, tablets, capsules and
-              gummies, so the format can change without the ingredient changing. And the four raw
-              honeys stay separate by origin, because a dense forest floral and a high-altitude
-              Himalayan harvest are genuinely different things.
+              gummies, so the format can change without the ingredient changing. And the three raw
+              honeys stay separate by origin, because a dense forest floral and a pale Kashmiri
+              acacia are genuinely different things.
             </p>
-            <dl className="about-story__facts">
-              <div>
-                <dt>Company</dt>
-                <dd>{BRAND.company}</dd>
-              </div>
-              <div>
-                <dt>Registered office</dt>
-                <dd>{BRAND.contact.address.at(-1)}</dd>
-              </div>
-              <div>
-                <dt>GST</dt>
-                <dd>{BRAND.gstin}</dd>
-              </div>
-              <div>
-                <dt>Write to us</dt>
-                <dd>
-                  <a href={`mailto:${BRAND.contact.emails[0]}`}>{BRAND.contact.emails[0]}</a>
-                </dd>
-              </div>
-            </dl>
             <Button to="/shop" variant="outline">
-              Shop the range
+              Shop All Products
             </Button>
           </Reveal>
         </div>
@@ -134,15 +113,10 @@ export default function About() {
       <section className="section about-ranges" aria-labelledby="about-ranges-title">
         <div className="shell">
           <Reveal className="about-head">
-            <p className="about-eyebrow">The ranges</p>
-            <div className="about-head__row">
+                        <div className="about-head__row">
               <h2 id="about-ranges-title" className="about-heading">
-                What we make.
+                Our Products
               </h2>
-              <p className="about-head__intro">
-                Four ranges, in the formats that fit a routine — spreads, powders, tablets, capsules
-                and gummies.
-              </p>
             </div>
           </Reveal>
 
@@ -185,7 +159,7 @@ export default function About() {
           <Reveal className="about-marks__lead">
             <p className="about-eyebrow about-eyebrow--on-dark">Standards</p>
             <h2 id="about-marks-title" className="about-heading about-heading--on-dark">
-              Every mark on the pack is defined.
+              Every Mark on the Pack Is Defined.
             </h2>
             <p>
               Every batch runs through an FSSAI-certified process, and every mark on a pack has a

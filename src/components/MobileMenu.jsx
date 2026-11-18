@@ -1,13 +1,35 @@
 import { useRef } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import Logo from './Logo'
 import { CloseIcon, ArrowIcon } from './Icons'
-import { SECTION_NAV, CATEGORY_NAV, SUPPORT_NAV, POLICY_NAV } from '../lib/nav'
+import { HEADER_NAV, SUPPORT_NAV, POLICY_NAV } from '../lib/nav'
+import { getCategory } from '../data/catalogue'
 import { useOverlay } from '../lib/useOverlay'
 
+/**
+ * The overlay menu behind the burger: the same five destinations as the bar,
+ * in the same order, with Home ahead of them off the homepage. The three that
+ * are menus on desktop — Spreads, Greens and Honey —
+ * are set here as a label with the ranges they cover beneath it.
+ */
 export default function MobileMenu({ open, onClose }) {
   const panelRef = useRef(null)
+  const { pathname } = useLocation()
   useOverlay(open, onClose, panelRef)
+
+  const link = (label, to, sub = false) => (
+    <NavLink
+      to={to}
+      end={to === '/shop' || to === '/'}
+      className={({ isActive }) =>
+        `drawer__link ${sub ? 'drawer__link--sub' : ''} ${isActive ? 'is-active' : ''}`
+      }
+      tabIndex={open ? 0 : -1}
+    >
+      <span>{label}</span>
+      <ArrowIcon />
+    </NavLink>
+  )
 
   return (
     <div className={`drawer drawer--left ${open ? 'is-open' : ''}`} aria-hidden={!open}>
@@ -34,37 +56,21 @@ export default function MobileMenu({ open, onClose }) {
 
         <nav className="drawer__nav" aria-label="Mobile">
           <ul>
-            {SECTION_NAV.map((item) => (
-              <li key={item.to}>
-                <NavLink
-                  to={item.to}
-                  end={item.to === '/shop'}
-                  className={({ isActive }) => `drawer__link ${isActive ? 'is-active' : ''}`}
-                  tabIndex={open ? 0 : -1}
-                >
-                  <span>{item.label}</span>
-                  <ArrowIcon />
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        <nav className="drawer__nav drawer__nav--ranges" aria-label="Ranges">
-          <p className="drawer__label">Ranges</p>
-          <ul>
-            {CATEGORY_NAV.map((item) => (
-              <li key={item.to}>
-                <NavLink
-                  to={item.to}
-                  className={({ isActive }) => `drawer__link ${isActive ? 'is-active' : ''}`}
-                  tabIndex={open ? 0 : -1}
-                >
-                  <span>{item.label}</span>
-                  <ArrowIcon />
-                </NavLink>
-              </li>
-            ))}
+            {pathname !== '/' && <li>{link('Home', '/')}</li>}
+            {HEADER_NAV.map((item) =>
+              item.to ? (
+                <li key={item.label}>{link(item.label, item.to)}</li>
+              ) : (
+                <li key={item.label} className="drawer__group">
+                  <p className="drawer__label">{item.label}</p>
+                  <ul>
+                    {item.ranges.map((slug) => (
+                      <li key={slug}>{link(getCategory(slug).name, `/shop/${slug}`, true)}</li>
+                    ))}
+                  </ul>
+                </li>
+              ),
+            )}
           </ul>
         </nav>
 

@@ -3,15 +3,40 @@ import Logo from './Logo'
 import Newsletter from './Newsletter'
 import { BRAND } from '../data/brand'
 import { CATEGORIES } from '../data/catalogue'
-import { POLICY_NAV, SUPPORT_NAV } from '../lib/nav'
-import { MailIcon, PhoneIcon, PinIcon } from './Icons'
 
+/* The company column. FAQs and Our Policies are the same pages the header's
+   mobile menu lists; the labels here are the footer's own. */
+const COMPANY_LINKS = [
+  { label: 'About Us', to: '/about' },
+  { label: 'Contact', to: '/contact' },
+  { label: 'FAQs', to: '/faq' },
+  { label: 'Our Policies', to: '/policies' },
+]
+
+/* The bottom bar. Terms and shipping are sections of Our Policies, so they
+   link straight to them. */
+const LEGAL_LINKS = [
+  { label: 'Privacy Policy', to: '/privacy' },
+  { label: 'Terms & Conditions', to: '/policies#terms-and-conditions' },
+  { label: 'Shipping & Returns', to: '/policies#shipping-policy' },
+]
+
+/**
+ * The site footer, in three bands on the aubergine ground:
+ *
+ *   the brand — the lockup and its line — beside the newsletter;
+ *   four columns: Shop, Company, Contact and Standards, each a quiet coral
+ *   label over its content, all starting on one line;
+ *   and a bottom bar with the copyright and the legal links.
+ *
+ * The bands are set apart by space alone: no rules, no panels.
+ */
 export default function Footer() {
   return (
     <footer className="footer on-dark">
       <div className="footer__top shell">
         <div className="footer__brand">
-          <Logo reversed width={180} className="footer__logo" />
+          <Logo reversed width={168} className="footer__logo" />
           <p className="footer__positioning">{BRAND.positioning}</p>
         </div>
         <div className="footer__signup">
@@ -20,10 +45,10 @@ export default function Footer() {
       </div>
 
       <div className="footer__mid shell">
-        <nav className="footer__col" aria-labelledby="footer-shop">
+        <nav className="footer__col footer__col--shop" aria-labelledby="footer-shop">
           <h2 className="footer__heading" id="footer-shop">Shop</h2>
-          <ul>
-            <li><Link to="/shop">All products</Link></li>
+          <ul className="footer__list">
+            <li><Link to="/shop">All Products</Link></li>
             {CATEGORIES.map((category) => (
               <li key={category.slug}>
                 <Link to={`/shop/${category.slug}`}>{category.name}</Link>
@@ -32,11 +57,10 @@ export default function Footer() {
           </ul>
         </nav>
 
-        <nav className="footer__col" aria-labelledby="footer-company">
+        <nav className="footer__col footer__col--company" aria-labelledby="footer-company">
           <h2 className="footer__heading" id="footer-company">Company</h2>
-          <ul>
-            <li><Link to="/about">About</Link></li>
-            {SUPPORT_NAV.map((item) => (
+          <ul className="footer__list">
+            {COMPANY_LINKS.map((item) => (
               <li key={item.to}>
                 <Link to={item.to}>{item.label}</Link>
               </li>
@@ -46,35 +70,22 @@ export default function Footer() {
 
         <div className="footer__col footer__col--contact">
           <h2 className="footer__heading">Contact</h2>
-          <ul className="footer__contact">
+          <ul className="footer__list footer__contact">
+            {BRAND.contact.footerEmails.map((email) => (
+              <li key={email}>
+                <a href={`mailto:${email}`}>{email}</a>
+              </li>
+            ))}
             <li>
-              <MailIcon width={18} height={18} />
-              <span>
-                {BRAND.contact.emails.map((email) => (
-                  <a key={email} href={`mailto:${email}`}>{email}</a>
-                ))}
-              </span>
-            </li>
-            <li>
-              <PhoneIcon width={18} height={18} />
-              <span>
-                {BRAND.contact.phones.map((phone) => (
-                  <a key={phone} href={`tel:${phone.replace(/\s/g, '')}`}>{phone}</a>
-                ))}
-              </span>
-            </li>
-            <li>
-              <PinIcon width={18} height={18} />
-              <address>
-                {BRAND.contact.address.map((line) => (
-                  <span key={line}>{line}</span>
-                ))}
-              </address>
+              {/* One address, allowed to wrap where the column needs it rather
+                  than at fixed lines, under a label that says what it is. */}
+              <span className="footer__contact-label">Office address</span>
+              <address>{BRAND.contact.address.join(', ')}</address>
             </li>
           </ul>
         </div>
 
-        <div className="footer__col footer__col--mark">
+        <div className="footer__col footer__col--standards">
           <h2 className="footer__heading">Standards</h2>
           {/* The FSSAI mark is the brand's own supplied asset and is used with
               the same wording as the Tatvyra catalogue. */}
@@ -82,46 +93,46 @@ export default function Footer() {
             className="footer__fssai"
             src="/images/fssai-mark.webp"
             alt="FSSAI"
-            width={132}
-            height={64}
+            width={120}
+            height={58}
             loading="lazy"
           />
-          <p className="footer__fssai-note">FSSAI-certified process behind every batch.</p>
         </div>
       </div>
 
       <div className="footer__bottom shell">
-        {/* The policies sit with the copyright line, below the main footer
-            navigation, and take no heading of their own. */}
-        <div className="footer__legal">
-          {/* Tatvyra is Feynman Foodcraft's brand, so the parent company's
-              monogram opens the line its name is on, in the supplied white
-              colourway. The name follows it, so the mark needs no alt text. */}
-          <p className="footer__company">
+        <div className="footer__credits">
+          <p className="footer__copyright">
+            © {new Date().getFullYear()} {BRAND.name}. All rights reserved.
+          </p>
+          {/* The studio that built the site, with its mark. */}
+          <a
+            className="footer__maker"
+            href="https://www.digiveritaz.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Made by
             <img
-              className="footer__ffc"
-              src="/brand/ffc-logo-reversed.svg"
+              className="footer__maker-mark"
+              src="/brand/digiveritaz-mark.webp"
               alt=""
-              width={44}
-              height={26}
+              width={20}
+              height={19}
               loading="lazy"
             />
-            {/* The company name ends on "Ltd.", which closes the sentence. */}
-            <span>© {new Date().getFullYear()} {BRAND.company} All rights reserved.</span>
-            <span className="footer__gstin">GST: {BRAND.gstin}</span>
-          </p>
-          <nav aria-label="Policies">
-            <ul className="footer__policies">
-              {POLICY_NAV.map((item) => (
-                <li key={item.to}>
-                  <Link to={item.to}>{item.label}</Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
+            DigiVeritaz
+          </a>
         </div>
-        <p className="footer__line">{BRAND.line}</p>
-        <p className="footer__site">{BRAND.website}</p>
+        <nav aria-label="Legal">
+          <ul className="footer__legal">
+            {LEGAL_LINKS.map((item) => (
+              <li key={item.to}>
+                <Link to={item.to}>{item.label}</Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
       </div>
     </footer>
   )

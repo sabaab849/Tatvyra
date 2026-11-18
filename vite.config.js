@@ -1,9 +1,53 @@
 import react from '@vitejs/plugin-react'
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
+
+/*
+ * Serves the Vercel functions in api/ from the Vite dev server, so
+ * `npm run dev` runs the real Razorpay checkout end to end without the Vercel
+ * CLI. In production Vercel serves api/ itself and this plugin does nothing.
+ *
+ * Server-only variables from .env.local (RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET)
+ * are copied onto process.env for the functions; they are not VITE_ variables,
+ * so they never reach the browser bundle.
+ */
+function devApi() {
+  return {
+    name: 'tatvyra-dev-api',
+    apply: 'serve',
+    configureServer(server) {
+      Object.assign(
+        process.env,
+        loadEnv(server.config.mode, process.cwd(), ['RAZORPAY_', 'SHIPROCKET_']),
+      )
+
+      server.middlewares.use('/api', async (req, res, next) => {
+        const route = (req.url ?? '').split('?')[0].replace(/^\/+|\/+$/g, '')
+        if (!/^[a-z0-9/-]+$/i.test(route) || route.split('/').some((p) => p.startsWith('_'))) {
+          return next()
+        }
+        let mod
+        try {
+          mod = await server.ssrLoadModule(`/api/${route}.js`)
+        } catch {
+          return next()
+        }
+        try {
+          await mod.default(req, res)
+        } catch (error) {
+          server.config.logger.error(`[api/${route}] ${error?.stack ?? error}`)
+          if (!res.headersSent) {
+            res.statusCode = 500
+            res.end(JSON.stringify({ error: 'Server error' }))
+          }
+        }
+      })
+    },
+  }
+}
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), devApi()],
   server: {
     watch: {
       /*

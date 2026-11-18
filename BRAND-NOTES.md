@@ -49,7 +49,9 @@ wordmark legibly at 16px, so the mark stands alone there. Worth confirming.
 Rules enforced in `src/components/Logo.jsx`:
 
 - Intrinsic aspect ratio is fixed and never distorted.
-- Width is clamped to the 120px digital minimum for the full lockup.
+- Width is clamped to the 120px digital minimum for the full lockup, except
+  in the mobile header (under 48rem), which sets it to 96px at the client's
+  request so the burger and cart have room.
 - Clear space is applied as padding on `.logo` (roughly the leaf-mark height).
 - No shadow, glow, outline, bevel, rotation, or placement over busy imagery.
 - A dark ground takes the supplied white colourway (`reversed`), never a CSS

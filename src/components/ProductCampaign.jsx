@@ -25,11 +25,11 @@ export default function ProductCampaign({ product }) {
         <Reveal className="campaign__media" delay={110}>
           <img
             src={campaign.image}
-            srcSet={`${base}-1000.webp 1000w, ${base}-1400.webp 1400w, ${base}-1926.webp 1926w`}
+            srcSet={`${base}-1000.webp 1000w, ${base}-1400.webp 1400w, ${base}-1920.webp 1920w`}
             sizes="(max-width: 82.5rem) 100vw, 1320px"
             alt={campaign.imageAlt}
-            width={1926}
-            height={817}
+            width={1920}
+            height={819}
             loading="lazy"
             decoding="async"
           />

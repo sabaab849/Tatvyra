@@ -85,7 +85,6 @@ export default function ProductStory({ product }) {
                   ))
                 : story.title}
             </h2>
-            {story.intro && <p className="pstory__intro">{story.intro}</p>}
           </div>
         </Reveal>
 

@@ -15,9 +15,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: var(--space-2xs);
   min-height: 2.875rem;
-  padding-inline: 1.5rem;
+  padding-inline: var(--space-m);
   border: 1px solid var(--btn-line);
   border-radius: var(--radius-pill);
   background: var(--btn-bg);
@@ -43,7 +43,7 @@
 
 .btn:active { translate: 0 1px; }
 
-.btn--lg { min-height: 3.25rem; padding-inline: 2rem; }
+.btn--lg { min-height: 3.25rem; padding-inline: var(--space-l); }
 .btn--sm { min-height: 2.375rem; padding-inline: 1.125rem; font-size: var(--step--2); }
 .btn--full { width: 100%; }
 
@@ -89,7 +89,7 @@
 .btn--quiet {
   --btn-fg: var(--tatvyra-purple);
   --btn-line: transparent;
-  padding-inline: 0.5rem;
+  padding-inline: var(--space-2xs);
   --btn-fg-hover: var(--tatvyra-aubergine);
 }
 
@@ -188,10 +188,15 @@
 }
 
 /* --- Header ---------------------------------------------------------------
-   The navbar from the Figma refresh (node 74:1042): Warm White ground, an ink
-   hairline, four nav links, the cart with its gold count badge, and the
-   Shop Now pill. Figma sets 80px gutters on a 1440 frame; the bar keeps the
-   site's .shell instead so it stays aligned with every section below it. */
+   Warm White ground on an ink hairline: the lockup left, five primary links
+   centred, and search, the cart with its count badge and the Shop Now pill
+   right. The bar keeps the site's .shell so it stays aligned with every
+   section below it.
+
+   Desktop measures (1440 frame): bar 92px tall, 84px once scrolled; 32px
+   between lockup, links and actions; 40px between links, each link 12.5px
+   uppercase at 0.14em with 8px above and below its 1px underline; search and
+   cart in 44px boxes 4px apart, 20px before the 12/24px Shop Now pill. */
 
 .header {
   position: sticky;
@@ -210,21 +215,14 @@
   box-shadow: var(--shadow-header);
 }
 
-/* Glass only where it can actually be blurred; otherwise the cream stays
-   opaque rather than leaving the links over unblurred page content. */
-@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .header--compact {
-    background: color-mix(in srgb, var(--tatvyra-warm-white) 76%, transparent);
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
-    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
-  }
-}
+/* Solid on scroll too: the bar stays the same opaque Warm White whatever
+   passes under it, so it never takes a tint from the page. */
 
 .header__inner {
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
-  gap: var(--space-m);
+  gap: var(--space-l);
   min-height: var(--header-h);
   transition: min-height var(--dur) var(--ease);
 }
@@ -237,34 +235,52 @@
    --font-logo is scoped here and nowhere else, so the logo face can never leak
    into site typography. The lockup is vector artwork today, so this has no
    visible effect until the wordmark is set as live text — see fonts.css. */
-.logo { display: inline-flex; padding: 0.375rem 0.25rem; font-family: var(--font-logo); }
+.logo { display: inline-flex; padding: 0.375rem var(--space-3xs); font-family: var(--font-logo); }
 .logo__img { transition: opacity var(--dur) var(--ease), width var(--dur) var(--ease); }
 .logo:hover .logo__img { opacity: 0.82; }
 
-/* The mauve dot that trails the lockup in the design. */
-.header__dot {
-  width: 7.42px;
-  height: 7.42px;
-  border-radius: var(--radius-pill);
-  background: var(--tatvyra-lilac);
+/* In the bar the lockup is centred as a box, but the leaf mark stacked on top
+   pushes the wordmark below that centre, so "Tatvyra" sat lower than the nav
+   links beside it. Measured off the artwork, the wordmark's own middle is
+   11.7% of the lockup's height under the box's — lifting it by that much puts
+   the word on the links' line, at any logo size. */
+.header__logo .logo__img { translate: 0 -11.7%; }
+
+/* Scrolled, the bar settles 8px shorter, so the lockup steps down a size with
+   it (its width eases, see .logo__img) and keeps clear space above and below
+   instead of touching the bar's edges; the lift is eased too, so that space
+   is shared more evenly between top and bottom. Wide layout only: the phone bar sets
+   its own, smaller lockup. */
+@media (min-width: 48.0625rem) {
+  .header--compact .header__logo .logo__img { --logo-w: 128px; translate: 0 -5%; }
 }
 
-.header__nav { justify-self: center; }
+.header__nav { justify-self: center; align-self: stretch; }
 
 .header__nav-list {
   display: flex;
-  align-items: center;
-  gap: clamp(1.25rem, 0.4rem + 1.9vw, 2.5rem);
+  align-items: stretch;
+  height: 100%;
+  gap: clamp(1.5rem, 2.78vw, 2.5rem);
 }
+
+/* Each item is as tall as the bar, so the pointer can travel from a menu's
+   label down into its panel without ever leaving the item. */
+.header__item { display: flex; align-items: center; }
 
 .header__link {
   position: relative;
-  display: inline-block;
-  padding-block: 0.5rem;
-  font-size: var(--step-0);
-  font-weight: 400;
-  color: rgb(var(--ink-rgb) / 0.7);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding-block: var(--space-2xs);
+  font-size: var(--step--2);
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-nav);
   white-space: nowrap;
+  cursor: pointer;
   transition: color var(--dur-fast) var(--ease);
 }
 
@@ -273,25 +289,188 @@
   position: absolute;
   inset-inline: 0;
   bottom: 0;
-  height: 2px;
-  border-radius: var(--radius-pill);
+  height: 1px;
   background: var(--tatvyra-orange);
   scale: 0 1;
   transform-origin: left;
   transition: scale var(--dur) var(--ease);
 }
 
-.header__link:hover { color: var(--tatvyra-purple); }
+/* The current page stays black and is marked by its orange underline alone;
+   hovering or opening a menu turns the link Purple. */
+.header__link:hover,
+.header__link.is-open { color: var(--tatvyra-purple); }
 .header__link:hover::after,
+.header__link.is-open::after,
 .header__link.is-active::after { scale: 1 1; }
-.header__link.is-active { color: var(--tatvyra-purple); font-weight: 600; }
 
-.header__actions { display: flex; align-items: center; gap: 1.75rem; }
+.header__caret { opacity: 0.6; transition: rotate var(--dur) var(--ease); }
+.header__link.is-open .header__caret { rotate: 180deg; }
+
+/* --- Mega-menu ---
+   Under the bar, the full width of the page, in two parts. On the left, two
+   columns of text links: a range's name, its products, and a way to the whole
+   range. On the right, under "Featured", a row of four product cards. No
+   picture stands in for a range — every image in the menu is a product. */
+.mega {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--tatvyra-warm-white);
+  border-top: 1px solid rgb(var(--ink-rgb) / 0.08);
+  border-bottom: 1px solid rgb(var(--ink-rgb) / 0.12);
+  box-shadow: 0 28px 40px -30px rgb(var(--ink-rgb) / 0.35);
+  opacity: 0;
+  visibility: hidden;
+  translate: 0 -6px;
+  transition:
+    opacity var(--dur) var(--ease),
+    translate var(--dur) var(--ease-out),
+    visibility 0s linear var(--dur);
+}
+
+.mega.is-open {
+  opacity: 1;
+  visibility: visible;
+  translate: 0 0;
+  transition-delay: 0s;
+}
+
+/* The links take what they need; the featured row takes the rest. */
+.mega__inner {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(2.5rem, 1rem + 4vw, 5.5rem);
+  padding-block: 2.5rem var(--space-xl);
+}
+
+.mega__links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(11rem, 14rem));
+  gap: clamp(2rem, 1rem + 2.5vw, 3.5rem);
+}
+
+.mega__name {
+  font-size: var(--step--2);
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--tatvyra-purple);
+}
+
+.mega__list {
+  display: grid;
+  gap: 0.625rem;
+  margin-top: 1.25rem;
+}
+
+.mega__link {
+  font-size: var(--step--1);
+  color: var(--text);
+  transition: color var(--dur-fast) var(--ease);
+}
+
+.mega__link:hover { color: var(--tatvyra-purple); }
+
+.mega__all {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  margin-top: var(--space-m);
+  font-size: var(--step--2);
+  font-weight: var(--type-button-weight);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tatvyra-purple);
+  transition: color var(--dur-fast) var(--ease);
+}
+
+.mega__all:hover { color: var(--tatvyra-orange); }
+
+/* Four cards in one row, held to a size at which the row never outgrows the
+   menu: on the widest screens the cards stop growing and the row sits hard
+   right, under the bar's own right-hand edge. */
+.mega__featured { justify-self: end; width: min(100%, 50rem); }
+
+.mega__cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(0.75rem, 0.3rem + 1vw, 1.25rem);
+  margin-top: 1.25rem;
+}
+
+/* --- Featured card ---
+   A tall thumbnail of the product's own photograph, corners rounded to 20px,
+   with its name centred beneath. While the card is hovered or focused its
+   video fades in over the photograph and plays (FeaturedCard); a card with no
+   video eases the photograph in a touch instead, so hovering always answers. */
+.fcard { display: block; }
+
+.fcard__thumb {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  border-radius: 20px;
+  background: var(--surface-sunken);
+}
+
+.fcard__thumb img,
+.fcard__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fcard__thumb img { transition: scale var(--dur-slow) var(--ease-out); }
+
+.fcard__video {
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease);
+}
+
+.fcard.is-playing .fcard__video { opacity: 1; }
+
+.fcard:is(:hover, :focus-visible):not(.is-playing) .fcard__thumb img { scale: 1.04; }
+
+.fcard__title {
+  display: block;
+  margin-top: 0.875rem;
+  font-size: var(--step-0);
+  font-weight: var(--type-heading-weight);
+  --weight-stroke: var(--heading-stroke);
+  paint-order: stroke fill;
+  line-height: var(--leading-subhead);
+  text-align: center;
+  text-wrap: balance;
+  color: var(--text);
+  transition: color var(--dur-fast) var(--ease);
+  letter-spacing: var(--heading-tracking);
+}
+
+.fcard:is(:hover, :focus-visible) .fcard__title { color: var(--tatvyra-purple); }
+
+@media (prefers-reduced-motion: reduce) {
+  .mega { translate: none; transition: none; }
+  .fcard__thumb img,
+  .fcard__video { transition: none; }
+  .fcard:is(:hover, :focus-visible) .fcard__thumb img { scale: none; }
+}
+
+/* Always the last column, hard right — also once the links are hidden and the
+   bar is down to two items. */
+.header__actions { grid-column: 3; justify-self: end; display: flex; align-items: center; gap: var(--space-3xs); }
 
 .header__cart {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2xs);
+  min-height: 44px;
+  padding-inline: var(--space-2xs);
   color: var(--tatvyra-purple);
   cursor: pointer;
   transition: opacity var(--dur-fast) var(--ease);
@@ -315,7 +494,8 @@
 .header__cta {
   display: inline-flex;
   align-items: center;
-  padding: 12px 24px;
+  margin-left: 1.25rem;
+  padding: 8px 16px;
   border-radius: var(--radius-pill);
   background: var(--tatvyra-purple);
   color: #fff;
@@ -345,18 +525,69 @@
 
 @media (max-width: 68rem) {
   .header__nav { display: none; }
+  .header__cta { margin-left: var(--space-2xs); }
   .header__icon--menu { display: inline-flex; }
   .header__lead { justify-self: start; }
+
+  /* Narrow layout is burger-left, bag-right: the two things a thumb reaches
+     for sit at the two edges. The Shop Now pill gives up the outer slot to
+     the cart rather than being dropped, so the call to action survives. */
+  .header__cta { order: 1; }
+  .header__cart { order: 2; }
 }
 
 @media (max-width: 48rem) {
-  .header__dot { display: none; }
-  .header__actions { gap: var(--space-s); }
+  .header__actions { gap: 0; }
+
+  /* Burger, lockup, cart — three columns with the lockup centred and equal
+     space either side, so the icons get room instead of crowding the mark.
+     The lockup drops to 84px — below the 120px digital minimum, at the
+     client's request, so the icons sit clear of it — and loses its side
+     padding; the bar is shortened to match. */
+  .header__inner {
+    grid-template-columns: 1fr auto 1fr;
+    gap: var(--space-s);
+  }
+
+  /* The burger and the cart are the same 44px tap box, each pulled the same
+     10px into the gutter, so the glyphs sit at matching distances from the
+     edges and the centred lockup has equal space either side. The count sits
+     on the bag's shoulder rather than beside it, which is what keeps the cart
+     no wider than the burger. */
+  .header__cart {
+    position: relative;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding-inline: 0;
+    margin-right: -10px;
+  }
+
+  .header__count {
+    position: absolute;
+    top: 4px;
+    right: 1px;
+    min-width: 18px;
+    padding: 2px 5px;
+    font-size: 10px;
+    box-shadow: 0 0 0 2px var(--tatvyra-warm-white);
+  }
+
+  .header__lead { display: contents; }
+  .header__icon--menu { justify-self: start; margin-left: -10px; }
+  .header__logo { justify-self: center; padding-inline: 0; }
+  .header__logo .logo__img { --logo-w: 84px; }
+  .header__actions { justify-self: end; }
+}
+
+/* Phone: burger, lockup, then search and cart — the pill goes, so the icons
+   on the right sit against a centred lockup without crowding it. */
+@media (max-width: 40rem) {
+  .header__cta { display: none; }
 }
 
 @media (max-width: 30rem) {
   .header__inner { gap: var(--space-2xs); }
-  .header__cta { display: none; }
 }
 
 /* --- Drawers & overlays --------------------------------------------------- */
@@ -456,7 +687,7 @@
 .drawer__support {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem 1rem;
+  gap: 0.4rem var(--space-s);
   font-size: var(--step--1);
   color: var(--text-muted);
 }
@@ -472,9 +703,24 @@
   font-weight: var(--type-label-weight);
 }
 
-/* The drawer keeps the ranges below the primary links now that the bar no
-   longer lists them. */
-.drawer__nav--ranges { margin-top: var(--space-m); }
+/* A menu from the bar — Spreads, Greens — set as a label with its ranges
+   beneath, a size down and indented so they read as belonging to it. */
+.drawer__group { padding-top: var(--space-m); border-bottom: 1px solid var(--line); }
+.drawer__group li:last-child .drawer__link { border-bottom: 0; }
+
+.drawer__link--sub {
+  padding-block: 0.7rem;
+  padding-left: calc(var(--space-m) + 0.75rem);
+  font-size: var(--step-1);
+  font-weight: 500;
+}
+
+.drawer__link--sub:hover { padding-left: calc(var(--space-m) + 0.75rem + 6px); }
+
+/* On a phone the menu is an overlay over the whole screen, not a side panel. */
+@media (max-width: 30rem) {
+  .drawer__panel--menu { width: 100%; }
+}
 
 .drawer__label {
   padding-inline: var(--space-m);
@@ -552,8 +798,8 @@
 .search__suggest ul {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem 1.5rem;
-  margin-top: 0.75rem;
+  gap: var(--space-2xs) var(--space-m);
+  margin-top: var(--space-xs);
   font-size: var(--step-1);
   color: var(--text);
 }
@@ -567,13 +813,13 @@
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: 0.5rem 1rem;
-  padding: 0.85rem 0.25rem;
+  gap: var(--space-2xs) var(--space-s);
+  padding: 0.85rem var(--space-3xs);
   background: var(--surface);
   transition: background-color var(--dur-fast) var(--ease), padding-left var(--dur) var(--ease);
 }
 
-.search__result:hover { background: var(--surface-sunken); padding-left: 0.75rem; }
+.search__result:hover { background: var(--surface-sunken); padding-left: var(--space-xs); }
 .search__result-name { font-weight: 700; color: var(--tatvyra-purple); }
 .search__result-meta { font-size: var(--step--1); color: var(--text-muted); }
 .search__empty { color: var(--text-muted); }
@@ -624,9 +870,12 @@
 
 .cart__title {
   font-size: var(--step-2);
-  font-weight: 700;
-  letter-spacing: -0.012em;
+  font-weight: var(--type-heading-weight);
+  --weight-stroke: var(--heading-stroke);
+  paint-order: stroke fill;
+  letter-spacing: var(--heading-tracking);
   color: var(--tatvyra-purple);
+  line-height: var(--leading-subhead);
 }
 
 .cart__count { color: var(--text-faint); font-weight: 400; }
@@ -654,7 +903,13 @@
 
 .cart__line:last-child { border-bottom: 0; padding-bottom: 0; }
 .cart__thumb { aspect-ratio: 3 / 4; }
-.cart__line-name { font-weight: 700; font-size: var(--step--1); color: var(--tatvyra-purple); }
+.cart__line-name { font-weight: var(--type-heading-weight);
+ --weight-stroke: var(--heading-stroke);
+ paint-order: stroke fill; font-size: var(--step--1); color: var(--tatvyra-purple);
+  font-size: var(--step--1);
+  letter-spacing: var(--heading-tracking);
+  line-height: var(--leading-subhead);
+}
 .cart__line-name:hover { color: var(--tatvyra-aubergine); }
 .cart__line-meta { font-size: var(--step--2); color: var(--text-muted); margin-top: 2px; }
 
@@ -719,7 +974,7 @@
 .cart__continue {
   display: block;
   width: 100%;
-  margin-top: 0.75rem;
+  margin-top: var(--space-xs);
   font-size: var(--step--2);
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -825,9 +1080,11 @@
 .pcard__name {
   margin-top: 0.35rem;
   font-size: var(--step-1);
-  font-weight: var(--type-product-weight);
-  line-height: 1.15;
-  letter-spacing: var(--product-tracking);
+  font-weight: var(--type-heading-weight);
+  --weight-stroke: var(--heading-stroke);
+  paint-order: stroke fill;
+  line-height: var(--leading-subhead);
+  letter-spacing: var(--heading-tracking);
   color: var(--tatvyra-purple);
 }
 
@@ -838,11 +1095,11 @@
 .pcard__descriptor {
   margin-top: 0.4rem;
   font-size: var(--step--1);
-  line-height: 1.6;
+  line-height: var(--leading-body);
   color: var(--text-muted);
 }
 
-.pcard__sizes { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.75rem; position: relative; z-index: 1; }
+.pcard__sizes { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: var(--space-xs); position: relative; z-index: 1; }
 
 .pcard__size {
   padding: 0.28rem 0.6rem;
@@ -862,7 +1119,7 @@
 }
 
 .pcard__size-single {
-  margin-top: 0.75rem;
+  margin-top: var(--space-xs);
   font-size: var(--step--2);
   letter-spacing: 0.06em;
   color: var(--text-muted);
@@ -881,8 +1138,6 @@
 
 .pcard__price-value { font-weight: 700; color: var(--text); }
 
-.pcard__price-mrp { color: var(--text-faint); }
-.pcard__price-mrp s { text-decoration-thickness: 1px; text-underline-offset: 0; }
 .pcard__price-tbc { color: var(--text-faint); letter-spacing: 0.03em; }
 
 /* At four-up the card is ~250px inside its padding, which is just enough for
@@ -901,7 +1156,7 @@
 .pcard__add {
   flex: 1;
   min-height: 2.5rem;
-  padding-inline: 0.75rem;
+  padding-inline: var(--space-xs);
   white-space: nowrap;
   border: 1px solid var(--tatvyra-purple);
   border-radius: var(--radius-pill);
@@ -929,9 +1184,58 @@
 
 .pcard__view:hover { color: var(--tatvyra-aubergine); box-shadow: inset 0 -1px 0 0 var(--tatvyra-orange); }
 
+/* Two-up on a phone leaves each card ~150px inside its padding: smaller type,
+   the name and descriptor clamped so cards in a row stay close in height, the
+   size chips on one line, and the actions stacked full width so neither can
+   push past the card's edge. */
 @media (max-width: 30rem) {
-  .pcard__actions { flex-direction: column; align-items: stretch; gap: 0.5rem; }
-  .pcard__view { text-align: center; box-shadow: none; }
+  .pcard { padding: var(--space-2xs); }
+  .pcard__body { padding: 0.6rem 0.15rem 0.15rem; }
+  .pcard__format { left: 0.5rem; bottom: 0.5rem; padding: 0.2rem var(--space-2xs); font-size: 0.625rem; }
+  .pcard__category { font-size: 0.625rem; letter-spacing: 0.1em; }
+
+  .pcard__name,
+  .pcard__descriptor {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .pcard__name { margin-top: 0.2rem; font-size: 0.95rem; line-height: 1.2; -webkit-line-clamp: 3;
+  font-size: var(--step-0);
+  font-weight: var(--type-heading-weight);
+  --weight-stroke: var(--heading-stroke);
+  paint-order: stroke fill;
+  letter-spacing: var(--heading-tracking);
+  line-height: var(--leading-subhead);
+}
+  .pcard__descriptor { margin-top: 0.3rem; font-size: 0.75rem; line-height: 1.4; -webkit-line-clamp: 2; }
+
+  .pcard__sizes { flex-wrap: nowrap; gap: var(--space-3xs); margin-top: var(--space-2xs); }
+  .pcard__size { flex: 1 1 0; min-width: 0; padding: 0.22rem 0.2rem; font-size: 0.65rem; text-align: center; }
+  .pcard__size-single { margin-top: var(--space-2xs); font-size: 0.65rem; }
+
+  .pcard__foot { padding-top: 0.6rem; }
+  .pcard__price { font-size: 0.9rem; }
+
+  .pcard__actions { flex-direction: column; align-items: stretch; gap: 0.35rem; margin-top: 0.45rem; }
+  .pcard__add {
+    flex: none;
+    width: 100%;
+    min-width: 0;
+    min-height: 2.1rem;
+    padding-inline: 0.4rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.04em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .pcard__view { font-size: 0.625rem; letter-spacing: 0.05em; text-align: center; box-shadow: none; }
+}
+
+/* The narrowest phones: "1000g" needs a touch less to clear its chip. */
+@media (max-width: 22rem) {
+  .pcard__sizes { gap: 0.2rem; }
+  .pcard__size { padding-inline: 0.1rem; font-size: 0.6rem; letter-spacing: -0.01em; }
 }
 
 .grid-empty { color: var(--text-muted); padding-block: var(--space-xl); }
@@ -972,13 +1276,15 @@
   color: var(--tatvyra-orange);
 }
 
-.ccard__name { color: var(--tatvyra-purple); line-height: 1.02; }
+.ccard__name { color: var(--tatvyra-purple); line-height: 1.02;
+  line-height: var(--leading-heading);
+}
 
 .ccard__teaser {
   margin-top: 0.35rem;
   font-size: var(--step-0);
   color: var(--text-muted);
-  line-height: 1.55;
+  line-height: var(--leading-lede);
   max-width: 36ch;
 }
 
@@ -989,7 +1295,6 @@
   gap: var(--space-s);
   margin-top: var(--space-m);
   padding-top: var(--space-s);
-  border-top: 1px solid var(--line);
   font-size: var(--step--1);
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -1002,7 +1307,7 @@
    rules across the row is the editorial detail, so the body stretches. */
 .ccard__body > .ccard__teaser { flex: 1; }
 
-.ccard:hover .ccard__more { border-top-color: var(--line-strong); color: var(--text); }
+.ccard:hover .ccard__more { color: var(--text); }
 .ccard__more svg { color: var(--tatvyra-purple); transition: translate var(--dur) var(--ease); }
 .ccard:hover .ccard__more svg { translate: 6px 0; }
 
@@ -1031,7 +1336,7 @@
 /* Measure is set on the individual lines: `ch` on the wrapper would be sized
    by the body font, not the display face, and choke long headlines. */
 .sheading .eyebrow { font-size: var(--step--2); letter-spacing: 0.18em; }
-.sheading__title { margin-top: 0.75rem; max-width: 18ch; }
+.sheading__title { margin-top: var(--space-xs); max-width: 18ch; }
 .sheading__intro { margin-top: var(--space-s); max-width: 46ch; }
 .sheading__action { flex: none; padding-bottom: 0.35rem; }
 .sheading--center { flex-direction: column; align-items: center; text-align: center; }
@@ -1045,17 +1350,18 @@
 
 /* --- Newsletter ----------------------------------------------------------- */
 
-.newsletter__label { display: block; font-size: var(--step--1); color: var(--text-on-dark-muted); max-width: 42ch; }
-.newsletter__row { display: flex; gap: 0.5rem; margin-top: var(--space-s); flex-wrap: wrap; }
+/* The field and its button on one row. */
+.newsletter__row { display: flex; gap: var(--space-2xs); }
+.newsletter__row .btn { flex: none; min-height: 2.875rem; }
 
 .newsletter__input {
   flex: 1 1 14rem;
   min-width: 0;
   min-height: 2.875rem;
   padding-inline: 1.125rem;
-  border: 1px solid var(--line-on-dark);
+  border: 1px solid color-mix(in srgb, var(--tatvyra-warm-white) 30%, transparent);
   border-radius: var(--radius-pill);
-  background: transparent;
+  background: color-mix(in srgb, var(--tatvyra-warm-white) 4%, transparent);
   color: var(--text-on-dark);
   font-size: var(--step--1);
 }
@@ -1064,154 +1370,195 @@
 .newsletter__input:focus-visible { outline-color: var(--tatvyra-peach); }
 
 .newsletter__status:not(:empty) {
-  margin-top: 0.75rem;
-  font-size: var(--step--2);
+  margin-top: var(--space-xs);
+  font-size: var(--step--1);
   color: var(--tatvyra-peach);
   max-width: 46ch;
 }
 
-/* --- Footer --------------------------------------------------------------- */
+/* --- Footer ---------------------------------------------------------------
+   Three bands on Aubergine, set apart by space rather than rules: the brand
+   beside the newsletter, four columns of links and details, and a quiet
+   bottom bar. Every column starts on one line, every label is the same small
+   coral capital, and every line of content shares one size and one rhythm.
+
+   Body copy here is a little lighter than the site's usual muted-on-dark, so
+   the small type holds up against the plum. */
 
 .footer {
+  /* One set of columns for the top band and the link band, so the
+     newsletter starts exactly where the Contact column does. */
+  --footer-cols: minmax(0, 0.8fr) minmax(0, 0.8fr) minmax(0, 1.4fr) minmax(0, 1fr);
+  --footer-ink: color-mix(in srgb, var(--tatvyra-warm-white) 80%, var(--tatvyra-aubergine));
+  --footer-faint: color-mix(in srgb, var(--tatvyra-warm-white) 62%, var(--tatvyra-aubergine));
+  --footer-gap: clamp(2rem, 1.4rem + 2.4vw, 3.25rem);
+
   background: var(--surface-aubergine);
   color: var(--text-on-dark);
-  padding-top: var(--section-y-tight);
-  border-top: 1px solid color-mix(in srgb, var(--tatvyra-warm-white) 12%, transparent);
+  padding-top: clamp(3rem, 2.2rem + 3vw, 4.5rem);
 }
 
+/* The brand and the newsletter, on the same two halves as the columns below:
+   the newsletter starts where the Contact column does. */
 .footer__top {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--space-xl);
-  padding-bottom: var(--space-xl);
-  border-bottom: 1px solid var(--line-on-dark);
+  display: grid;
+  grid-template-columns: var(--footer-cols);
+  align-items: end;
+  gap: var(--space-l) var(--footer-gap);
 }
 
-.footer__logo { padding: 0.6rem 0.4rem 0.6rem 0; }
-
-/* The lockup ships in a white colourway for dark grounds, so the aubergine
-   footer takes that artwork rather than a holding shape behind the purple one. */
-
-/* The parent company's monogram, set small against its own name. */
-.footer__company {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-.footer__ffc {
-  width: 2.75rem;
-  height: auto;
-  opacity: 0.85;
-}
-
-/* The registration reads as a company fact, not as a link or a claim. */
-.footer__gstin {
-  white-space: nowrap;
-  opacity: 0.75;
-}
+.footer__logo { padding: 0; }
 
 .footer__positioning {
   margin-top: var(--space-s);
-  font-size: var(--step--2);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--tatvyra-peach);
+  font-size: 0.6875rem;
   font-weight: var(--type-label-weight);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--footer-faint);
 }
 
-.footer__signup { flex: 1 1 24rem; max-width: 34rem; }
+.footer__brand { grid-column: 1 / span 2; }
+.footer__signup { grid-column: 3 / span 2; max-width: 30rem; }
 
 .footer__mid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--space-xl) var(--space-l);
-  padding-block: var(--space-xl);
+  grid-template-columns: var(--footer-cols);
+  gap: var(--space-xl) var(--footer-gap);
+  padding-block: clamp(2.5rem, 2rem + 2.2vw, 3.75rem);
 }
 
+/* Section labels: small, coral and spaced, a step quieter than headings
+   anywhere else. */
 .footer__heading {
-  font-size: var(--step--2);
+  margin-bottom: var(--space-s);
+  font-size: 0.6875rem;
   font-weight: var(--type-label-weight);
-  letter-spacing: 0.18em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--tatvyra-peach);
-  margin-bottom: var(--space-s);
 }
 
-.footer__col ul { display: grid; gap: 0.55rem; font-size: var(--step--1); }
-.footer__col a { color: var(--text-on-dark-muted); transition: color var(--dur-fast) var(--ease); }
-.footer__col a:hover { color: var(--text-on-dark); }
+.footer__list {
+  display: grid;
+  gap: 0.7rem;
+  font-size: var(--step--1);
+  line-height: 1.45;
+}
 
-.footer__contact li { display: flex; gap: 0.65rem; align-items: flex-start; }
-.footer__contact svg { flex: none; margin-top: 2px; color: var(--tatvyra-peach); }
-.footer__contact span,
-.footer__contact address { display: grid; gap: 0.2rem; font-style: normal; color: var(--text-on-dark-muted); }
+.footer__list a,
+.footer__list address {
+  color: var(--footer-ink);
+  font-style: normal;
+}
 
-.footer__fssai { opacity: 0.9; width: 132px; height: auto; }
-.footer__fssai-note { margin-top: 0.75rem; font-size: var(--step--2); color: var(--text-on-dark-muted); max-width: 24ch; }
+.footer__list a {
+  /* A comfortable target without loosening the rhythm. */
+  display: inline-block;
+  padding-block: 0.15rem;
+  margin-block: -0.15rem;
+  transition: color var(--dur-fast) var(--ease);
+}
+
+.footer__list a:hover { color: var(--text-on-dark); }
+
+/* An email stays on one line; the address flows. */
+.footer__contact a { white-space: nowrap; }
+/* The label over the office address, small and quiet above it. */
+.footer__contact-label { display: block; font-size: var(--step--2); color: color-mix(in srgb, var(--text-on-dark-muted) 75%, transparent); }
+.footer__contact address { max-width: 36ch; text-wrap: pretty; }
+
+/* Standards closes the row against the right edge, its label and mark both
+   set flush right, level with the bottom bar's links below. */
+.footer__col--standards {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.footer__fssai {
+  display: block;
+  width: 120px;
+  height: auto;
+  margin-top: 0.15rem;
+  opacity: 0.92;
+}
 
 .footer__bottom {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-s) var(--space-l);
-  padding-block: var(--space-m);
-  border-top: 1px solid var(--line-on-dark);
-  font-size: var(--step--2);
-  color: var(--text-on-dark-muted);
+  gap: var(--space-2xs) var(--space-l);
+  padding-block: var(--space-m) var(--space-l);
+  font-size: 0.8125rem;
+  color: var(--footer-faint);
 }
 
-.footer__line {
-  letter-spacing: 0.26em;
-  text-transform: uppercase;
-  color: var(--tatvyra-peach);
-  font-size: var(--step--2);
-  font-weight: var(--type-label-weight);
-}
-
-.footer__legal {
+/* The copyright and the studio credit, side by side on the left. */
+.footer__credits {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-2xs) var(--space-l);
 }
 
-/* Secondary to the columns above: the bottom bar's small size and muted tone,
-   with a faint underline so they read as links beside the copyright line. */
-.footer__policies {
+.footer__maker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding-block: 0.35rem;
+  color: var(--footer-faint);
+  transition: color var(--dur-fast) var(--ease);
+}
+
+.footer__maker:hover { color: var(--text-on-dark); }
+
+.footer__maker-mark {
+  width: 20px;
+  height: auto;
+}
+
+.footer__legal {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2xs) var(--space-m);
+  gap: var(--space-2xs) var(--space-l);
 }
 
-.footer__policies a {
+.footer__legal a {
   display: inline-block;
-  padding-block: 0.2rem;
-  color: var(--text-on-dark-muted);
-  text-decoration: underline;
-  text-decoration-color: var(--line-on-dark);
-  text-underline-offset: 0.3em;
-  transition:
-    color var(--dur-fast) var(--ease),
-    text-decoration-color var(--dur-fast) var(--ease);
+  padding-block: 0.35rem;
+  color: var(--footer-faint);
+  transition: color var(--dur-fast) var(--ease);
 }
 
-.footer__policies a:hover {
-  color: var(--text-on-dark);
-  text-decoration-color: currentColor;
-}
+.footer__legal a:hover { color: var(--text-on-dark); }
 
+/* Tablet: the brand over the newsletter, and the columns two by two. */
 @media (max-width: 62rem) {
-  .footer__mid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .footer__top { grid-template-columns: minmax(0, 1fr); align-items: start; }
+  .footer__brand,
+  .footer__signup { grid-column: auto; }
+  .footer__mid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
 }
 
+/* Phone: Shop and Company side by side, then Contact, then Standards. */
 @media (max-width: 34rem) {
-  .footer__mid { grid-template-columns: minmax(0, 1fr); gap: var(--space-l); }
+  .footer__mid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-l) var(--space-m);
+  }
+
+  .footer__col--contact,
+  .footer__col--standards { grid-column: 1 / -1; }
+
+  /* Stacked on a phone, it keeps to the left with everything else. */
+  .footer__col--standards { align-items: flex-start; text-align: left; }
+
+  .footer__contact a { white-space: normal; overflow-wrap: anywhere; }
   .footer__bottom { flex-direction: column; align-items: flex-start; }
-  .footer__legal { flex-direction: column; align-items: flex-start; }
+  .footer__legal { gap: 0 var(--space-m); }
 }
 
 /* --- Kinetic type ---------------------------------------------------------

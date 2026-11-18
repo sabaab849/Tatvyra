@@ -17,9 +17,7 @@ export default function CartDrawer() {
     setQuantity,
     removeItem,
     subtotal,
-    delivery,
     total,
-    freeDeliveryFrom,
   } = useCart()
   const panelRef = useRef(null)
   useOverlay(isOpen, closeCart, panelRef)
@@ -42,7 +40,7 @@ export default function CartDrawer() {
       >
         <div className="drawer__head">
           <h2 className="cart__title">
-            Your cart <span className="cart__count">({count})</span>
+            Your Cart <span className="cart__count">({count})</span>
           </h2>
           <button type="button" className="drawer__close" data-autofocus onClick={closeCart} aria-label="Close cart">
             <CloseIcon />
@@ -53,7 +51,7 @@ export default function CartDrawer() {
           <div className="cart__empty">
             <p>Your cart is empty.</p>
             <Button to="/shop" variant="outline" onClick={closeCart}>
-              Browse the range
+              Browse our products
             </Button>
           </div>
         ) : (
@@ -117,8 +115,8 @@ export default function CartDrawer() {
                   <dd>{formatINR(subtotal)}</dd>
                 </div>
                 <div className="cart__summary-row">
-                  <dt>Delivery</dt>
-                  <dd>{delivery === 0 ? 'Free' : formatINR(delivery)}</dd>
+                  <dt>GST</dt>
+                  <dd>Included</dd>
                 </div>
                 <div className="cart__summary-row cart__summary-row--total">
                   <dt>Total</dt>
@@ -126,12 +124,10 @@ export default function CartDrawer() {
                 </div>
               </dl>
               {/* Product prices are Tatvyra's own MRPs, bar the few packs
-                  marked on their product page. Delivery is still a placeholder
-                  rule, and the payment step runs against a stand-in provider
-                  until the client confirms a real one. */}
+                  marked on their product page. The payment step runs against
+                  a stand-in provider until the client confirms a real one. */}
               <p className="cart__note">
-                {delivery > 0 && `Free delivery over ${formatINR(freeDeliveryFrom)}. `}
-                Delivery is a placeholder rate and no live payment provider is connected yet.
+                Prices are MRP, inclusive of all taxes. No live payment provider is connected yet.
               </p>
               <Button to="/checkout" variant="primary" full onClick={closeCart}>
                 Checkout

@@ -5,14 +5,14 @@ import ShopByCategory from '../sections/ShopByCategory'
 import ShelfTrust from '../sections/ShelfTrust'
 import CertificationProof from '../sections/CertificationProof'
 import BrandStory from '../sections/BrandStory'
-import FinalCTA from '../sections/FinalCTA'
+import JungleJourney from '../sections/JungleJourney'
 import usePageMeta from '../lib/usePageMeta'
 
 export default function Home() {
   usePageMeta({
-    title: 'Tatvyra — Rise. Nourish. Thrive.',
+    title: 'Tatvyra | Rise. Nourish. Thrive.',
     description:
-      'Clean-label wellness essentials from Tatvyra by Feynman Foodcraft: nut butters, moringa, spirulina and single-origin raw honey.',
+      'Honest nutrition from Tatvyra by Feynman Foodcraft: nut butters, moringa, spirulina and single-origin raw honey.',
   })
 
   return (
@@ -24,7 +24,7 @@ export default function Home() {
       <ShelfTrust />
       <CertificationProof />
       <BrandStory />
-      <FinalCTA />
+      <JungleJourney />
     </>
   )
 }

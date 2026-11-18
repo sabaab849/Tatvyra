@@ -215,13 +215,6 @@ export default function ProductOrigin({ product }) {
               )
             })}
           </ol>
-
-          <p className="origin__tagline">
-            {origin.tagline.map((line) => (
-              <span key={line}>{line} </span>
-            ))}
-          </p>
-          <p className="origin__signoff">{origin.signoff}</p>
         </Reveal>
 
         <Reveal className="origin__benefits" delay={120}>

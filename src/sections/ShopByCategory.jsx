@@ -11,28 +11,28 @@ import { ArrowIcon } from '../components/Icons'
  */
 const CARDS = [
   {
+    slug: 'superfoods',
+    eyebrow: 'Organic Powders',
+    title: 'Superfoods',
+    to: '/shop',
+    image: '/images/products/packs/moringa-leaf-powder-1.webp',
+    alt: 'A pouch of Tatvyra Natural Moringa Powder on a table with nuts, a glass of water and fresh leaves.',
+  },
+  {
     slug: 'nut-butters',
     eyebrow: 'Rich & Creamy',
     title: 'Nut Butters',
     to: '/shop/nut-butters',
-    image: '/images/categories/cat-nut-butters.webp',
-    alt: 'An open jar of Tatvyra organic premium peanut butter, a spoonful drizzling into a glass bowl beside a slice of toast and whole peanuts.',
+    image: '/images/products/packs/natural-peanut-butter-creamy-2.webp',
+    alt: 'A spoon lifting creamy peanut butter from an open jar of Tatvyra Natural Peanut Butter Creamy, its lid beside it.',
   },
   {
     slug: 'wild-honey',
     eyebrow: 'Pure & Raw',
     title: 'Wild Honey',
     to: '/shop/raw-honey',
-    image: '/images/categories/cat-wild-honey.webp',
-    alt: 'Honey running from a piece of honeycomb into an open jar of Tatvyra wild forest honey.',
-  },
-  {
-    slug: 'superfoods',
-    eyebrow: 'Organic Powders',
-    title: 'Superfoods',
-    to: '/shop',
-    image: '/images/categories/cat-superfoods.webp',
-    alt: 'A pouch of Tatvyra organic moringa leaf powder beside bowls of green powder and fresh leaves.',
+    image: '/images/products/packs/wild-forest-honey-2.webp',
+    alt: 'A wooden dipper drizzling honey into an open jar of Tatvyra Wild Forest Honey, its lid beside it.',
   },
 ]
 
@@ -44,12 +44,8 @@ export default function ShopByCategory() {
           <p className="categories__eyebrow">Organic Curation</p>
           <div className="categories__title-row">
             <h2 id="categories-title" className="categories__title">
-              Explore our wellness essentials
+              Explore Our Products
             </h2>
-            <p className="categories__intro">
-              Pure, uncompromised nutrition crafted directly from nature&rsquo;s finest
-              ingredients to nourish your daily rituals.
-            </p>
           </div>
         </div>
 

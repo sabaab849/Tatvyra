@@ -23,7 +23,9 @@ export default function Logo({ width = 144, to = '/', className = '', reversed =
       alt="Tatvyra"
       width={safeWidth}
       height={Math.round(safeWidth / ratio)}
-      style={{ width: `${safeWidth}px`, height: 'auto' }}
+      // --logo-w lets a stylesheet resize the lockup per breakpoint. The mobile
+      // header sets it below the 120px minimum, at the client's request.
+      style={{ width: `var(--logo-w, ${safeWidth}px)`, height: 'auto' }}
       className="logo__img"
     />
   )
@@ -31,7 +33,7 @@ export default function Logo({ width = 144, to = '/', className = '', reversed =
   if (!to) return <span className={`logo ${className}`}>{img}</span>
 
   return (
-    <Link to={to} className={`logo ${className}`} aria-label="Tatvyra — home">
+    <Link to={to} className={`logo ${className}`} aria-label="Tatvyra home">
       {img}
     </Link>
   )

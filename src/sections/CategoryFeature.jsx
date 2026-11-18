@@ -31,7 +31,7 @@ export default function CategoryFeature({ category, reversed = false, headline, 
 
         <Reveal className="cfeature__copy" delay={100}>
           <p className={`eyebrow ${tone === 'dark' ? 'eyebrow--on-dark' : ''}`}>
-            {category.number} — {category.name}
+            {category.number} {category.name}
           </p>
           <h2 id={`cfeature-${category.slug}`} className="display display--m cfeature__title">
             {headline}

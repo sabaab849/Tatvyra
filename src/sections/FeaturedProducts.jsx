@@ -10,8 +10,8 @@ export default function FeaturedProducts() {
         <SectionHeading
           id="featured-title"
           eyebrow="Featured"
-          title="Where most people start."
-          intro="One from each range — the everyday formats that do the most work."
+          title="Where Most People Start."
+          intro="One of each kind: the everyday formats that do the most work."
           action={
             <Button to="/shop" variant="quiet">
               Shop everything

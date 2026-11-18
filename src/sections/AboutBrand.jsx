@@ -4,10 +4,11 @@ import { getProduct } from '../data/catalogue'
 /**
  * "The brand" — the opening section of the About page.
  *
- * Every sentence of copy here is the brand's own text, kept whole and in order;
- * the only additions are the structural labels ("01 / The brand", "The story",
- * "The name"). The headline is lifted from that text rather than written.
- * "The name" closes the section as a ruled row under the photographs.
+ * Every sentence of copy here is the brand's own text, kept whole; the only
+ * additions are the two small headings, "The story" and "The name". The
+ * headline is lifted from that text rather than written. The story and the
+ * name come first, under the headline; the range photographs follow, with the
+ * company line under them.
  *
  * The product lists under the photographs are the catalogue's own products,
  * looked up by slug so a renamed or removed SKU drops out instead of linking
@@ -30,20 +31,6 @@ const RANGES = [
     ],
   },
   {
-    key: 'nut-butters',
-    name: 'Nut Butters',
-    tone: 'accent',
-    to: '/shop/nut-butters',
-    image: '/images/about/brand-nut-butters.webp',
-    alt: 'A glass jar of creamy nut butter with a spoon standing in it, cashews scattered around the base.',
-    items: [
-      { slug: 'natural-peanut-butter-creamy', label: 'Peanut, Creamy' },
-      { slug: 'chocolate-peanut-butter', label: 'Chocolate Peanut, Cream & Crunchy' },
-      { slug: 'almond-butter-creamy', label: 'Almond, Creamy' },
-      { slug: 'cashew-butter-creamy', label: 'Cashew, Creamy' },
-    ],
-  },
-  {
     key: 'spirulina',
     name: 'Spirulina',
     tone: 'purple',
@@ -52,8 +39,20 @@ const RANGES = [
     alt: 'A ceramic bowl heaped with deep green spirulina powder among long green leaves.',
     items: [
       { slug: 'spirulina-powder', label: 'Powder' },
-      { slug: 'spirulina-tablets', label: 'Tablets' },
       { slug: 'spirulina-capsules', label: 'Capsules' },
+    ],
+  },
+  {
+    key: 'nut-butters',
+    name: 'Nut Butters',
+    tone: 'accent',
+    to: '/shop/nut-butters',
+    image: '/images/about/brand-nut-butters.webp',
+    alt: 'A glass jar of creamy nut butter with a spoon standing in it, cashews scattered around the base.',
+    items: [
+      { slug: 'natural-peanut-butter-creamy', label: 'Peanut Creamy' },
+      { slug: 'chocolate-peanut-butter', label: 'Chocolate Peanut Crunchy' },
+      { slug: 'chocolate-peanut-butter-creamy', label: 'Chocolate Peanut Creamy' },
     ],
   },
   {
@@ -66,7 +65,6 @@ const RANGES = [
     items: [
       { slug: 'wild-forest-honey', label: 'Wild Forest' },
       { slug: 'multifloral-honey', label: 'Multifloral' },
-      { slug: 'himalayan-honey', label: 'Himalayan' },
       { slug: 'kashmiri-white-acacia-honey', label: 'Kashmiri White Acacia' },
     ],
   },
@@ -87,25 +85,44 @@ export default function AboutBrand() {
       <div className="shell">
         <div className="about-brand__head">
           <div className="about-brand__lead">
-            <p className="about-brand__index">
-              {/* One inline run: as bare flex children the label would lose the
-                  space before the slash. */}
-              <span>
-                <span className="about-brand__index-no">01</span> / The brand
-              </span>
-            </p>
             <h1 id="about-title" className="display about-brand__title">
-              The essence of vitality, distilled from nature.
+              The Essence of Vitality, Distilled From Nature.
             </h1>
           </div>
-          <p className="about-brand__intro">
-            Tatvyra is a health &amp; wellness company committed to delivering premium-quality
-            health and wellness supplements, which are healthy nutraceuticals derived from
-            moringa, spirulina &amp; honey, along with top-notch quality nut butter derived from
-            peanuts, almonds, cashews, etc.
+        </div>
+
+        <div className="about-brand__story">
+          <p className="about-brand__kicker">The story</p>
+          <h2 className="about-brand__story-title">
+            Tatvyra Is the Wellness-Nutrition Brand of Feynman Foodcraft Pvt. Ltd.
+          </h2>
+          <p>
+            Built by founders who set out to fix a simple problem: India’s healthiest
+            traditions, moringa, spirulina, raw honey, and nut butters, were
+            scattered across unbranded, inconsistent, low-trust supply chains.
+          </p>
+          <p>
+            We build each product the way a chemist and a grandmother would agree on: rooted in
+            natural, superior quality and traditional use; validated by science;
+            and manufactured to consistent, testable standards, so a shopper can build an
+            entire daily wellness ritual under one trusted name.
           </p>
         </div>
 
+        <div className="about-brand__naming">
+          <p className="about-brand__note">The name</p>
+          <p>
+            “Tatvyra” draws from the Sanskrit roots “tatva” (essence) and “vyra”: the essence of
+            vitality, distilled from nature.
+          </p>
+          <p>
+            From a single spoon of superfood powder to a jar of nut butter on the breakfast table,
+            Tatvyra is designed to be the everyday nutrition brand for health-conscious Indian
+            households.
+          </p>
+        </div>
+
+        {/* The ranges, with the company line set under the photographs. */}
         <div className="about-brand__body">
           <ul className="about-brand__ranges">
             {RANGES.map((range) => {
@@ -130,38 +147,11 @@ export default function AboutBrand() {
             })}
           </ul>
 
-          <div className="about-brand__story">
-            <p className="about-brand__kicker">The story</p>
-            <h2 className="about-brand__story-title">
-              Tatvyra is the wellness-nutrition brand of Feynman Foodcraft Pvt. Ltd.
-            </h2>
-            <p>
-              Built by founders who set out to fix a simple problem: India’s healthiest
-              traditions, moringa, spirulina, raw honey, and cold-pressed nut butters, were
-              scattered across unbranded, inconsistent, low-trust supply chains.
-            </p>
-            <p>
-              We build each product the way a chemist and a grandmother would agree on: rooted in
-              natural, superior quality and traditional use; validated by clean-label science;
-              and manufactured to consistent, testable standards, so a shopper can build an
-              entire daily wellness ritual under one trusted name.
-            </p>
-          </div>
-        </div>
-
-        {/* A ruled row of its own under the photographs, rather than the foot of
-            the story column: there it ran the narrow column far past the product
-            lists and left the space under the photographs empty. */}
-        <div className="about-brand__naming">
-          <p className="about-brand__note">The name</p>
-          <p>
-            “Tatvyra” draws from the Sanskrit roots “tatva” (essence) and “vyra”: the essence of
-            vitality, distilled from nature.
-          </p>
-          <p>
-            From a single spoon of superfood powder to a jar of nut butter on the breakfast table,
-            Tatvyra is designed to be the everyday nutrition brand for health-conscious Indian
-            households.
+          <p className="about-brand__intro">
+            Tatvyra is a health &amp; wellness company committed to delivering premium-quality
+            health and wellness supplements, which are healthy nutraceuticals derived from
+            moringa, spirulina &amp; honey, along with top-notch quality nut butter derived from
+            peanuts.
           </p>
         </div>
       </div>

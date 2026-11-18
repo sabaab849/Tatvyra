@@ -21,17 +21,17 @@ export default function IngredientStory() {
         <Reveal className="ingredient__copy" delay={110}>
           <p className="eyebrow">The ingredient list is the story</p>
           <h2 id="ingredient-title" className="display display--m">
-            Short lists. Recognisable words.
+            Short Lists. Recognisable Words.
           </h2>
           <p>
             A jar of peanut butter should read like peanuts. A pouch of moringa should read like
-            moringa leaf. We do not thicken, sweeten or preserve our way to a longer shelf life,
-            which is why the labels stay short enough to read in the aisle.
+            moringa leaf. We do not thicken or preserve our way to a longer shelf life, which is
+            why the labels stay short enough to read in the aisle.
           </p>
           <ul className="ingredient__points">
             <li>
               <span className="ingredient__point-label">Milled, not compounded</span>
-              Nut butters are milled from the nut itself — no hydrogenated oils, no added sugar.
+              Nut butters are milled from the nut itself, with no hydrogenated oils.
             </li>
             <li>
               <span className="ingredient__point-label">Whole-leaf and whole-algae</span>
@@ -39,12 +39,12 @@ export default function IngredientStory() {
             </li>
             <li>
               <span className="ingredient__point-label">Raw honey, by origin</span>
-              Four honeys kept separate by source, from dense forest florals to high-altitude
-              Himalayan harvests.
+              Three honeys kept separate by source, from dense forest florals to pale Kashmiri
+              acacia.
             </li>
           </ul>
           <Button to="/shop" variant="outline">
-            See the full range
+            See all products
           </Button>
         </Reveal>
       </div>

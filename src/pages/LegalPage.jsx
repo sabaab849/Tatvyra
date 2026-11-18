@@ -31,10 +31,9 @@ function Block({ block }) {
 }
 
 export default function LegalPage({ doc }) {
-  usePageMeta({ title: `${doc.title} — Tatvyra`, description: doc.description })
+  usePageMeta({ title: `${doc.title} | Tatvyra`, description: doc.description })
 
   const email = BRAND.contact.emails[0]
-  const phone = BRAND.contact.phones[0]
 
   return (
     <div className="legal">
@@ -67,9 +66,6 @@ export default function LegalPage({ doc }) {
             <ul>
               <li>
                 <a href={`mailto:${email}`}>{email}</a>
-              </li>
-              <li>
-                <a href={`tel:${phone.replace(/\s/g, '')}`}>{phone}</a>
               </li>
             </ul>
           </div>

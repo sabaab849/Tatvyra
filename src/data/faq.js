@@ -16,39 +16,31 @@
  * address (`href`).
  */
 
-import { BRAND, MARKS } from './brand'
+import { BRAND } from './brand'
 import { getCategory, productsByCategory } from './catalogue'
 
 const NUMBER_WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
 const inWords = (n) => NUMBER_WORDS[n] ?? String(n)
 
 const [email] = BRAND.contact.emails
-const [phone] = BRAND.contact.phones
 
 const moringa = productsByCategory('moringa')
-const moringaFormats = moringa.map((p) => `${p.name} — ${p.descriptor}`)
+const moringaFormats = moringa.map((p) => `${p.name}: ${p.descriptor}`)
 // "Tablets" → "tablet", so the sentence reads "tablet and capsule formats".
 const spirulinaFormats = productsByCategory('spirulina')
   .map((p) => p.format.toLowerCase().replace(/s$/, ''))
   .join(', ')
   .replace(/, ([^,]*)$/, ' and $1')
 
-const honeys = productsByCategory('raw-honey').map((p) => `${p.name} — ${p.descriptor}`)
+const honeys = productsByCategory('raw-honey').map((p) => `${p.name}: ${p.descriptor}`)
 
 export const FAQ = [
   {
     id: 'products-and-ingredients',
-    title: 'Products & ingredients',
+    title: 'Products & Ingredients',
     items: [
       {
-        q: 'Which products are vegan?',
-        a: [
-          MARKS.vegan.definition,
-          'Each product page lists the on-pack marks that product carries.',
-        ],
-      },
-      {
-        q: 'Do the nut butters contain added sugar or hydrogenated oils?',
+        q: 'Do the nut butters contain hydrogenated oils?',
         a: [`No. ${getCategory('nut-butters').description}`],
         links: [{ to: '/shop/nut-butters', label: 'Shop nut butters' }],
       },
@@ -68,14 +60,14 @@ export const FAQ = [
         links: [{ to: '/shop/moringa', label: 'Shop moringa' }],
       },
       {
-        q: 'How are the four raw honeys different?',
+        q: `How are the ${inWords(honeys.length)} raw honeys different?`,
         a: [getCategory('raw-honey').description, { list: honeys }],
         links: [{ to: '/shop/raw-honey', label: 'Shop raw honey' }],
       },
       {
         q: 'Where can I find the ingredients and nutrition information?',
         a: [
-          'The full ingredient declaration and nutrition panel for each product are not yet published on this site. Until they are, the on-pack label is the authority — always refer to the packaging for ingredients, recommended use, allergens, warnings and storage.',
+          'The full ingredient declaration and nutrition panel for each product are not yet published on this site. Until they are, the on-pack label is the authority: always refer to the packaging for ingredients, recommended use, allergens, warnings and storage.',
           `For a specific product, write to us at ${email}.`,
         ],
         links: [{ href: `mailto:${email}`, label: 'Email us' }],
@@ -103,7 +95,7 @@ export const FAQ = [
   },
   {
     id: 'orders-and-delivery',
-    title: 'Orders & delivery',
+    title: 'Orders & Delivery',
     items: [
       {
         q: 'How do I place an order?',
@@ -115,7 +107,7 @@ export const FAQ = [
       {
         q: 'What are the delivery charges and timelines?',
         a: [
-          'Our shipping policy — covering order processing, delivery locations, delivery timelines, shipping charges and order tracking — is published on Our Policies. Applicable shipping charges, if any, are shown during checkout before the order is completed.',
+          'Our shipping policy, covering order processing, delivery locations, delivery timelines, shipping charges and order tracking, is published on Our Policies. Applicable shipping charges, if any, are shown during checkout before the order is completed.',
           `If you need help with an order, write to us at ${email}.`,
         ],
         links: [{ to: '/policies#shipping-policy', label: 'Shipping policy' }],
@@ -123,7 +115,7 @@ export const FAQ = [
       {
         q: 'Can I cancel or return an order?',
         a: [
-          'Our refund and cancellation policy — covering cancellation, returns, damaged or incorrect products, and refund processing — is published on Our Policies.',
+          'Our refund and cancellation policy, covering cancellation, returns, damaged or incorrect products, and refund processing, is published on Our Policies.',
           `If you need help with an order, write to us at ${email}.`,
         ],
         links: [{ to: '/policies#refund-and-cancellation-policy', label: 'Refund & cancellation policy' }],
@@ -144,12 +136,11 @@ export const FAQ = [
       {
         q: 'How do I get in touch?',
         a: [
-          `Email ${BRAND.contact.emails.join(' or ')}, or call ${BRAND.contact.phones.join(' or ')}.`,
+          `Email ${BRAND.contact.emails.join(' or ')}.`,
           `${BRAND.company}, ${BRAND.contact.address.join(', ')}.`,
         ],
         links: [
           { to: '/contact', label: 'Contact page' },
-          { href: `tel:${phone.replace(/\s/g, '')}`, label: `Call ${phone}` },
         ],
       },
     ],

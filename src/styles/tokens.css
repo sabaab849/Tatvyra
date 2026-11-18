@@ -56,6 +56,8 @@
   --text-muted: color-mix(in srgb, var(--tatvyra-ink) 75%, var(--tatvyra-warm-white));
   --text-faint: color-mix(in srgb, var(--tatvyra-ink) 65%, var(--tatvyra-warm-white));
   --text-heading: var(--tatvyra-purple);
+  /* The header's primary links, pure black at the client's request. */
+  --text-nav: #000;
   --text-on-dark: var(--tatvyra-warm-white);
   --text-on-dark-muted: color-mix(in srgb, var(--tatvyra-warm-white) 68%, var(--tatvyra-aubergine));
 
@@ -110,8 +112,16 @@
   --weight-bold: 700;
 
   /* Roles — components reference these rather than raw numbers. */
-  --type-display-weight: var(--weight-bold);      /* hero and page titles */
-  --type-heading-weight: var(--weight-bold);      /* section headings */
+  /* Every heading — hero, page, section, card — is Semibold. Helvetica Neue,
+     Helvetica and Arial ship no Semibold: asked for 600 they draw their Bold.
+     So a heading is drawn in the Regular cut thickened by a hairline outline
+     in its own colour (--heading-stroke), which lands between the two — a
+     true Semibold weight on every platform. Headings take both tokens, and
+     paint the outline behind the fill (paint-order) so it never draws over
+     the letter itself. */
+  --type-display-weight: var(--weight-regular);   /* hero and page titles */
+  --type-heading-weight: var(--weight-regular);   /* every other heading */
+  --heading-stroke: 0.022em;
   --type-product-weight: var(--weight-medium);    /* product and range names */
   --type-body-weight: var(--weight-regular);      /* running copy */
   --type-label-weight: var(--weight-medium);      /* eyebrows, metadata */
@@ -126,26 +136,46 @@
        0.26em  ornament                        — mottos, rails, map plates
 
      Buttons and the quiet text links are the fourth setting, at --step--1.
-     Running copy is --step-0 at 1.65; the small copy beneath it --step--1 at
-     1.6; a lede --step-1 or --step-2 at 1.55. Use the scale, not raw px. */
+     Running copy is --step-0 (18-19px) at --leading-body; the small copy
+     beneath it --step--1 (15-16px); a lede --step-1 at --leading-lede. Use
+     the scale, not raw px. */
 
-  /* Tracking. A bold grotesque reads looser than it is at display sizes, so
-     headings are drawn in; labels keep their own wider tracking. */
-  --display-tracking: -0.022em;
-  --heading-tracking: -0.02em;
+  /* Tracking. ONE value for every heading at every size: a heavy grotesque
+     reads looser than it is, so headings are drawn in. Labels keep their own
+     wider tracking (above); running text is never tracked. */
+  /* -0.02em between the letters as they are seen: the outline that gives
+     headings their weight widens each letter by its own width, so that
+     width is given back here. */
+  --heading-tracking: calc(-0.02em + var(--heading-stroke));
+  --display-tracking: var(--heading-tracking);
   --product-tracking: -0.01em;
-  --display-leading: 0.98;
 
-  /* Fluid type scale */
-  --step--2: clamp(0.688rem, 0.67rem + 0.09vw, 0.75rem);
-  --step--1: clamp(0.813rem, 0.79rem + 0.11vw, 0.875rem);
-  --step-0: clamp(0.938rem, 0.91rem + 0.14vw, 1rem);
-  --step-1: clamp(1.063rem, 1rem + 0.31vw, 1.25rem);
-  --step-2: clamp(1.25rem, 1.14rem + 0.55vw, 1.625rem);
-  --step-3: clamp(1.5rem, 1.28rem + 1.09vw, 2.25rem);
-  --step-4: clamp(1.875rem, 1.45rem + 2.13vw, 3.25rem);
-  --step-5: clamp(2.375rem, 1.6rem + 3.86vw, 4.75rem);
-  --step-6: clamp(2.875rem, 1.53rem + 6.7vw, 7rem);
+  /* Line height. It follows the size, in four settings and no others:
+       --leading-display  step-5, step-6     the largest headings
+       --leading-heading  step-3, step-4     section and sub-section heads
+       --leading-subhead  step-2 and below   small heads, card and product names
+       --leading-body     running copy       paragraphs, lists, answers
+     and --leading-lede for an intro paragraph at step-1 or step-2. */
+  --leading-display: 1;
+  --leading-heading: 1.1;
+  --leading-subhead: 1.25;
+  --leading-lede: 1.5;
+  --leading-body: 1.6;
+  --display-leading: var(--leading-display);
+
+  /* Fluid type scale. Each step grows linearly from its first size on a
+     360px screen to its second at 1440px, and holds outside that range.
+     Body copy is 18-19px: nothing meant to be read as a sentence is set
+     smaller than --step--1. */
+  --step--2: clamp(0.75rem, 0.7292rem + 0.0926vw, 0.8125rem);  /* 12 - 13px  labels */
+  --step--1: clamp(0.9375rem, 0.9167rem + 0.0926vw, 1rem);     /* 15 - 16px  secondary, buttons */
+  --step-0: clamp(1.125rem, 1.1042rem + 0.0926vw, 1.1875rem);  /* 18 - 19px  body */
+  --step-1: clamp(1.25rem, 1.1875rem + 0.2778vw, 1.4375rem);   /* 20 - 23px  ledes, card names */
+  --step-2: clamp(1.4375rem, 1.3333rem + 0.463vw, 1.75rem);    /* 23 - 28px  block headings */
+  --step-3: clamp(1.6875rem, 1.4583rem + 1.0185vw, 2.375rem);  /* 27 - 38px  sub-sections */
+  --step-4: clamp(2rem, 1.5417rem + 2.037vw, 3.375rem);        /* 32 - 54px  section headings */
+  --step-5: clamp(2.5rem, 1.7083rem + 3.5185vw, 4.875rem);     /* 40 - 78px  hero, page titles */
+  --step-6: clamp(3rem, 1.6667rem + 5.9259vw, 7rem);           /* 48 - 112px display */
 
   /* --- Space ------------------------------------------------------------ */
   --space-3xs: 0.25rem;
@@ -159,6 +189,8 @@
   --space-3xl: 6rem;
   --section-y: clamp(2.75rem, 1.9rem + 3.6vw, 5rem);
   --section-y-tight: clamp(2.25rem, 1.6rem + 2.6vw, 3.5rem);
+  /* A page whose sections run one after another on shared grounds (About). */
+  --section-y-snug: clamp(1.75rem, 1.3rem + 1.8vw, 2.75rem);
 
   /* --- Layout ----------------------------------------------------------- */
   --page-max: 82.5rem; /* 1320px */
@@ -194,14 +226,14 @@
 
 @media (max-width: 48rem) {
   :root {
-    --header-h: 86px;
-    --header-h-compact: 84px;
+    --header-h: 64px;
+    --header-h-compact: 60px;
   }
 }
 
 @media (max-width: 30rem) {
   :root {
-    --header-h: 86px;
-    --header-h-compact: 84px;
+    --header-h: 64px;
+    --header-h-compact: 60px;
   }
 }

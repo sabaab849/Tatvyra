@@ -1,0 +1,253 @@
+/* --- The jungle ---------------------------------------------------------------
+   The homepage's close (JungleJourney): a track five screens tall with a stage
+   that sticks for the length of it. The 3D scene fills the stage; the type
+   here sits over it. The ground colour is the scene's own shade, so the stage
+   is never blank while the scene loads.
+
+   The section clips rather than hides its overflow: hidden would make it a
+   scroll container and stop the stage from sticking. */
+
+.jungle {
+  --jungle-shade: #101f13;
+  --jungle-gold: #f3cf7a;
+  position: relative;
+  overflow: clip;
+  background: var(--jungle-shade);
+  color: var(--tatvyra-warm-white);
+}
+
+/* How much scrolling the walk takes. The path and everything on it are
+   unchanged; a shorter track only brings each product round sooner. */
+.jungle__track { height: 260vh; }
+
+.jungle__stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background: radial-gradient(60% 55% at 50% 55%, #22392a, var(--jungle-shade));
+}
+
+.jungle__stage.is-pointing { cursor: pointer; }
+
+/* A vignette over the scene, so the eye stays in the middle of the tunnel. */
+.jungle__stage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(75% 70% at 50% 52%, transparent 45%, rgb(4 12 6 / 0.55) 100%);
+  pointer-events: none;
+}
+
+.jungle__canvas {
+  position: absolute !important;
+  inset: 0;
+}
+
+/* --- The way in ------------------------------------------------------------ */
+
+.jungle__intro {
+  z-index: 1;
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: clamp(1rem, 0.6rem + 1.6vw, 2rem);
+  padding: var(--header-h-compact) var(--gutter) 0;
+  text-align: center;
+  pointer-events: none;
+}
+
+.jungle__logo .logo__img { --logo-w: clamp(150px, 9rem + 8vw, 240px); }
+
+.jungle__line {
+  max-width: 17ch;
+  font-size: var(--step-5);
+  font-weight: var(--type-heading-weight);
+  --weight-stroke: var(--heading-stroke);
+  paint-order: stroke fill;
+  line-height: var(--leading-display);
+  letter-spacing: var(--heading-tracking);
+  text-wrap: balance;
+  text-shadow: 0 2px 30px rgb(0 0 0 / 0.55);
+}
+
+/* --- The product in focus ---------------------------------------------------
+   Set on the side of the screen the product is not on, so the two never
+   overlap. */
+
+.jungle__caption {
+  z-index: 1;
+  position: absolute;
+  inset: var(--header-h-compact) 0 0;
+  pointer-events: none;
+}
+
+.jungle__focus {
+  position: absolute;
+  top: 50%;
+  width: min(34vw, 26rem);
+  margin-top: -5rem;
+  pointer-events: auto;
+}
+
+/* A soft pool of shade behind the type, so it reads against the foliage. */
+.jungle__focus::before {
+  content: '';
+  position: absolute;
+  inset: -4rem -5rem;
+  z-index: -1;
+  background: radial-gradient(closest-side, rgb(6 16 9 / 0.78), rgb(6 16 9 / 0.5) 55%, transparent);
+  pointer-events: none;
+}
+
+.jungle__focus--left { left: max(var(--gutter), 8vw); }
+.jungle__focus--right { right: max(var(--gutter), 8vw); }
+
+.jungle__name {
+  font-size: var(--step-4);
+  font-weight: var(--type-heading-weight);
+  --weight-stroke: var(--heading-stroke);
+  paint-order: stroke fill;
+  line-height: var(--leading-heading);
+  letter-spacing: var(--heading-tracking);
+  text-shadow: 0 2px 24px rgb(0 0 0 / 0.6);
+}
+
+.jungle__desc {
+  max-width: 30ch;
+  margin-top: var(--space-s);
+  padding-top: var(--space-s);
+  border-top: 1px solid rgb(248 245 236 / 0.3);
+  font-size: var(--step-0);
+  line-height: var(--leading-body);
+  letter-spacing: 0.01em;
+  color: rgb(248 245 236 / 0.86);
+  text-shadow: 0 1px 16px rgb(0 0 0 / 0.7);
+}
+
+.jungle__shop {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  margin-top: 1.25rem;
+  padding-bottom: var(--space-3xs);
+  border-bottom: 1px solid currentColor;
+  font-size: var(--step--1);
+  font-weight: var(--type-button-weight);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--jungle-gold);
+  transition: color var(--dur) var(--ease);
+}
+
+.jungle__shop:hover { color: var(--tatvyra-warm-white); }
+.jungle__shop svg { transition: translate var(--dur) var(--ease); }
+.jungle__shop:hover svg { translate: 4px 0; }
+
+/* --- Out into the light ---------------------------------------------------- */
+
+.jungle__outro {
+  z-index: 2;
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--space-l);
+  padding: var(--header-h-compact) var(--gutter) 0;
+  text-align: center;
+}
+
+/* Two lines, in the site's heading face and weight. */
+.jungle__tagline {
+  display: grid;
+  font-size: var(--step-6);
+  font-weight: var(--type-heading-weight);
+  --weight-stroke: var(--heading-stroke);
+  paint-order: stroke fill;
+  line-height: var(--leading-display);
+  letter-spacing: var(--heading-tracking);
+  /* Aubergine, the brand's deepest colour, against the blue sky: dark enough
+     to read on the blue and on the white of the clouds alike. A soft pale glow
+     lifts it off the cloud where the two meet. */
+  color: var(--tatvyra-aubergine);
+  text-shadow: 0 0 24px rgb(255 255 255 / 0.45), 0 1px 2px rgb(255 255 255 / 0.3);
+}
+
+/* --- The open sky ------------------------------------------------------------
+   Where the walk comes out: a clear blue sky with drifting cloud and the sun
+   high on the left, drawn live and sharp at any size (SkyCanvas). */
+
+.jungle__sky {
+  z-index: 1;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #7fa9d6;
+  pointer-events: none;
+}
+
+.jungle__sky-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* --- Narrow: the product above, its name below ----------------------------- */
+
+@media (max-width: 48rem) {
+  .jungle__focus,
+  .jungle__focus--left,
+  .jungle__focus--right {
+    top: auto;
+    bottom: clamp(1.5rem, 1rem + 5vh, 4rem);
+    left: var(--gutter);
+    right: var(--gutter);
+    width: auto;
+    margin-top: 0;
+  }
+}
+
+/* --- Reduced motion: a plain row, nothing pinned --------------------------- */
+
+.jungle__still {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-xl, 3rem);
+  padding-block: var(--section-y);
+  text-align: center;
+}
+
+.jungle__row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: var(--space-l);
+  width: 100%;
+}
+
+.jungle__card {
+  display: grid;
+  gap: var(--space-2xs);
+  text-align: left;
+}
+
+.jungle__card img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: var(--radius-card);
+  margin-bottom: var(--space-2xs);
+}
+
+.jungle--still .jungle__name { font-size: var(--step-1); text-shadow: none;
+  font-weight: var(--type-heading-weight);
+  --weight-stroke: var(--heading-stroke);
+  paint-order: stroke fill;
+  letter-spacing: var(--heading-tracking);
+  line-height: var(--leading-subhead);
+}
+.jungle--still .jungle__desc { margin-top: 0; padding-top: 0; border-top: 0; font-size: var(--step--1); text-shadow: none; }

@@ -70,13 +70,31 @@ export default function KineticText({
     const count = letters.length
     let flow = 0
 
+    // What was last written, so a frame only touches what has changed. Every
+    // write invalidates style (and a filter attribute, the filter's whole
+    // render), and most frames change only a few of these values, so the rest
+    // of the line is left alone.
+    const last = { stretch: '', lag: '', liquid: null, scale: '', base: '', pulls: new Array(count).fill('') }
+
     const write = () => {
       const energy = state.energy.current
       const at = state.at.current
 
-      root.style.setProperty('--kt-stretch', state.stretch.current.toFixed(3))
-      root.style.setProperty('--kt-lag', `${state.lag.current.toFixed(2)}px`)
-      root.classList.toggle('is-liquid', energy > 0.015)
+      const stretch = state.stretch.current.toFixed(3)
+      if (stretch !== last.stretch) {
+        last.stretch = stretch
+        root.style.setProperty('--kt-stretch', stretch)
+      }
+      const lag = `${state.lag.current.toFixed(2)}px`
+      if (lag !== last.lag) {
+        last.lag = lag
+        root.style.setProperty('--kt-lag', lag)
+      }
+      const liquid = energy > 0.015
+      if (liquid !== last.liquid) {
+        last.liquid = liquid
+        root.classList.toggle('is-liquid', liquid)
+      }
 
       // Each letter's lean, on a bell curve around the pointer.
       for (let i = 0; i < count; i += 1) {
@@ -84,6 +102,8 @@ export default function KineticText({
         const distance = position - at
         const pull = Math.exp(-(distance * distance) / 0.018) * energy
         const value = pull.toFixed(3)
+        if (value === last.pulls[i]) continue
+        last.pulls[i] = value
         for (const set of letterSets) set[i]?.style.setProperty('--kt-pull', value)
       }
 
@@ -92,11 +112,19 @@ export default function KineticText({
       const displacement = displacementRef.current
       const turbulence = turbulenceRef.current
       if (displacement && turbulence) {
-        displacement.setAttribute('scale', (energy * 7 * intensity).toFixed(2))
-        if (energy > 0.015) {
+        const scale = (energy * 7 * intensity).toFixed(2)
+        if (scale !== last.scale) {
+          last.scale = scale
+          displacement.setAttribute('scale', scale)
+        }
+        if (liquid) {
           flow += 0.0009 * energy
-          const base = 0.012 + Math.sin(flow) * 0.004
-          turbulence.setAttribute('baseFrequency', `0.008 ${base.toFixed(4)}`)
+          const base = `0.008 ${(0.012 + Math.sin(flow) * 0.004).toFixed(4)}`
+          // The noise only has to be generated again when it actually moves.
+          if (base !== last.base) {
+            last.base = base
+            turbulence.setAttribute('baseFrequency', base)
+          }
         }
       }
     }

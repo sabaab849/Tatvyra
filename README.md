@@ -1,6 +1,6 @@
 # Tatvyra
 
-The official website for **Tatvyra** — clean-label wellness essentials from
+The official website for **Tatvyra** — clean-label nutrition from
 Feynman Foodcraft Pvt. Ltd.
 
 > Rise. Nourish. Thrive.
@@ -20,6 +20,23 @@ npm run lint     # oxlint
 React 19 + React Router 7 on Vite 8, with hand-written CSS driven by design
 tokens. No UI kit, no CSS framework, no animation library — the only runtime
 dependencies are React, React DOM and React Router.
+
+## Payments (Razorpay)
+
+Checkout takes payment through Razorpay's hosted window. Two Vercel functions
+hold the secret: `api/razorpay/order.js` prices the basket on the server (via
+`src/lib/pricing.js`, the same code the cart uses) and opens the order, and
+`api/razorpay/verify.js` checks Razorpay's signature before an order counts as
+paid. The order reference, items and delivery address are saved as notes on the
+Razorpay order, so every paid order shows up in the Razorpay dashboard.
+
+Keys are server environment variables, never `VITE_` ones:
+
+- **Local:** copy `.env.example` to `.env.local` (git-ignored) and fill in
+  `RAZORPAY_KEY_ID` and `RAZORPAY_KEY_SECRET`. `npm run dev` serves `api/`
+  itself, so no Vercel CLI is needed.
+- **Production:** set the same two variables in Vercel → Project → Settings →
+  Environment Variables, then redeploy.
 
 ## Layout
 

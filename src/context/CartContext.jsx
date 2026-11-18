@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useReducer, useState } from 'react'
-import { getProduct, priceFor } from '../data/catalogue'
+import { getProduct } from '../data/catalogue'
+import { quoteLines } from '../lib/pricing'
 import { CartContext } from './useCart'
 
 /**
@@ -11,16 +12,11 @@ import { CartContext } from './useCart'
  *
  * Totals are computed here, once, and read by every surface — the arithmetic
  * lives in one place so the drawer and any later checkout cannot drift apart.
- * No payment backend is connected: the drawer totals the order and hands off to
- * the enquiry route rather than faking a payment step.
+ * The total is the MRP of each line times its quantity, summed: MRPs include
+ * GST, so nothing — tax, markup or delivery — is added on top. The arithmetic
+ * itself lives in src/lib/pricing.js, which the payment server shares — so
+ * what Razorpay charges is always what this cart shows.
  */
-
-/* Placeholder delivery rule — free over a threshold, a flat fee below it.
-   Unlike the product prices, which are Tatvyra's own MRPs, these two figures
-   are invented: the supplied price structure covers products only. Replace
-   them with the real rates, or drop the line, once shipping is settled. */
-const FREE_DELIVERY_FROM = 999
-const DELIVERY_FLAT = 79
 
 const STORAGE_KEY = 'tatvyra.cart.v1'
 
@@ -83,27 +79,13 @@ export function CartProvider({ children }) {
   }, [lines])
 
   const value = useMemo(() => {
-    const items = lines
-      .map((line) => {
-        const product = getProduct(line.slug)
-        if (!product) return null
-        /* Fall back to nought rather than null, so one unpriced SKU cannot turn
-           the whole basket into NaN. */
-        const unitPrice = priceFor(product, line.size) ?? 0
-        return { ...line, product, unitPrice, lineTotal: unitPrice * line.quantity }
-      })
-      .filter(Boolean)
-
-    const subtotal = items.reduce((sum, line) => sum + line.lineTotal, 0)
-    const delivery = subtotal > 0 && subtotal < FREE_DELIVERY_FROM ? DELIVERY_FLAT : 0
+    const { items, subtotal, total } = quoteLines(lines)
 
     return {
       items,
-      count: items.reduce((total, line) => total + line.quantity, 0),
+      count: items.reduce((sum, line) => sum + line.quantity, 0),
       subtotal,
-      delivery,
-      total: subtotal + delivery,
-      freeDeliveryFrom: FREE_DELIVERY_FROM,
+      total,
       isOpen,
       openCart: () => setIsOpen(true),
       closeCart: () => setIsOpen(false),

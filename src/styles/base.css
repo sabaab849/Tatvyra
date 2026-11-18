@@ -25,8 +25,8 @@ body {
   font-family: var(--font-sans);
   font-weight: var(--type-body-weight);
   font-size: var(--step-0);
-  line-height: 1.6;
-  letter-spacing: 0.004em;
+  line-height: var(--leading-body);
+  letter-spacing: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
@@ -74,11 +74,30 @@ ol {
   padding: 0;
 }
 
+/* The outline that gives headings their Semibold weight (see tokens.css).
+   A heading names its width as --weight-stroke; every element works it out
+   here against its own font size. Set on the heading alone, an em width
+   would be fixed at the heading's size and handed down as a hairline to any
+   larger words inside it. Elsewhere it is nought. */
+* {
+  -webkit-text-stroke-width: var(--weight-stroke, 0);
+  -webkit-text-stroke-color: currentColor;
+}
+
+/* Every heading: the site's one face, Semibold, one tracking. Each component
+   sets the size from the scale and the line height that size takes. */
 h1,
 h2,
 h3,
-h4 {
-  font-weight: 400;
+h4,
+h5,
+h6 {
+  font-family: var(--font-sans);
+  font-weight: var(--type-heading-weight);
+  --weight-stroke: var(--heading-stroke);
+  paint-order: stroke fill;
+  letter-spacing: var(--heading-tracking);
+  line-height: var(--leading-heading);
   text-wrap: balance;
 }
 
@@ -104,16 +123,19 @@ p {
 /* --- Type primitives ------------------------------------------------------ */
 
 .display {
-  font-weight: var(--type-display-weight);
-  line-height: var(--display-leading);
-  letter-spacing: var(--display-tracking);
+  font-weight: var(--type-heading-weight);
+  --weight-stroke: var(--heading-stroke);
+  paint-order: stroke fill;
+  line-height: var(--leading-display);
+  letter-spacing: var(--heading-tracking);
   color: var(--text-heading);
 }
 
 .display--xl { font-size: var(--step-6); }
 .display--l  { font-size: var(--step-5); }
-.display--m  { font-size: var(--step-4); }
-.display--s  { font-size: var(--step-3); }
+/* Steps 3 and 4 take the heading leading, not the display one (CLAUDE.md). */
+.display--m  { font-size: var(--step-4); line-height: var(--leading-heading); }
+.display--s  { font-size: var(--step-3); line-height: var(--leading-heading); }
 
 .eyebrow {
   font-size: var(--step--2);
@@ -127,7 +149,7 @@ p {
 
 .lede {
   font-size: var(--step-1);
-  line-height: 1.55;
+  line-height: var(--leading-lede);
   color: var(--text-muted);
 }
 
@@ -189,7 +211,7 @@ p {
   z-index: calc(var(--z-overlay) + 10);
   background: var(--tatvyra-purple);
   color: var(--tatvyra-warm-white);
-  padding: 0.75rem 1.25rem;
+  padding: var(--space-xs) 1.25rem;
   font-size: var(--step--1);
   font-weight: 700;
   letter-spacing: 0.06em;

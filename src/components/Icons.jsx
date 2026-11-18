@@ -153,14 +153,6 @@ export const FlaskIcon = (p) => (
   </svg>
 )
 
-/* No added sugar — a sugar cube. */
-export const SugarCubeIcon = (p) => (
-  <svg {...mark} {...p}>
-    <path d="M12 3.4 19.4 7.7v8.6L12 20.6l-7.4-4.3V7.7z" />
-    <path d="M4.6 7.7 12 12l7.4-4.3M12 12v8.6" />
-  </svg>
-)
-
 /* A certified process — a shield carrying a tick. */
 export const ShieldCheckIcon = (p) => (
   <svg {...mark} {...p}>

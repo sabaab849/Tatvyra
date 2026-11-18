@@ -52,16 +52,16 @@ export default function Hero() {
       <div className="hero__stage">
         <div className="hero__inner shell">
           <div className="hero__copy">
-            <p className="eyebrow hero__eyebrow">Wellness Essentials</p>
             <h1 id="hero-title" className="display display--xl hero__title">
-              Rise.<br />Nourish.<br />Thrive.
+              <span className="hero__title-part">A Little<br />Indulgence.</span>{' '}
+              <span className="hero__title-part hero__title-part--accent">A Lot of<br />Goodness.</span>
             </h1>
             <p className="hero__lede">
-              Clean-label wellness essentials, made with real ingredients and nothing hidden.
+              Real ingredients, feel-good flavours, and everyday favourites worth savouring.
             </p>
             <div className="hero__actions">
               <Button to="/shop" variant="primary" icon={<ArrowIcon width={18} height={18} />}>
-                Shop Wellness Essentials
+                Shop All Products
               </Button>
               <Button to="/about" variant="quiet">
                 Explore Tatvyra
@@ -77,15 +77,15 @@ export default function Hero() {
             media="(max-width: 75rem)"
             srcSet="/images/hero-banner-narrow.webp"
             width={1000}
-            height={700}
+            height={635}
           />
           <img
             src="/images/hero-banner-1400.webp"
-            srcSet="/images/hero-banner-1000.webp 1000w, /images/hero-banner-1400.webp 1400w, /images/hero-banner-1983.webp 1983w"
+            srcSet="/images/hero-banner-1000.webp 1000w, /images/hero-banner-1400.webp 1400w, /images/hero-banner-2252.webp 2252w"
             sizes="100vw"
-            alt="Tatvyra premium peanut butter, organic moringa gummies and multifloral honey, arranged with peanuts, moringa leaves and wildflowers."
-            width={1983}
-            height={793}
+            alt="Tatvyra premium peanut butter, organic moringa gummies and multifloral honey, floating over soft pink and lavender shapes with peanuts, moringa leaves and a honey dipper."
+            width={2252}
+            height={897}
             fetchPriority="high"
             decoding="async"
           />

@@ -19,8 +19,10 @@ export default function Newsletter() {
         setSubmitted(true)
       }}
     >
-      <label className="newsletter__label" htmlFor="newsletter-email">
-        Get the range, the recipes and new formats — occasionally, never daily.
+      {/* No visible heading or line: the field speaks for itself. The label
+          stays for screen readers. */}
+      <label className="visually-hidden" htmlFor="newsletter-email">
+        Email address for the Tatvyra newsletter
       </label>
       <div className="newsletter__row">
         <input
@@ -43,7 +45,7 @@ export default function Newsletter() {
       </div>
       <p className="newsletter__status" role="status">
         {submitted
-          ? 'Thanks — the mailing list is being set up. Write to connect@feynmanfoodcraft.com in the meantime and we will add you.'
+          ? 'Thanks. The mailing list is being set up. Write to Connect@tatvyra.com in the meantime and we will add you.'
           : ''}
       </p>
     </form>

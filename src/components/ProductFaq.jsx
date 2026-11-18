@@ -16,7 +16,7 @@ export default function ProductFaq({ product }) {
         <Reveal className="faq__head">
           <p className="faq__eyebrow">Questions</p>
           <h2 id="faq-title" className="faq__title">
-            Before you open the jar.
+            Before You Open the Jar.
           </h2>
         </Reveal>
 

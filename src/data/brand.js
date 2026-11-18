@@ -9,21 +9,23 @@ export const BRAND = {
   name: 'Tatvyra',
   line: 'Rise. Nourish. Thrive.',
   company: 'Feynman Foodcraft Pvt. Ltd.',
-  positioning: 'Clean-label wellness, kept honest.',
-  catalogueTitle: 'Wellness Essentials',
+  positioning: 'Real wellness, kept honest.',
   // Verbatim from the catalogue cover / closing page.
   promise: 'Your Trusted Source for Everyday Health & Wellness',
   certification: 'FSSAI certified',
-  // The company's GST registration, as supplied by Tatvyra.
-  gstin: '27AAHCF1032B1ZA',
   website: 'www.tatvyra.com',
   contact: {
-    emails: ['connect@feynmanfoodcraft.com', 'vijeta.r@feynmanfoodcraft.com'],
-    phones: ['+91 90040 95046', '+91 90040 98295'],
+    emails: ['Connect@tatvyra.com', 'Sales@tatvyra.com'],
+    // What each address is for, shown above it in the footer and on Contact.
+    emailFor: {
+      'Connect@tatvyra.com': 'Product info',
+      'Sales@tatvyra.com': 'Business opportunities',
+    },
+    // The footer lists only these two addresses, as the client asked.
+    footerEmails: ['connect@tatvyra.com', 'sales@tatvyra.com'],
     address: [
-      'Unit no. 407, Shivam Chambers',
-      'Swami Vivekanda Road, Jawahar Nagar',
-      'Goregaon West, Mumbai 400104',
+      '208/407, Shivam Chambers',
+      'SV Road, Goregaon West, Mumbai 400104',
     ],
   },
 }
@@ -41,7 +43,7 @@ export const VOICE_TRAITS = [
   {
     id: 'rooted',
     title: 'Rooted',
-    body: 'Moringa, spirulina and honey are real, traditional foods here — not trends we picked up this season.',
+    body: 'Moringa, spirulina and honey are real, traditional foods here, not trends we picked up this season.',
   },
   {
     id: 'everyday',
@@ -60,29 +62,19 @@ export const VOICE_TRAITS = [
  * These definitions govern which product may carry which mark.
  */
 export const MARKS = {
-  'clean-label': {
-    label: 'Clean Label',
-    definition:
-      'Made with thoughtfully selected ingredients and free from unnecessary additives, with clean-label standards maintained across every SKU in this catalogue.',
-  },
-  vegan: {
-    label: 'Vegan',
-    definition:
-      'Contains no animal-derived ingredients. Applied to nut butters, moringa and spirulina formats; raw honey is excluded by category definition.',
-  },
   'gluten-free': {
     label: 'Gluten-Free',
     definition:
-      'Naturally free of gluten-containing grains — no cross-formulation risk from wheat, barley or rye.',
+      'Naturally free of gluten-containing grains, with no cross-formulation risk from wheat, barley or rye.',
   },
   'nutrition-forward': {
-    label: 'High Protein / No Added Sugar',
+    label: 'High Protein',
     definition:
-      'Nutrition-forward claims used where the product meaningfully over-indexes on protein density or carries no added sugar in its clean-label formulation.',
+      'Nutrition-forward claim used where the product meaningfully over-indexes on protein density.',
   },
   'single-origin': {
     label: 'Single Origin / High-Altitude',
     definition:
-      'Sourcing claims specific to the Raw Honey range, describing floral source diversity or harvest terrain.',
+      'Sourcing claims specific to Raw Honey, describing floral source diversity or harvest terrain.',
   },
 }

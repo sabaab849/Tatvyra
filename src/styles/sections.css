@@ -4,8 +4,11 @@
 
 /* --- Hero -----------------------------------------------------------------
    The hero is one supplied banner: the packshot, its cream ground and its
-   styling are baked into the photograph, which already leaves its left ~42%
-   open. The copy is laid over that open area rather than set beside it, so
+   styling are baked into the photograph. The wide sizes are the supplied
+   packshot (kept locally, untracked, as product images/Hero banner.png)
+   set at the right of a 2252x897 field of its own flat cream, feathered over
+   the join, which leaves the left ~44% open. The narrow size is the packshot
+   alone. The copy is laid over that open area rather than set beside it, so
    the section paints no wash of its own — anything it painted would tint the
    picture. --surface only shows through on the narrow layout and behind the
    trust strip. */
@@ -26,33 +29,13 @@
   max-width: 100rem;
   margin-inline: auto;
   /* The banner's own ratio, so cover has nothing left to trim vertically. */
-  aspect-ratio: 1983 / 793;
+  aspect-ratio: 2252 / 897;
 }
 
 .hero__banner {
   position: absolute;
   inset: 0;
   z-index: 0;
-}
-
-/* The photograph carries soft, out-of-focus leaf shadows dappled across its
-   open left, which read as a blur behind the copy. That area is otherwise one
-   flat cream — sampled at 245,233,221 across the whole region — so it is
-   covered in exactly that cream and faded out in the clean gap between the
-   last shadow (x≈640/1983) and the first jar (x≈840). The stage carries the
-   banner’s own aspect ratio, so cover never crops and the image maps onto the
-   element 1:1 — these percentages hit the same pixels at every width. */
-.hero__banner::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(
-    to right,
-    rgb(245 233 221) 0%,
-    rgb(245 233 221) 33%,
-    rgb(245 233 221 / 0) 38%
-  );
 }
 
 .hero__banner img {
@@ -77,29 +60,44 @@
 
 /* Held inside the photograph's open left third at every width the wide layout
    covers, so the type never runs across a jar. */
-.hero__copy { width: min(100%, 32rem); }
+.hero__copy { width: min(100%, 34rem); }
 
-.hero__eyebrow {
-  margin-bottom: var(--space-s);
-  color: var(--text);
-}
+/* The headline as the picture's counterweight: two sentences stacked over
+   four short lines, set large and tight, the first in Purple and the second
+   in Burnt Orange, so "a little" and "a lot" answer each other. The weight
+   is the site's ordinary Bold; the presence comes from size and setting.
 
+   On the wide layout the size follows the screen (the stage is as tall as the
+   banner, which is as wide as the screen), held to what leaves the copy and
+   buttons their room at the narrowest wide width and stops growing where the
+   stage does. The longest line, "indulgence.", stays well clear of the jars. */
 .hero__title {
   font-size: var(--step-5);
-  letter-spacing: -0.035em;
-  line-height: 0.92;
+  letter-spacing: var(--heading-tracking);
+  line-height: var(--leading-display);
+  white-space: nowrap;
   /* Purple, like every other headline on the site. Ink here was a holdover
      from the earthy pass, and left the one headline that matters most as
      the only one not carrying the brand colour. */
   color: var(--text-heading);
+  font-weight: var(--type-heading-weight);
+  --weight-stroke: var(--heading-stroke);
+  paint-order: stroke fill;
 }
+
+.hero__title-part { display: block; }
+
+/* Burnt Orange, deepened a little: the pure accent is too pale against the
+   banner's cream, and --accent-ink, mixed for small text, goes brown at this
+   size. This mix keeps the colour and clears 3:1 for display type. */
+.hero__title-part--accent { color: color-mix(in srgb, var(--tatvyra-orange) 86%, var(--tatvyra-ink)); }
 
 .hero__lede {
   max-width: 38ch;
   margin-top: var(--space-m);
   font-size: var(--step-1);
   font-weight: 400;
-  line-height: 1.55;
+  line-height: var(--leading-lede);
   color: var(--text-muted);
 }
 
@@ -111,12 +109,29 @@
   margin-top: var(--space-l);
 }
 
+/* On a phone the primary pill takes the full width and its label stays on one
+   line: the tracking and side padding ease off a little so the label
+   and its arrow fit down to a 320px screen. */
+@media (max-width: 30rem) {
+  .hero__actions .btn--primary,
+  .cta__actions .btn--accent {
+    width: 100%;
+    padding-inline: 1.25rem;
+    font-size: 0.8125rem;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+}
+
 /* The quiet link beside the primary button. At rest it is Ink over a hairline;
    on hover the text turns Purple and a Burnt Orange rule sweeps in over the
    hairline from the left, then leaves to the right when the pointer does.
    Only background-size transitions — the layer's anchor flips instantly
    between right and left, and that flip is what sets the direction each way. */
 .hero__actions .btn--quiet {
+  /* No side padding: wrapped under the pill on a phone, it lines up with
+     the title, the copy and the pill on the same left edge. */
+  padding-inline: 0;
   --btn-fg: var(--text);
   --btn-fg-hover: var(--tatvyra-purple);
 }
@@ -142,7 +157,6 @@
 .trust-marquee {
   margin-top: 0;
   background: var(--tatvyra-warm-white);
-  border-top: 1px solid rgb(var(--ink-rgb) / 0.1);
   padding-block: clamp(1.35rem, 0.95rem + 1.5vw, 2.25rem);
 }
 
@@ -169,7 +183,7 @@
   gap: clamp(2.5rem, 1.5rem + 3vw, 5rem);
   padding-right: clamp(2.5rem, 1.5rem + 3vw, 5rem);
   font-size: var(--step-1);
-  font-weight: 500;
+  font-weight: var(--type-label-weight);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--tatvyra-purple);
@@ -213,10 +227,6 @@
    at the same 60rem the layout does. */
 @media (max-width: 75rem) {
   .hero__stage { aspect-ratio: auto; }
-  /* The narrow source is cropped to the products — there is no open left to
-     cover here, so the cream wash would sit straight on top of a jar. */
-  .hero__banner::after { content: none; }
-
   .hero__banner { position: static; display: block; }
   .hero__banner img { height: auto; }
 
@@ -226,7 +236,9 @@
   }
 
   .hero__copy { width: 100%; }
-  .hero__title { font-size: var(--step-4); }
+  /* Stacked above the picture, the headline has the full width to itself:
+     as large as a phone allows, growing with the screen up to a tablet. */
+  .hero__title { }
   .hero__lede { max-width: 42ch; }
 }
 
@@ -254,7 +266,6 @@
   isolation: isolate;
   overflow: hidden;
   padding-block: clamp(2.75rem, 1.5rem + 3.1vw, 4.75rem) clamp(1.75rem, 1rem + 1.9vw, 2.75rem);
-  border-top: 1px solid rgb(var(--ink-rgb) / 0.08);
   background: var(--tatvyra-warm-white);
 }
 
@@ -295,10 +306,13 @@
 }
 
 .philosophy__title {
-  font-size: clamp(2.75rem, 1.1rem + 5.2vw, 5.25rem);
-  font-weight: var(--type-body-weight);
-  line-height: 1.02;
+  font-size: var(--step-5);
+  font-weight: var(--type-heading-weight);
+  --weight-stroke: var(--heading-stroke);
+  paint-order: stroke fill;
+  line-height: var(--leading-display);
   color: var(--tatvyra-purple);
+  letter-spacing: var(--heading-tracking);
 }
 
 /* Each line is kinetic type, so its tracking is set through --kt-track and the
@@ -321,7 +335,7 @@
 .philosophy__text {
   max-width: 44ch;
   font-size: var(--step-0);
-  line-height: 1.65;
+  line-height: var(--leading-body);
   color: var(--text-muted);
 }
 
@@ -378,10 +392,12 @@
 /* The line itself. Ink until it is chosen; the Purple copy behind the mask is
    what the wipe brings in, so the colour arrives as ink rather than as a fade. */
 .philosophy__claim-line {
-  --kt-track: -0.035em;
-  font-size: clamp(1.75rem, 0.8rem + 2.9vw, 3.25rem);
-  font-weight: var(--type-body-weight);
-  line-height: 1.04;
+  --kt-track: var(--heading-tracking);
+  font-size: var(--step-4);
+  font-weight: var(--type-heading-weight);
+  --weight-stroke: var(--heading-stroke);
+  paint-order: stroke fill;
+  line-height: var(--leading-heading);
   color: var(--text-muted);
 }
 
@@ -389,13 +405,17 @@
    standard takes the accent ink instead. */
 .philosophy__claim.is-active .philosophy__claim-index { color: var(--accent-ink); }
 
+/* Hover: the line warms towards Purple, in place — nothing moves. */
+.philosophy__claim-line { transition: color var(--settle); }
+.philosophy__claim-button:hover .philosophy__claim-line { color: color-mix(in srgb, var(--tatvyra-purple) 70%, var(--text-muted)); }
+
 /* The line a standard says, always in place so nothing shifts when it speaks. */
 .philosophy__says {
   grid-column: 2;
   margin-top: 0.4rem;
   max-width: 34ch;
   font-size: var(--step--1);
-  line-height: 1.5;
+  line-height: var(--leading-lede);
   color: var(--text-muted);
   opacity: 0;
   translate: 0 -0.35rem;
@@ -430,14 +450,13 @@
 
 /* --- Four pillars ---------------------------------------------------------
    The four ranges as irregular blobs scattered across an editorial
-   composition, each carrying its packshot under a drawn lid that lifts away
-   on hover, letting a soft light rise from the jar.
+   composition, each carrying its packshot under its own photographed lid,
+   which lifts away on hover, letting a soft light rise from the jar.
 
-   GEOMETRY. Everything that has to land on the jar — the lid, the neck under
-   it, the glow, the motes — is placed from the custom properties set per card
-   in FourPillars.jsx: --lid-x/y/w/h (the cap's box as fractions of the
-   photograph) and --cap-round/-bot/-face (how round that cap's ellipse reads,
-   which differs per shot). Each frame is cut to the blob's own aspect, so
+   GEOMETRY. Everything that has to land on the jar (the lid, the glow, the
+   motes) is placed from the custom properties set per card in
+   FourPillars.jsx: --lid-x/y/w/h, the lid's box as fractions of the frame.
+   Each frame is cut to the blob's own aspect, so
    --stage-w/left resolve to 100/0 and the fractions convert to figure-box
    percentages once. They stay computed rather than hard-coded so a re-crop
    that drifts off 0.82 still lands. All of these vars are unitless numbers
@@ -492,9 +511,11 @@
 
 .pillars__title {
   max-width: 20ch;
-  font-size: clamp(2.125rem, 1.2rem + 3vw, 3.5rem);
+  font-size: var(--step-4);
   font-weight: var(--type-heading-weight);
-  line-height: 1.06;
+  --weight-stroke: var(--heading-stroke);
+  paint-order: stroke fill;
+  line-height: var(--leading-heading);
   letter-spacing: var(--heading-tracking);
   color: var(--tatvyra-purple);
 }
@@ -502,7 +523,7 @@
 .pillars__intro {
   max-width: 44ch;
   font-size: var(--step-0);
-  line-height: 1.65;
+  line-height: var(--leading-body);
   color: rgb(var(--ink-rgb) / 0.7);
 }
 
@@ -546,7 +567,7 @@
      all measured off this stage, so they follow the crop. */
   --stage-h: calc(100 * var(--zoom, 1));
   --stage-top: calc(var(--cap-top) - var(--lid-y) * var(--stage-h));
-  --stage-w: calc(var(--stage-h) * var(--src-aspect) / var(--blob-aspect));
+  --stage-w: calc(var(--stage-h) * var(--src-aspect, var(--blob-aspect)) / var(--blob-aspect));
   --stage-left: calc((100 - var(--stage-w)) / 2);
 
   /* Centre of the jar's opening, in figure-box percentages. */
@@ -620,66 +641,6 @@
   transition: opacity var(--open-dur) var(--open-ease);
 }
 
-/* --- Packaging colour -----------------------------------------------------
-   The lid and the neck are not brand surfaces — they continue the
-   photograph, standing in for each product's own cap and glass. They
-   are the one place in this section that carries literal colour rather than a
-   palette mix, for the same reason .catcard sets a white name and a black
-   scrim over its photograph. Everything else here is Purple, Orange, Lilac,
-   Peach, Warm White and Ink. */
-
-.pillar {
-  /* Amber glass, seen where a cap has just come off. */
-  --neck-hi: #8a5f1c;
-  --neck-mid: #5e4114;
-  --neck-lo: #3a280f;
-  --neck-void: #0a0805;
-}
-
-/* --- The neck under the lid -----------------------------------------------
-   Moringa and spirulina were photographed sealed, so lifting the lid has to
-   put something in the cap's place: an amber collar with a dark opening, sized
-   a little larger than the cap so none of the photographed one survives. Honey
-   and nut butter were photographed open, so they set --mouth-open to 0 and
-   what the lid reveals is the real jar. */
-
-.pillar__mouth {
-  position: absolute;
-  left: calc((var(--stage-left) + (var(--lid-x) - var(--lid-w) * 0.02) * var(--stage-w)) * 1%);
-  top: calc((var(--stage-top) + (var(--lid-y) - var(--lid-h) * 0.02) * var(--stage-h)) * 1%);
-  width: calc(var(--lid-w) * 1.04 * var(--stage-w) * 1%);
-  height: calc(var(--lid-h) * 1.04 * var(--stage-h) * 1%);
-  border-radius:
-    50% 50% 50% 50%
-    / calc(var(--cap-round) * 1%) calc(var(--cap-round) * 1%)
-      calc(var(--cap-round-bot) * 1%) calc(var(--cap-round-bot) * 1%);
-  background: linear-gradient(
-    90deg,
-    var(--neck-lo) 0%,
-    var(--neck-mid) 24%,
-    var(--neck-hi) 46%,
-    var(--neck-mid) 70%,
-    var(--neck-lo) 100%
-  );
-  box-shadow: inset 0 -0.4em 0.6em -0.35em rgb(0 0 0 / 0.55);
-  opacity: 0;
-  transition: opacity var(--dur) var(--ease);
-}
-
-/* The opening itself — nearly black, its rim catching the light coming up. */
-.pillar__mouth::before {
-  content: '';
-  position: absolute;
-  inset: 3% 8% auto 8%;
-  height: calc(var(--cap-face) * 1%);
-  border-radius: 50%;
-  background: radial-gradient(ellipse 88% 96% at 50% 38%, var(--neck-void), #1b1409 100%);
-  box-shadow:
-    inset 0 0.18em 0.1em -0.07em rgb(248 245 236 / 0.42),
-    inset 0 -0.12em 0.16em rgb(0 0 0 / 0.7),
-    0 0.04em 0.06em rgb(248 245 236 / 0.16);
-}
-
 /* Light coming up out of the open jar — a soft warm bloom, arriving a beat
    after the lid starts to lift. */
 .pillar__glow {
@@ -704,8 +665,9 @@
 }
 
 /* --- The lid --------------------------------------------------------------
-   Drawn to each jar's own measured cap box and its own perspective, so a
-   side-on bottle gets a shallow ellipse and a jar shot from above a deep one. */
+   The product's own lid, photographed on its own and cut out, laid over the
+   open neck to its measured box. Its shadow is a filter, so it follows the
+   lid's silhouette. */
 
 .pillar__lid {
   position: absolute;
@@ -714,48 +676,13 @@
   top: calc((var(--stage-top) + var(--lid-y) * var(--stage-h)) * 1%);
   width: calc(var(--lid-w) * var(--stage-w) * 1%);
   height: calc(var(--lid-h) * var(--stage-h) * 1%);
-  border-radius:
-    50% 50% 50% 50%
-    / calc(var(--cap-round) * 1%) calc(var(--cap-round) * 1%)
-      calc(var(--cap-round-bot) * 1%) calc(var(--cap-round-bot) * 1%);
-  /* Knurling over cylindrical shading — a moulded cap, not a flat oval. The
-     face below covers the top of it, so the ribs only show on the skirt. */
-  background:
-    repeating-linear-gradient(
-      90deg,
-      rgb(0 0 0 / 0.13) 0 2px,
-      rgb(255 255 255 / 0.06) 2px 5px
-    ),
-    linear-gradient(
-      90deg,
-      var(--lid-lo) 0%,
-      var(--lid-mid) 20%,
-      var(--lid-hi) 42%,
-      var(--lid-mid) 68%,
-      var(--lid-lo) 100%
-    );
-  box-shadow:
-    inset 0 -0.4em 0.5em -0.35em rgb(0 0 0 / 0.5),
-    0 0.35em 0.6em -0.3em rgb(var(--ink-rgb) / 0.5);
+  background: var(--lid-photo) center / 100% 100% no-repeat;
+  filter: drop-shadow(0 0.2em 0.3em rgb(var(--ink-rgb) / 0.22));
   transform-origin: 50% 135%;
   transition:
     translate var(--open-dur) var(--open-ease),
     rotate var(--open-dur) var(--open-ease),
     filter var(--open-dur) var(--open-ease);
-}
-
-.pillar__lid-face {
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: calc(var(--cap-face) * 1%);
-  border-radius: 50%;
-  background: radial-gradient(
-    ellipse 52% 60% at 34% 24%,
-    var(--lid-hi),
-    var(--lid-mid) 48%,
-    var(--lid-lo) 112%
-  );
-  box-shadow: inset 0 0.06em 0.09em rgb(255 255 255 / 0.2);
 }
 
 /* --- Light rising from the open jar ---------------------------------------
@@ -789,6 +716,220 @@
   0% { opacity: 0; translate: 0 0.4rem; }
   22% { opacity: 0.9; }
   100% { opacity: 0; translate: var(--mote-x) -5.5rem; }
+}
+
+/* --- The tablet bottles: a slow reveal ------------------------------------
+   Moringa and spirulina open their own way. Honey and nut butter are not
+   touched by anything in this block — every rule is scoped to
+   .pillar--tablets.
+
+   OPENING (about 2.8s). The bottle holds completely still: no lift, no zoom,
+   no glow, the photograph's own light and shadow left as shot. After a beat
+   the cap lifts off the thread, then tips back on its rear edge, just far
+   enough to show the mouth. As it clears, six capsules come up out of the
+   opening one at a time, each on its own path, and settle at different
+   moments into a loose cluster above the bottle.
+
+   CLOSING (faster, about 1.9s). The capsules sink back into the bottle first,
+   each in its own time; only once they are in does the cap swing down and
+   screw home.
+
+   Everything is a transition rather than a keyframe animation, so leaving
+   mid-way reverses from wherever it has got to instead of snapping. The two
+   phases are ordered by delays: the open state carries the opening delays,
+   the resting state the closing ones. Only transform properties, opacity
+   and the cap's soft shadow move.
+
+   --tab-speed scales every duration and delay in this block, the capsules'
+   included, so the whole sequence can be quickened or slowed in one place
+   without changing its order: 1 is the original pace, lower is faster.
+
+   The capsules themselves are described below. */
+
+.pillar--tablets {
+  --tab-speed: 0.8;
+  --tab-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --tab-ease-in: cubic-bezier(0.55, 0, 0.45, 1);
+}
+
+/* The bottle stays exactly as photographed. */
+.pillar.pillar--tablets:is(:hover, :focus-visible, .is-open) .pillar__blob {
+  translate: none;
+  filter: drop-shadow(0 18px 26px rgb(var(--ink-rgb) / 0.18));
+}
+
+.pillar.pillar--tablets:is(:hover, :focus-visible, .is-open) .pillar__stage { scale: none; }
+
+.pillar.pillar--tablets:is(:hover, :focus-visible, .is-open) .pillar__photo {
+  filter: saturate(0.94) brightness(0.98);
+}
+
+.pillar.pillar--tablets:is(:hover, :focus-visible, .is-open) .pillar__wash { opacity: 1; }
+
+.pillar--tablets .pillar__glow { display: none; }
+
+/* The cap is the black ribbed cap's own photograph. Resting, it carries the
+   closing timing: it waits for the capsules to go back in, swings down, then
+   settles home. */
+.pillar.pillar--tablets .pillar__lid {
+  filter: saturate(0.94) brightness(0.98) drop-shadow(0 0 0 transparent);
+  transform-origin: 100% 100%;
+  transition:
+    rotate calc(700ms * var(--tab-speed)) var(--tab-ease-in) calc(1300ms * var(--tab-speed)),
+    filter calc(700ms * var(--tab-speed)) var(--tab-ease-in) calc(1300ms * var(--tab-speed)),
+    translate calc(420ms * var(--tab-speed)) var(--tab-ease) calc(1950ms * var(--tab-speed));
+}
+
+/* Open: after a beat it lifts off the thread, then tips back on its rear
+   edge, picking up a soft shadow as it leaves the bottle. */
+.pillar.pillar--tablets:is(:hover, :focus-visible, .is-open) .pillar__lid {
+  translate: 24% -84%;
+  rotate: 16deg;
+  filter: saturate(0.94) brightness(0.98) drop-shadow(0 0.3em 0.35em rgb(var(--ink-rgb) / 0.18));
+  animation: none;
+  transition:
+    translate calc(520ms * var(--tab-speed)) var(--tab-ease) calc(200ms * var(--tab-speed)),
+    rotate calc(900ms * var(--tab-speed)) var(--tab-ease) calc(420ms * var(--tab-speed)),
+    filter calc(900ms * var(--tab-speed)) var(--tab-ease) calc(420ms * var(--tab-speed));
+}
+
+/* --- The capsules ---------------------------------------------------------
+   Real capsules, cut from each bottle's own photograph (public/images/
+   pillars/capsule-*.webp), so each one carries its photographed colour,
+   seam and light. Six copies of the one capsule are told apart by size,
+   angle, a touch of shade and their place in the stack.
+
+   DEPTH. The capsules live in a box masked to the bottle's own opening:
+   everything above the opening's centre line, plus the front half of the
+   opening ellipse. So a capsule below the rim is seen inside the mouth, one
+   coming up passes out through it, one that settles low stays cut off by the
+   front rim, and none can appear in front of the glass. Further-back capsules
+   are smaller and sit lower in the stack.
+
+   MOTION. Each capsule moves on three nested layers with their own timing,
+   so no two paths are the same and none is a straight line: the outer layer
+   slides it sideways, the middle one lifts it, the image turns it. The lift
+   starts slowly — a release rather than a launch — and has a long tail, which
+   is the settle; every tablet has its own duration, so they come to rest one
+   by one. Going back in, each one falls on a shorter, accelerating curve with
+   its own delay and turns back the way it came, so the close is not the open
+   played backwards. Every value comes from PILLS in FourPillars.jsx, and
+   --jx/--jy/--jr/--jd add the small per-opening variation rolled there. */
+
+.pillar--tablets {
+  /* The opening of the glass neck (the ellipse of its rim, measured off the
+     bottle photograph) as unitless percentages: horizontal ones of the
+     figure's width, vertical ones of its height. */
+  --open-cx: calc(var(--stage-left) + var(--rim-cx) * var(--stage-w));
+  --open-cy: calc(var(--stage-top) + var(--rim-cy) * var(--stage-h));
+  --open-rx: calc(var(--rim-rx) * var(--stage-w));
+  --open-ry: calc(var(--rim-ry) * var(--stage-h));
+  --pills-h: calc(var(--open-cy) + var(--open-ry));
+}
+
+.pillar__pills {
+  position: absolute;
+  z-index: 4;
+  inset: 0 0 auto;
+  height: calc(var(--pills-h) * 1%);
+  container-type: inline-size;
+  pointer-events: none;
+  -webkit-mask:
+    linear-gradient(#000, #000) 0 0 / 100% calc(var(--open-cy) / var(--pills-h) * 100%) no-repeat,
+    radial-gradient(
+      calc(var(--open-rx) * 1%) calc(var(--open-ry) / var(--pills-h) * 100%)
+        at calc(var(--open-cx) * 1%) calc(var(--open-cy) / var(--pills-h) * 100%),
+      #000 96%,
+      transparent 100%
+    );
+  mask:
+    linear-gradient(#000, #000) 0 0 / 100% calc(var(--open-cy) / var(--pills-h) * 100%) no-repeat,
+    radial-gradient(
+      calc(var(--open-rx) * 1%) calc(var(--open-ry) / var(--pills-h) * 100%)
+        at calc(var(--open-cx) * 1%) calc(var(--open-cy) / var(--pills-h) * 100%),
+      #000 96%,
+      transparent 100%
+    );
+}
+
+/* Sideways. At rest each tablet sits short of its settled place by its own
+   drift, deep in the bottle; it covers that drift as it rises. */
+.pillar__pill {
+  --pill-w: calc(var(--capsule-w, 8.4) * 1cqw * var(--pill-s, 1));
+
+  position: absolute;
+  z-index: var(--pill-z);
+  /* Its lower edge on the opening's centre line, which is what `rise`
+     measures from. */
+  bottom: calc(var(--open-ry) / var(--pills-h) * 100%);
+  left: calc(var(--mouth-cx) + (var(--pill-x) + var(--jx, 0)) * 1cqw);
+  width: var(--pill-w);
+  margin-left: calc(var(--pill-w) / -2);
+  translate: calc(var(--pill-drift) * -1cqw) 0;
+  transition-property: translate;
+  transition-duration: calc(var(--pill-dur) * 0.5 * var(--tab-speed));
+  transition-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+  transition-delay: calc(var(--pill-out) * var(--tab-speed));
+}
+
+/* Up. Resting, the capsule is wholly below the front rim, however it is
+   turned: deep enough for its length standing at its steepest angle. */
+.pillar__pill-rise {
+  display: block;
+  translate: 0 calc(100% + var(--pill-w) * 0.45 + var(--open-ry) / var(--blob-aspect) * 1cqw + 1cqw);
+  transition-property: translate;
+  transition-duration: calc(var(--pill-dur) * 0.55 * var(--tab-speed));
+  transition-timing-function: cubic-bezier(0.5, 0, 0.75, 0.6);
+  transition-delay: calc(var(--pill-out) * var(--tab-speed));
+}
+
+/* Turn, light and shadow. The photograph's own lighting is kept; `shade` only
+   nudges it so the copies differ, and the shadow is a soft contact shadow. */
+.pillar__pill-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  rotate: var(--pill-from);
+  filter: brightness(var(--pill-shade)) drop-shadow(0 0.45cqw 0.5cqw rgb(var(--ink-rgb) / 0.24));
+  transition-property: rotate;
+  transition-duration: calc(var(--pill-dur) * 0.6 * var(--tab-speed));
+  transition-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  transition-delay: calc(var(--pill-out) * var(--tab-speed));
+  user-select: none;
+}
+
+.pillar.pillar--tablets:is(:hover, :focus-visible, .is-open) .pillar__pill {
+  translate: 0 0;
+  transition-duration: calc(var(--pill-dur) * 1.1 * var(--tab-speed));
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-delay: calc((var(--pill-in) + var(--jd, 0ms)) * var(--tab-speed));
+}
+
+/* A slow release out of the bottle, then a long, unhurried settle. */
+.pillar.pillar--tablets:is(:hover, :focus-visible, .is-open) .pillar__pill-rise {
+  translate: 0 calc((var(--pill-rise) + var(--jy, 0)) * -1cqw);
+  transition-duration: calc(var(--pill-dur) * var(--tab-speed));
+  transition-timing-function: cubic-bezier(0.45, 0, 0.15, 1);
+  transition-delay: calc((var(--pill-in) + var(--jd, 0ms)) * var(--tab-speed));
+}
+
+/* It reaches its angle a little after its height, then holds with the
+   faintest drift of its own. */
+.pillar.pillar--tablets:is(:hover, :focus-visible, .is-open) .pillar__pill-img {
+  rotate: calc(var(--pill-tilt) + var(--jr, 0deg));
+  transition-duration: calc((var(--pill-dur) + 450ms) * var(--tab-speed));
+  transition-timing-function: cubic-bezier(0.35, 0, 0.2, 1);
+  transition-delay: calc((var(--pill-in) + var(--jd, 0ms)) * var(--tab-speed));
+  animation-name: pillar-tablet-hold;
+  animation-duration: calc(var(--pill-dur) * 3.4);
+  animation-timing-function: ease-in-out;
+  animation-delay: calc((var(--pill-in) + var(--pill-dur) + 500ms) * var(--tab-speed));
+  animation-iteration-count: infinite;
+}
+
+@keyframes pillar-tablet-hold {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -0.25cqw; }
 }
 
 /* --- Hand-drawn marks -----------------------------------------------------
@@ -895,10 +1036,6 @@
 
 .pillar:is(:hover, :focus-visible, .is-open) .pillar__wash { opacity: 0.75; }
 
-.pillar:is(:hover, :focus-visible, .is-open) .pillar__mouth {
-  opacity: var(--mouth-open);
-}
-
 .pillar:is(:hover, :focus-visible, .is-open) .pillar__glow {
   opacity: 1;
   scale: 1;
@@ -985,10 +1122,12 @@
 
 .pillar__name {
   margin-top: 0.45rem;
-  font-size: clamp(1.05rem, 0.85rem + 0.6vw, 1.3rem);
-  font-weight: var(--type-product-weight);
-  line-height: 1.15;
-  letter-spacing: var(--product-tracking);
+  font-size: var(--step-1);
+  font-weight: var(--type-heading-weight);
+  --weight-stroke: var(--heading-stroke);
+  paint-order: stroke fill;
+  line-height: var(--leading-subhead);
+  letter-spacing: var(--heading-tracking);
   color: var(--text);
 }
 
@@ -996,7 +1135,7 @@
   margin-top: 0.35rem;
   max-width: 26ch;
   font-size: var(--step--1);
-  line-height: 1.6;
+  line-height: var(--leading-body);
   color: var(--text-muted);
 }
 
@@ -1017,33 +1156,6 @@
 }
 
 .pillar__cta svg { color: var(--tatvyra-orange); }
-
-/* --- Closing line --------------------------------------------------------- */
-
-.pillars__outro {
-  display: flex;
-  align-items: center;
-  gap: clamp(1rem, 0.5rem + 1.5vw, 2rem);
-  margin-top: clamp(1.5rem, 1rem + 1.8vw, 2.5rem);
-}
-
-.pillars__outro::before,
-.pillars__outro::after {
-  content: '';
-  flex: 1;
-  max-width: 7rem;
-  height: 1px;
-  background: rgb(var(--ink-rgb) / 0.18);
-}
-
-.pillars__closer {
-  font-size: clamp(1.35rem, 1rem + 1.4vw, 2.125rem);
-  font-weight: 400;
-  line-height: 1.12;
-  letter-spacing: -0.01em;
-  text-align: center;
-  color: var(--tatvyra-purple);
-}
 
 /* --- Per range ------------------------------------------------------------
    The blob tints are Lilac and Peach thinned into Warm White, the same way
@@ -1107,9 +1219,11 @@
    right — the same scattered rhythm, in a single column. */
 
 @media (max-width: 34rem) {
+  /* Tight: each blob already sits a little inside its own box, so a wide gap
+     on top of that reads as a hole between the pillars. */
   .pillars__grid {
     grid-template-columns: minmax(0, 1fr);
-    gap: clamp(2.5rem, 1rem + 6vw, 4rem);
+    gap: var(--space-xs);
   }
 
   .pillars__item {
@@ -1118,6 +1232,7 @@
   }
 
   .pillar {
+    gap: var(--space-xs);
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     justify-items: var(--phone-align, center);
@@ -1128,11 +1243,17 @@
   .pillar__caption { align-items: var(--phone-align, center); }
   .pillar__note { max-width: 30ch; }
 
+  /* There is no hover to bring the link in, and its space is held either way,
+     so on a phone it stays shown rather than leaving a blank under the note. */
+  .pillar__cta {
+    margin-top: var(--space-2xs);
+    opacity: 1;
+    translate: 0 0;
+  }
+
   .pillars__item:nth-child(odd) .pillar { --phone-align: start; --phone-text: left; }
   .pillars__item:nth-child(even) .pillar { --phone-align: end; --phone-text: right; }
 
-  .pillars__outro::before,
-  .pillars__outro::after { max-width: 2.5rem; }
 }
 
 /* Under reduced motion the lid still lifts and the jar still opens — they just
@@ -1141,6 +1262,9 @@
   .pillar:is(:hover, :focus-visible, .is-open) .pillar__blob { translate: none; }
   .pillar:is(:hover, :focus-visible, .is-open) .pillar__lid { animation: none; }
   .pillar:is(:hover, :focus-visible, .is-open) .pillar__mote { animation: none; }
+  /* The tablet bottles stay as photographed: closed, still, no tablets. */
+  .pillar.pillar--tablets:is(:hover, :focus-visible, .is-open) .pillar__lid { translate: none; rotate: none; }
+  .pillar--tablets .pillar__pills { display: none; }
   .pillar:is(:hover, :focus-visible, .is-open) .pillar__doodle svg { animation: none; }
   .pillar__doodle path { stroke-dashoffset: 0; }
 }
@@ -1158,7 +1282,7 @@
 .categories__header {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: var(--space-xs);
   margin-bottom: clamp(2rem, 1.2rem + 2.4vw, 3rem);
 }
 
@@ -1179,25 +1303,20 @@
 
 .categories__title {
   max-width: 44rem;
-  font-size: clamp(2rem, 1.2rem + 2.6vw, 3rem);
+  font-size: var(--step-4);
   font-weight: var(--type-heading-weight);
-  line-height: 1.08;
+  --weight-stroke: var(--heading-stroke);
+  paint-order: stroke fill;
+  line-height: var(--leading-heading);
   letter-spacing: var(--heading-tracking);
   color: var(--tatvyra-purple);
 }
 
-.categories__intro {
-  width: 25rem;
-  max-width: 100%;
-  font-size: var(--step-0);
-  line-height: 1.65;
-  color: rgb(var(--ink-rgb) / 0.7);
-}
 
 .categories__grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 2rem;
+  gap: var(--space-l);
 }
 
 .categories__item { display: flex; }
@@ -1211,7 +1330,7 @@
   flex-direction: column;
   justify-content: flex-end;
   height: clamp(24rem, 14rem + 26vw, 36.25rem);
-  padding: 2rem;
+  padding: var(--space-l);
   border-radius: 16px;
   overflow: hidden;
   isolation: isolate;
@@ -1246,7 +1365,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0.75rem;
+  gap: var(--space-xs);
 }
 
 /* Soft Peach, not Purple: these sit on a darkened photograph, which is the
@@ -1260,17 +1379,19 @@
 }
 
 .catcard__name {
-  font-size: clamp(1.75rem, 1.1rem + 2vw, 2.375rem);
-  font-weight: var(--type-product-weight);
-  letter-spacing: var(--product-tracking);
-  line-height: 1.05;
+  font-size: var(--step-3);
+  font-weight: var(--type-heading-weight);
+  --weight-stroke: var(--heading-stroke);
+  paint-order: stroke fill;
+  letter-spacing: var(--heading-tracking);
+  line-height: var(--leading-heading);
   color: #fff;
 }
 
 .catcard__cta {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2xs);
   font-size: var(--step--1);
   font-weight: var(--type-button-weight);
   color: #fff;
@@ -1287,12 +1408,11 @@
 @media (max-width: 62rem) {
   .categories__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .categories__title-row { flex-direction: column; align-items: flex-start; gap: var(--space-m); }
-  .categories__intro { width: 100%; max-width: 46ch; }
 }
 
 @media (max-width: 40rem) {
   .categories__grid { grid-template-columns: minmax(0, 1fr); }
-  .catcard { height: clamp(20rem, 12rem + 40vw, 26rem); padding: 1.5rem; }
+  .catcard { height: clamp(20rem, 12rem + 40vw, 26rem); padding: var(--space-m); }
 }
 
 /* --- Shelf trust ----------------------------------------------------------
@@ -1386,9 +1506,11 @@
 }
 
 .shelf__title {
-  font-size: clamp(1.75rem, 1.1rem + 2.2vw, 2.75rem);
+  font-size: var(--step-4);
   font-weight: var(--type-heading-weight);
-  line-height: 1.12;
+  --weight-stroke: var(--heading-stroke);
+  paint-order: stroke fill;
+  line-height: var(--leading-heading);
   letter-spacing: var(--heading-tracking);
   color: var(--text-on-dark);
 }
@@ -1522,19 +1644,20 @@
 }
 
 .shelf__card-title {
-  font-size: clamp(0.8125rem, 0.75rem + 0.1vw, 0.875rem);
-  font-weight: var(--weight-bold);
-  line-height: 1.25;
-  letter-spacing: 0.01em;
+  font-size: var(--step-0);
+  font-weight: var(--type-heading-weight);
+  --weight-stroke: var(--heading-stroke);
+  paint-order: stroke fill;
+  line-height: var(--leading-subhead);
+  letter-spacing: var(--heading-tracking);
   text-transform: uppercase;
 }
 
 .shelf__body {
   margin-top: 0.8rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--card-rule);
+  padding-top: var(--space-s);
   font-size: var(--step--1);
-  line-height: 1.6;
+  line-height: var(--leading-body);
 }
 
 /* The motto sits on the card's floor; the mark stands beside it and runs off
@@ -1543,16 +1666,16 @@
 .shelf__foot {
   display: grid;
   grid-template-columns: minmax(0, 1fr) clamp(4.75rem, 46%, 7rem);
-  column-gap: 0.5rem;
+  column-gap: var(--space-2xs);
   align-items: end;
-  padding-top: 0.25rem;
+  padding-top: var(--space-3xs);
 }
 
 .shelf__motto {
   font-size: var(--step--2);
   font-style: italic;
   font-weight: var(--type-label-weight);
-  line-height: 1.5;
+  line-height: var(--leading-lede);
   letter-spacing: 0.26em;
   text-transform: uppercase;
   color: var(--card-motto);
@@ -1651,15 +1774,12 @@
   grid-template-columns: minmax(0, 0.55fr) minmax(0, 1fr);
   gap: var(--space-s) var(--space-l);
   padding-block: var(--space-m);
-  border-top: 1px solid var(--line-on-dark);
 }
-
-.cleanlabel__item:last-child { border-bottom: 1px solid var(--line-on-dark); }
 
 .cleanlabel__term {
   display: flex;
   align-items: baseline;
-  gap: 0.75rem;
+  gap: var(--space-xs);
   font-size: var(--step-1);
   font-weight: 700;
   letter-spacing: -0.01em;
@@ -1667,7 +1787,7 @@
 }
 
 .cleanlabel__index { font-size: var(--step--2); letter-spacing: 0.1em; color: var(--tatvyra-peach); }
-.cleanlabel__def { font-size: var(--step--1); line-height: 1.6; color: var(--text-on-dark-muted); }
+.cleanlabel__def { font-size: var(--step--1); line-height: var(--leading-body); color: var(--text-on-dark-muted); }
 
 @media (max-width: 62rem) {
   .cleanlabel__inner { grid-template-columns: minmax(0, 1fr); }
@@ -1691,11 +1811,9 @@
 .ingredient__points { display: grid; gap: var(--space-s); margin-top: var(--space-xs); }
 
 .ingredient__points li {
-  padding-left: var(--space-m);
-  border-left: 2px solid var(--tatvyra-lilac);
   font-size: var(--step--1);
   color: var(--text-muted);
-  line-height: 1.55;
+  line-height: var(--leading-lede);
 }
 
 .ingredient__point-label { display: block; font-weight: 700; color: var(--tatvyra-purple); margin-bottom: 2px; }
@@ -1713,28 +1831,31 @@
   gap: clamp(1.5rem, 0.8rem + 2.4vw, 3rem);
 }
 
-.why__item { padding-top: var(--space-m); border-top: 2px solid var(--tatvyra-orange); }
+.why__item { padding-top: var(--space-m); }
 
 .why__number {
   display: block;
   font-size: var(--step--2);
-  font-weight: 700;
-  letter-spacing: 0.18em;
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.12em;
   color: var(--text-muted);
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--space-xs);
 }
 
 .why__title {
   font-size: var(--step-2);
-  font-weight: 700;
-  letter-spacing: -0.015em;
+  font-weight: var(--type-heading-weight);
+  --weight-stroke: var(--heading-stroke);
+  paint-order: stroke fill;
+  letter-spacing: var(--heading-tracking);
   color: var(--tatvyra-purple);
+  line-height: var(--leading-subhead);
 }
 
 .why__body {
   margin-top: 0.6rem;
   font-size: var(--step--1);
-  line-height: 1.6;
+  line-height: var(--leading-body);
   color: var(--text-muted);
 }
 
@@ -1760,19 +1881,18 @@
 .cfeature__title { margin-top: 0.4rem; max-width: 20ch; }
 .cfeature__body { color: var(--text-muted); max-width: 50ch; }
 
-.cfeature__products { display: grid; margin-top: var(--space-xs); border-top: 1px solid var(--line); }
+.cfeature__products { display: grid; margin-top: var(--space-xs); }
 
 .cfeature__product {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto auto;
   align-items: center;
   gap: var(--space-s);
-  padding-block: 0.75rem;
-  border-bottom: 1px solid var(--line);
+  padding-block: var(--space-xs);
   transition: padding-left var(--dur) var(--ease);
 }
 
-.cfeature__product:hover { padding-left: 0.5rem; }
+.cfeature__product:hover { padding-left: var(--space-2xs); }
 .cfeature__product-name { font-size: var(--step--1); font-weight: 700; color: var(--tatvyra-purple); }
 .cfeature__product-meta { font-size: var(--step--2); color: var(--text-faint); letter-spacing: 0.04em; }
 .cfeature__product svg { color: var(--tatvyra-purple); opacity: 0; transition: opacity var(--dur) var(--ease); }
@@ -1825,7 +1945,6 @@
   /* Clip rather than hide: hidden would make this a scroll container and
      stop the stage from sticking. */
   overflow: clip;
-  border-top: 1px solid rgb(var(--ink-rgb) / 0.08);
   background: var(--tatvyra-warm-white);
   transition:
     --s 1.1s var(--ease-out),
@@ -1878,7 +1997,7 @@
 .orbit__eyebrow {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: var(--space-s);
   font-size: var(--step--2);
   font-weight: var(--type-label-weight);
   letter-spacing: 0.18em;
@@ -1886,19 +2005,16 @@
   color: var(--tatvyra-purple);
 }
 
-.orbit__eyebrow::after {
-  content: '';
-  flex: 0 1 4rem;
-  height: 1px;
-  background: color-mix(in srgb, var(--tatvyra-purple) 50%, transparent);
-}
-
+/* A section heading, so --step-4 at the heading leading: one name to a line
+   — "Tatvyra," / "By Feynman" / "Foodcraft." — none of them wrapping. */
 .orbit__title {
-  margin-top: clamp(1rem, 0.5rem + 1.4vw, 1.75rem);
-  font-size: clamp(2.75rem, 1.2rem + 3.9vw, 5rem);
-  font-weight: var(--weight-regular);
-  line-height: 0.98;
-  letter-spacing: -0.045em;
+  margin-top: var(--space-2xs);
+  font-size: var(--step-4);
+  font-weight: var(--type-heading-weight);
+  --weight-stroke: var(--heading-stroke);
+  paint-order: stroke fill;
+  line-height: var(--leading-heading);
+  letter-spacing: var(--heading-tracking);
   color: var(--tatvyra-aubergine);
 }
 
@@ -1907,19 +2023,10 @@
 
 .orbit__lede {
   max-width: 22ch;
-  margin-top: clamp(1.1rem, 0.7rem + 1vw, 1.6rem);
-  font-size: var(--step-2);
-  line-height: 1.28;
-  letter-spacing: -0.01em;
-  color: color-mix(in srgb, var(--tatvyra-purple) 70%, var(--tatvyra-ink));
-}
-
-.orbit__body {
-  max-width: 40ch;
   margin-top: var(--space-s);
-  font-size: var(--step-0);
-  line-height: 1.65;
-  color: rgb(var(--ink-rgb) / 0.7);
+  font-size: var(--step-2);
+  line-height: var(--leading-subhead);
+  color: color-mix(in srgb, var(--tatvyra-purple) 70%, var(--tatvyra-ink));
 }
 
 .orbit__sign {
@@ -1927,14 +2034,11 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-s) var(--space-l);
-  margin-top: clamp(1.25rem, 0.8rem + 1.4vw, 2.25rem);
+  margin-top: var(--space-l);
 }
 
 .orbit__signoff {
   display: grid;
-  grid-template-columns: 2.75rem auto;
-  column-gap: 1rem;
-  align-items: center;
   font-size: var(--step--2);
   font-weight: var(--type-label-weight);
   line-height: 1.8;
@@ -1942,15 +2046,6 @@
   text-transform: uppercase;
   color: rgb(var(--ink-rgb) / 0.78);
 }
-
-.orbit__signoff::before {
-  content: '';
-  grid-row: span 2;
-  height: 1px;
-  background: var(--hair);
-}
-
-.orbit__signoff span { grid-column: 2; }
 
 .orbit__story {
   display: inline-flex;
@@ -2315,11 +2410,14 @@
   display: block;
   margin-top: 0.35rem;
   font-size: var(--step--1);
-  line-height: 1.6;
+  line-height: var(--leading-body);
   color: rgb(var(--ink-rgb) / 0.62);
 }
 
-.orbit__tab-lines span { display: block; }
+/* One line each, so every tab is the same three rows — name, line, line —
+   and the thumbs, names and lines fall on the same rhythm down the column. */
+.orbit__tab-lines span { display: block; white-space: nowrap; }
+.orbit__tab-text { min-width: 0; }
 
 /* The two arrows, and the range in view's shop link on its own line. */
 .orbit__nav {
@@ -2385,7 +2483,7 @@
 .orbit__cue {
   display: none;
   align-items: center;
-  gap: 1rem;
+  gap: var(--space-s);
   font-size: var(--step--2);
   font-weight: var(--type-label-weight);
   letter-spacing: 0.26em;
@@ -2424,8 +2522,6 @@
 
 .orbit__wisdom {
   margin-left: auto;
-  padding-left: 1.25rem;
-  border-left: 1px solid var(--hair);
   font-size: var(--step--2);
   font-weight: var(--type-label-weight);
   line-height: 1.9;
@@ -2463,7 +2559,7 @@
   .orbit__tabs {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1rem 1.25rem;
+    gap: var(--space-s) 1.25rem;
   }
 
   .orbit__foot { margin-top: var(--space-xl); }
@@ -2473,11 +2569,17 @@
 /* On a phone the tabs become a row of small pods, their words kept for
    assistive technology but hidden, and the range in view is named beneath. */
 @media (max-width: 34rem) {
+  /* The copy centred over the pod, which is centred too. */
+  .orbit__copy { text-align: center; }
+  .orbit__eyebrow { justify-content: center; }
+  .orbit__lede { margin-inline: auto; }
+  .orbit__sign { flex-direction: column; justify-content: center; }
+
   .orbit__tabs {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    gap: 1rem;
+    gap: var(--space-s);
   }
 
   .orbit__tab { padding: 0 0 0.9rem; }
@@ -2514,19 +2616,261 @@
   .orbit__shop { justify-self: center; }
 }
 
-/* --- Final CTA ------------------------------------------------------------ */
+/* --- Final CTA --------------------------------------------------------------
+   The closing band, set as a poster (FinalCTA). The brand line is the picture:
+   "RISE." and "NOURISH." in Warm White on lines of their own, pushed to
+   opposite sides, and "THRIVE." larger again in Burnt Orange on a line of its
+   own under them, lined up with "RISE.". No word overlaps another. The line
+   of copy sits in the space beside "RISE."; the buttons sit under the end of
+   "THRIVE.". One soft disc of lighter Purple sits behind it all.
 
-.cta { padding-block: var(--section-y); }
-.cta__inner { text-align: center; }
-.cta__title { color: var(--text-on-dark); margin-top: 0.75rem; }
-.cta__body { margin-top: var(--space-m); line-height: 1.65; color: var(--text-on-dark-muted); max-width: 44ch; margin-inline: auto; }
+   Every size and offset on the stage is in cqw — a share of the stage's own
+   width — so the composition keeps its proportions at any screen size and the
+   overlaps land in the same place. The stage is capped, so on a very wide
+   screen the type stops growing rather than outgrowing the page. */
 
+.cta {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-block: var(--section-y);
+}
+
+/* One disc of lighter Purple, high on the right behind the copy. */
+.cta__disc {
+  position: absolute;
+  z-index: -1;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.cta__disc--far {
+  --drift: -7vw;
+  width: clamp(22rem, 60vw, 68rem);
+  top: clamp(-24rem, -24vw, -8rem);
+  right: clamp(-16rem, -13vw, -5rem);
+  background: color-mix(in srgb, var(--tatvyra-warm-white) 6%, transparent);
+}
+
+.cta__stage {
+  position: relative;
+  container-type: inline-size;
+  max-width: 112rem;
+  margin-inline: auto;
+}
+
+.cta__title {
+  font-weight: var(--type-heading-weight);
+  --weight-stroke: var(--heading-stroke);
+  paint-order: stroke fill;
+  line-height: 0.82;
+  letter-spacing: var(--heading-tracking);
+  text-transform: uppercase;
+  color: var(--tatvyra-warm-white);
+}
+
+.cta__word {
+  /* Its own tracking, worked out at its own size, not the heading's handed
+     down at the heading's size. */
+  letter-spacing: var(--heading-tracking);
+  display: block;
+  width: max-content;
+  white-space: nowrap;
+}
+
+/* The copy beside "RISE." is set in rem, not cqw, so on a narrower stage it
+   is taller than the line it sits beside: the margin makes up the difference,
+   and is nought once the line is tall enough on its own. */
+.cta__word--rise {
+  margin-left: 3.5cqw;
+  margin-bottom: max(0px, 8.75rem - 5.3cqw);
+  font-size: 6.5cqw;
+}
+
+/* Hard against the right edge, so the two white lines pull apart. */
+.cta__word--nourish {
+  margin-left: auto;
+  margin-right: 1.2cqw;
+  font-size: 6.5cqw;
+}
+
+/* The climax: larger again, on its own line under "NOURISH." with clear
+   space between them, its left edge on the same line as "RISE.". */
+.cta__word--thrive {
+  margin-top: 1.2cqw;
+  margin-left: 3.5cqw;
+  font-size: 11cqw;
+  color: var(--tatvyra-orange);
+}
+
+/* The copy, in the open space to the right of "RISE.", its first line level
+   with the top of the capitals. */
+.cta__aside {
+  position: absolute;
+  top: 1.4cqw;
+  left: 47cqw;
+  right: max(var(--gutter), 4cqw);
+  max-width: 26rem;
+}
+
+.cta__eyebrow {
+  font-size: var(--step--1);
+  font-weight: var(--type-label-weight);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-on-dark-muted);
+}
+
+.cta__body {
+  margin-top: var(--space-s);
+  font-size: var(--step-1);
+  line-height: var(--leading-lede);
+  color: var(--text-on-dark);
+}
+
+/* Under the end of "THRIVE.", closing the composition at the bottom right. */
 .cta__actions {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-end;
   gap: var(--space-s);
-  margin-top: var(--space-l);
+  margin-top: clamp(1rem, 2cqw, 2rem);
+  padding-inline: max(var(--gutter), 4cqw);
+}
+
+.cta__actions .btn {
+  min-height: 3.75rem;
+  padding-inline: 2.25rem;
+  letter-spacing: 0.1em;
+}
+
+.cta__actions .btn--on-dark { --btn-line: color-mix(in srgb, var(--tatvyra-warm-white) 70%, transparent); }
+
+/* --- Tilt ---
+   Under a pointer, each word turns a few degrees in 3D towards it — its near
+   edge comes forward — and settles back flat when the pointer leaves. The
+   angles are set from the component (--tilt-x, --tilt-y); here they are only
+   eased. On touch screens and under reduced motion the words stay flat. */
+.cta__title { perspective: 1100px; }
+
+.cta__word {
+  transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transform-origin: 50% 50%;
+}
+
+/* --- Motion ---
+   Once, as the section comes into view: the two white lines rise into place a
+   beat apart, then "THRIVE." slides in from the left, then the copy and the
+   buttons fade up. Nothing moves after that but the discs. */
+@media (prefers-reduced-motion: no-preference) {
+  .cta__aside,
+  .cta__actions {
+    transition:
+      opacity 900ms var(--ease-out),
+      translate 900ms var(--ease-out);
+  }
+
+  /* Each word: its arrival (opacity, translate) a beat after the last, and
+     its tilt (transform), which answers the pointer at once. */
+  .cta__word {
+    transition:
+      opacity 900ms var(--ease-out) var(--arrive, 0ms),
+      translate 900ms var(--ease-out) var(--arrive, 0ms),
+      transform 700ms var(--ease-out);
+  }
+
+  .cta__word--nourish { --arrive: 110ms; }
+
+  .cta__word--thrive {
+    --arrive: 260ms;
+    transition:
+      opacity 700ms var(--ease-out) var(--arrive),
+      translate 1150ms var(--ease-out) var(--arrive),
+      transform 700ms var(--ease-out);
+  }
+
+  .cta__aside { transition-delay: 520ms; }
+  .cta__actions { transition-delay: 640ms; }
+
+  .cta:not(.is-in) .cta__word,
+  .cta:not(.is-in) .cta__aside,
+  .cta:not(.is-in) .cta__actions { opacity: 0; }
+
+  .cta:not(.is-in) .cta__word--rise,
+  .cta:not(.is-in) .cta__word--nourish { translate: 0 0.22em; }
+  .cta:not(.is-in) .cta__word--thrive { translate: -8cqw 0; }
+  .cta:not(.is-in) .cta__aside,
+  .cta:not(.is-in) .cta__actions { translate: 0 1rem; }
+
+  /* The discs drift against the way "THRIVE." came in, tied to the section's
+     passage through the screen rather than to a clock, each by its own amount
+     so the nearer ones move further. Browsers without scroll-driven animation
+     leave them where they are. */
+  @supports (animation-timeline: view()) {
+    .cta__disc {
+      animation: cta-drift linear both;
+      animation-timeline: view();
+    }
+  }
+}
+
+@keyframes cta-drift {
+  from { translate: calc(var(--drift) * -1) 0; }
+  to { translate: var(--drift) 0; }
+}
+
+/* Tablet: the same poster, with the copy a size down so it keeps clear of
+   "NOURISH." in the narrower space beside "RISE.". */
+@media (max-width: 62rem) {
+  .cta__aside { top: 0; left: 44cqw; }
+  .cta__body { margin-top: var(--space-xs); font-size: var(--step-0); line-height: 1.4; }
+}
+
+/* Phone: recomposed rather than shrunk. There is no room beside "RISE." for
+   the copy, so the three words stack as the whole picture — each at the
+   largest size that keeps it inside the screen, "RISE." left, "NOURISH."
+   right, "THRIVE." back to the left — and the copy and full-width buttons
+   follow underneath. */
+@media (max-width: 40rem) {
+  .cta__title { line-height: 0.86;
+  font-weight: var(--type-heading-weight);
+  --weight-stroke: var(--heading-stroke);
+  paint-order: stroke fill;
+  letter-spacing: var(--heading-tracking);
+}
+
+  .cta__word--rise {
+    margin-left: var(--gutter);
+    margin-bottom: 0;
+    font-size: 20cqw;
+  }
+
+  .cta__word--nourish {
+    margin-right: var(--gutter);
+    font-size: 13cqw;
+  }
+
+  .cta__word--thrive {
+    margin-top: 2cqw;
+    margin-left: var(--gutter);
+    font-size: 16.5cqw;
+  }
+
+  .cta__aside {
+    position: static;
+    max-width: none;
+    margin-top: var(--space-l);
+    padding-inline: var(--gutter);
+  }
+
+  .cta__actions {
+    flex-direction: column;
+    margin-top: var(--space-m);
+    padding-inline: var(--gutter);
+  }
+
+  .cta__actions .btn { width: 100%; padding-inline: 1.25rem; }
 }
 
 /* --- Certified. Trusted. Transparent. ---------------------------------------
@@ -2544,7 +2888,6 @@
   padding-block: clamp(2.5rem, 1.8rem + 2.4vw, 4rem);
   background: var(--surface);
   /* The rule that closes the band, across its full width. */
-  border-bottom: 1px solid var(--line);
 }
 
 /* Three words, spaced rather than punctuated: the gap does the separating.

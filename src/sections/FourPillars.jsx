@@ -4,98 +4,79 @@ import Reveal from '../components/Reveal'
 import { ArrowIcon } from '../components/Icons'
 
 /**
- * "The Four Pillars of Daily Ritual" — the four ranges as irregular blobs
+ * "The Four Pillars of Daily Ritual": the four ranges as irregular blobs
  * scattered across an editorial composition, each carrying its packshot under a
- * drawn lid that lifts away on hover, letting a soft light rise from the jar.
+ * lid that lifts away on hover, letting a soft light rise from the jar.
  *
- * GEOMETRY. The lid is drawn, not photographed, so it has to land exactly on
- * the jar in every frame. Per pillar:
+ * ARTWORK. Everything comes from the packshots in "product images": each jar
+ * and bottle photographed open and cut out, set on a transparent frame cut to
+ * the blob's 0.82 aspect (public/images/pillars/*-jar.webp, *-bottle.webp),
+ * and its own lid or cap photographed on its own (lid-*.webp, cap-black.webp).
+ * At rest the lid sits over the open neck, so what it lifts off is the real
+ * opening.
  *
- *   lid  — the cap's box, measured off the cropped photograph in
- *          public/images/pillars/ as fractions of that image.
- *   crop — zoom, and where the cap's top edge sits in the blob (capTop, in
- *          blob percent). The four jars were shot at different distances, so
- *          each is zoomed until it reads at about the same size as the others
- *          — and since the photograph always has to cover the blob, the zoom
- *          also sets how far down the jar falls. capTop then hangs the
- *          photograph so each jar's base stays clear of the blob's own curve,
- *          which cuts in at a different height on each shape. Everything else
- *          on the blob is measured off this stage, so the lid follows the crop.
- *   cap  — how round the cap's ellipse reads, which differs per shot: the two
- *          jars were photographed from above (a deep ellipse, `round` ~34%) and
- *          the two tablet bottles almost side on (a shallow one, ~15-21%).
- *          Using one value for all four is what made the caps look wrong.
- *          `round`/`roundBot` are the ellipse's vertical radius at the top and
- *          bottom of the cap as a percentage of the cap's height; `face` is the
- *          whole top ellipse, so it is twice `round`.
+ * GEOMETRY. The lid has to land exactly on the neck in every frame. Per pillar:
  *
- * Each frame is cut to the same 0.82 aspect as the blob, so the photograph
- * fills the blob and these fractions convert to figure-box percentages once
- * (--stage-*) for the lid, the neck, the glow and the motes to share.
+ *   lid  — the lid's box on the neck, as fractions of the frame: it covers the
+ *          threaded neck from just above the rim down to the shoulder. The lid
+ *          photograph is stretched to this box, which only changes how far
+ *          from above it seems to be seen.
+ *   crop — zoom, and where the lid's top edge sits in the blob (capTop, in
+ *          blob percent). With zoom 1 and capTop at the lid's own y, the frame
+ *          fills the blob exactly. Everything else on the blob is measured off
+ *          this stage, so the lid follows the crop.
  *
- * `mouth` is the drawn opening. Honey and nut butter were photographed with
- * their jars open, so the lid reveals the real thing and nothing is drawn
- * (mouth: 0). The tablet bottles were photographed sealed, so the drawn cap
- * hides the real one and a drawn neck takes its place (mouth: 1).
- *
- * `doodles` are the hand-drawn marks that come on around the opening — the
+ * `doodles` are the hand-drawn marks that come on around the opening: the
  * bee over the honey, the star over the nut butter. `w` is the mark's width as
  * a percentage of the figure, `dx`/`dy` its offset from the centre of the jar's
  * mouth, and both are chosen to keep clear of the lid's flight path, which goes
  * up and slightly to the right.
  *
+ * `pills` marks the two capsule bottles, which open differently: the bottle
+ * stays still, the cap unscrews and tips back on its rear edge, and six
+ * capsules rise out of the mouth and settle in a loose cluster above it.
+ * `capsule` is that product's own capsule, cut from its bottle's photograph,
+ * and `capsuleWidth` its length in percent of the figure. `rim` is the ellipse
+ * of the neck's opening, which the capsules rise out of, as fractions of the
+ * frame. No glow and no motes. Honey and nut butter keep the lid-lift.
+ *
  * `blob` is a clip path in objectBoundingBox units, so one path fits any card
  * width. Each is a different irregular shape, and each was checked against its
- * cap — a blob that pinches in too early clips the cap off.
+ * lid: a blob that pinches in too early clips the lid off.
  */
 const PILLARS = [
-  {
-    slug: 'honey',
-    name: 'Honey',
-    benefit: 'Pure Energy',
-    note: 'Four single-origin harvests, bottled apart.',
-    to: '/shop/raw-honey',
-    image: '/images/pillars/honey.webp',
-    alt: 'An open jar of Tatvyra multifloral honey on a wooden table, honeycomb and chamomile flowers around it.',
-    srcAspect: 0.82,
-    crop: { zoom: 1.06, capTop: 7.8 },
-    lid: { x: 0.258, y: 0.118, w: 0.502, h: 0.238 },
-    cap: { round: 25, roundBot: 21, face: 50 },
-    doodles: [
-      { art: 'bang', w: 10, dx: -30, dy: -6, rot: -5, d: 260 },
-      { art: 'bee', w: 40, dx: 18, dy: -6, rot: -4, d: 700 },
-    ],
-    mouth: 0,
-    blob: 'M0.9650,0.3303C0.9986,0.4378 0.9615,0.5853 0.9125,0.6919C0.8636,0.7985 0.7711,0.9352 0.6714,0.9697C0.5718,1.0042 0.4189,0.9495 0.3144,0.8989C0.2099,0.8484 0.0845,0.7658 0.0444,0.6663C0.0043,0.5668 0.0233,0.3992 0.0738,0.3018C0.1244,0.2044 0.2412,0.1245 0.3474,0.0820C0.4536,0.0395 0.6080,0.0053 0.7109,0.0466C0.8138,0.0880 0.9314,0.2227 0.9650,0.3303Z',
-  },
   {
     slug: 'moringa',
     name: 'Moringa',
     benefit: 'Nourishment',
     note: 'Powder, tablets, capsules and gummies.',
     to: '/shop/moringa',
-    image: '/images/pillars/moringa.webp',
-    alt: 'A sealed amber bottle of Tatvyra moringa tablets on a wooden board, fresh moringa leaves and a bowl of green powder around it.',
-    srcAspect: 0.8198,
-    crop: { zoom: 1, capTop: 16.79 },
-    lid: { x: 0.2937, y: 0.1679, w: 0.4, h: 0.1444 },
-    cap: { round: 19.6, roundBot: 14.8, face: 39.2 },
-    mouth: 1,
+    image: '/images/pillars/moringa-bottle.webp',
+    lidImage: '/images/pillars/cap-black.webp',
+    alt: 'An open amber bottle of Tatvyra Moringa Capsules.',
+    crop: { zoom: 1, capTop: 12.45 },
+    lid: { x: 0.3279, y: 0.1245, w: 0.3387, h: 0.14 },
+    rim: { cx: 0.498, cy: 0.1648, rx: 0.1366, ry: 0.0179 },
+    pills: 'moringa',
+    capsule: '/images/pillars/capsule-moringa.webp',
+    capsuleWidth: 10,
     blob: 'M0.8949,0.7157C0.8440,0.8175 0.7417,0.9514 0.6408,0.9798C0.5398,1.0082 0.3917,0.9429 0.2891,0.8861C0.1864,0.8294 0.0571,0.7405 0.0250,0.6394C-0.0071,0.5383 0.0376,0.3723 0.0963,0.2795C0.1551,0.1867 0.2703,0.1190 0.3775,0.0826C0.4848,0.0462 0.6449,0.0135 0.7397,0.0612C0.8345,0.1090 0.9203,0.2600 0.9462,0.3691C0.9721,0.4782 0.9458,0.6140 0.8949,0.7157Z',
   },
   {
     slug: 'spirulina',
     name: 'Spirulina',
     benefit: 'Vitality',
-    note: 'Protein-dense, in three simple formats.',
+    note: 'Protein-dense, in two simple formats.',
     to: '/shop/spirulina',
-    image: '/images/pillars/spirulina.webp',
-    alt: 'A sealed amber bottle of Tatvyra spirulina tablets on a wooden board beside loose tablets and a bowl of green powder.',
-    srcAspect: 0.8203,
-    crop: { zoom: 1.08, capTop: 14.5 },
-    lid: { x: 0.3087, y: 0.1974, w: 0.3624, h: 0.1016 },
-    cap: { round: 18.4, roundBot: 10.5, face: 36.8 },
-    mouth: 1,
+    image: '/images/pillars/spirulina-bottle.webp',
+    lidImage: '/images/pillars/cap-black.webp',
+    alt: 'An open amber bottle of Tatvyra Spirulina Capsules.',
+    crop: { zoom: 1, capTop: 13.39 },
+    lid: { x: 0.3391, y: 0.1339, w: 0.3167, h: 0.1537 },
+    rim: { cx: 0.4994, cy: 0.171, rx: 0.1293, ry: 0.0186 },
+    pills: 'spirulina',
+    capsule: '/images/pillars/capsule-spirulina.webp',
+    capsuleWidth: 10.5,
     blob: 'M0.7268,0.9456C0.6280,0.9906 0.4722,0.9568 0.3638,0.9184C0.2555,0.8800 0.1332,0.8110 0.0767,0.7155C0.0201,0.6199 -0.0128,0.4465 0.0245,0.3453C0.0618,0.2440 0.1959,0.1597 0.3004,0.1079C0.4049,0.0560 0.5508,0.0031 0.6516,0.0340C0.7525,0.0650 0.8547,0.1912 0.9055,0.2936C0.9563,0.3960 0.9862,0.5399 0.9564,0.6485C0.9267,0.7572 0.8256,0.9006 0.7268,0.9456Z',
   },
   {
@@ -104,18 +85,33 @@ const PILLARS = [
     benefit: 'Wholeness',
     note: 'Milled from the nut. Nothing hydrogenated.',
     to: '/shop/nut-butters',
-    image: '/images/pillars/nut-butter.webp',
-    alt: 'An open jar of Tatvyra organic premium peanut butter on a green checked cloth, its purple lid, peanuts and buttered toast beside it.',
-    srcAspect: 0.82,
-    crop: { zoom: 1, capTop: 20.3 },
-    lid: { x: 0.162, y: 0.203, w: 0.556, h: 0.205 },
-    cap: { round: 35.9, roundBot: 30, face: 71.9 },
+    image: '/images/pillars/nut-butter-jar.webp',
+    lidImage: '/images/pillars/lid-nut-butter.webp',
+    alt: 'An open jar of Tatvyra Natural Peanut Butter Creamy.',
+    crop: { zoom: 1, capTop: 14.5 },
+    lid: { x: 0.2439, y: 0.145, w: 0.5091, h: 0.181 },
     doodles: [
       { art: 'star', w: 17, dx: -16, dy: -8, rot: -9, d: 260 },
       { art: 'bang', w: 10, dx: 31, dy: -2, rot: 6, d: 620 },
     ],
-    mouth: 0,
     blob: 'M0.7485,0.1129C0.8443,0.1688 0.9592,0.2920 0.9788,0.3957C0.9983,0.4993 0.9281,0.6362 0.8660,0.7350C0.8040,0.8338 0.7103,0.9611 0.6065,0.9885C0.5027,1.0160 0.3336,0.9653 0.2434,0.8997C0.1531,0.8341 0.0926,0.7064 0.0652,0.5948C0.0379,0.4831 0.0228,0.3189 0.0793,0.2298C0.1358,0.1408 0.2926,0.0798 0.4042,0.0603C0.5157,0.0408 0.6528,0.0570 0.7485,0.1129Z',
+  },
+  {
+    slug: 'honey',
+    name: 'Honey',
+    benefit: 'Pure Energy',
+    note: 'Three single-origin harvests, bottled apart.',
+    to: '/shop/raw-honey',
+    image: '/images/pillars/honey-jar.webp',
+    lidImage: '/images/pillars/lid-honey.webp',
+    alt: 'An open jar of Tatvyra Multifloral Honey.',
+    crop: { zoom: 1, capTop: 17.96 },
+    lid: { x: 0.2559, y: 0.1796, w: 0.4851, h: 0.1602 },
+    doodles: [
+      { art: 'bang', w: 10, dx: -30, dy: -6, rot: -5, d: 260 },
+      { art: 'bee', w: 40, dx: 18, dy: -6, rot: -4, d: 700 },
+    ],
+    blob: 'M0.9650,0.3303C0.9986,0.4378 0.9615,0.5853 0.9125,0.6919C0.8636,0.7985 0.7711,0.9352 0.6714,0.9697C0.5718,1.0042 0.4189,0.9495 0.3144,0.8989C0.2099,0.8484 0.0845,0.7658 0.0444,0.6663C0.0043,0.5668 0.0233,0.3992 0.0738,0.3018C0.1244,0.2044 0.2412,0.1245 0.3474,0.0820C0.4536,0.0395 0.6080,0.0053 0.7109,0.0466C0.8138,0.0880 0.9314,0.2227 0.9650,0.3303Z',
   },
 ]
 
@@ -189,6 +185,51 @@ const MOTES = [
   { x: '-1.7rem', s: '3.5px', d: 3600 },
 ]
 
+/**
+ * The capsules that rise out of an opened bottle and settle in a loose cluster
+ * above its mouth. Each is a real capsule cut from the product photography,
+ * placed by hand so that no two share a height, a gap or an angle.
+ *
+ *   x     where it settles across the opening, from the mouth's centre
+ *   rise  where its lower edge settles above the rim; at or below 0 it stays
+ *         partly inside the bottle, cut off by the rim
+ *   drift how far it has slid sideways by then, so paths are not vertical
+ *   from  its angle inside the bottle; tilt the angle it settles at
+ *   s     size, smaller reading as further back; z its place in the stack
+ *   d     when it starts to rise, ms after the cap starts to move
+ *   dur   how long it takes to rise and settle
+ *   out   its delay going back in, so the return is not the opening reversed
+ *   shade a touch of light or shadow on the photograph, so copies differ
+ *
+ * x, rise and drift are in percent of the figure's width. The settled cluster
+ * leans left, to the side the cap has tipped away from.
+ */
+const PILLS = [
+  { x: -2.4, rise: 5.1, drift: 0.5, from: 15, tilt: 4, s: 0.97, z: 6, d: 950, dur: 1450, out: 70, shade: 1.03 },
+  { x: 6.8, rise: -1.7, drift: 1.1, from: -12, tilt: -5, s: 0.93, z: 4, d: 1060, dur: 1320, out: 0, shade: 0.98 },
+  { x: -6.8, rise: 11.2, drift: -0.9, from: -21, tilt: -8, s: 1, z: 5, d: 1190, dur: 1700, out: 200, shade: 1 },
+  { x: -11.4, rise: 0.3, drift: -1.8, from: 24, tilt: 11, s: 1.02, z: 7, d: 1330, dur: 1500, out: 160, shade: 0.95 },
+  { x: -13.2, rise: 8.6, drift: -1.4, from: 9, tilt: 3, s: 0.86, z: 1, d: 1420, dur: 1850, out: 300, shade: 0.9 },
+  { x: 12.4, rise: 1.2, drift: 1.6, from: 19, tilt: 9, s: 0.88, z: 2, d: 1590, dur: 1380, out: 110, shade: 0.92 },
+]
+
+/**
+ * A little chance, rolled once each time a capsule bottle opens and held for as
+ * long as it stays open: every capsule shifts a fraction from its authored
+ * place, angle and moment, so the cluster is never quite the same twice but
+ * never loses its shape. Nothing moves while the bottle stays open.
+ */
+function rollTablets(card) {
+  if (!card?.classList.contains('pillar--tablets')) return
+  const jitter = (range) => (Math.random() * 2 - 1) * range
+  card.querySelectorAll('.pillar__pill').forEach((pill) => {
+    pill.style.setProperty('--jx', jitter(0.9).toFixed(2))
+    pill.style.setProperty('--jy', jitter(0.8).toFixed(2))
+    pill.style.setProperty('--jr', `${jitter(3.5).toFixed(1)}deg`)
+    pill.style.setProperty('--jd', `${Math.round(jitter(45))}ms`)
+  })
+}
+
 export default function FourPillars() {
   const listRef = useRef(null)
 
@@ -206,6 +247,9 @@ export default function FourPillars() {
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
+          if (entry.isIntersecting && !entry.target.classList.contains('is-open')) {
+            rollTablets(entry.target)
+          }
           entry.target.classList.toggle('is-open', entry.isIntersecting)
         }
       },
@@ -240,8 +284,7 @@ export default function FourPillars() {
             The Four Pillars of Daily Ritual.
           </h2>
           <p className="pillars__intro">
-            Four ingredients, each doing one job properly. Lift a lid to see what is
-            inside.
+            Get to know what goes into every jar.
           </p>
         </Reveal>
 
@@ -255,20 +298,28 @@ export default function FourPillars() {
             >
               <Link
                 to={pillar.to}
-                className={`pillar pillar--${pillar.slug}`}
+                className={`pillar pillar--${pillar.slug}${pillar.pills ? ' pillar--tablets' : ''}`}
+                onPointerEnter={
+                  pillar.pills
+                    ? (event) => event.pointerType === 'mouse' && rollTablets(event.currentTarget)
+                    : undefined
+                }
                 style={{
-                  '--src-aspect': pillar.srcAspect,
                   '--zoom': pillar.crop.zoom,
                   '--cap-top': pillar.crop.capTop,
                   '--lid-x': pillar.lid.x,
                   '--lid-y': pillar.lid.y,
                   '--lid-w': pillar.lid.w,
                   '--lid-h': pillar.lid.h,
-                  '--cap-round': pillar.cap.round,
-                  '--cap-round-bot': pillar.cap.roundBot,
-                  '--cap-face': pillar.cap.face,
-                  '--mouth-open': pillar.mouth,
                   '--blob': `url(#pillar-blob-${pillar.slug})`,
+                  '--lid-photo': `url(${pillar.lidImage})`,
+                  ...(pillar.rim && {
+                    '--rim-cx': pillar.rim.cx,
+                    '--rim-cy': pillar.rim.cy,
+                    '--rim-rx': pillar.rim.rx,
+                    '--rim-ry': pillar.rim.ry,
+                    '--capsule-w': pillar.capsuleWidth,
+                  }),
                 }}
               >
                 <span className="pillar__figure">
@@ -284,22 +335,59 @@ export default function FourPillars() {
                     </span>
                     <span className="pillar__wash" aria-hidden="true" />
                     <span className="pillar__glow" aria-hidden="true" />
-                    <span className="pillar__mouth" aria-hidden="true" />
                   </span>
 
-                  <span className="pillar__motes" aria-hidden="true">
-                    {MOTES.map((mote) => (
-                      <span
-                        key={mote.d}
-                        className="pillar__mote"
-                        style={{
-                          '--mote-x': mote.x,
-                          '--mote-s': mote.s,
-                          '--mote-delay': `${mote.d}ms`,
-                        }}
-                      />
-                    ))}
-                  </span>
+                  {pillar.pills ? (
+                    <span
+                      className={`pillar__pills pillar__pills--${pillar.pills}`}
+                      aria-hidden="true"
+                    >
+                      {PILLS.map((pill) => (
+                        <span
+                          key={pill.d}
+                          className="pillar__pill"
+                          style={{
+                            '--pill-x': pill.x,
+                            '--pill-rise': pill.rise,
+                            '--pill-drift': pill.drift,
+                            '--pill-from': `${pill.from}deg`,
+                            '--pill-tilt': `${pill.tilt}deg`,
+                            '--pill-s': pill.s,
+                            '--pill-z': pill.z,
+                            '--pill-in': `${pill.d}ms`,
+                            '--pill-dur': `${pill.dur}ms`,
+                            '--pill-out': `${pill.out}ms`,
+                            '--pill-shade': pill.shade,
+                          }}
+                        >
+                          <span className="pillar__pill-rise">
+                            <img
+                              className="pillar__pill-img"
+                              src={pillar.capsule}
+                              alt=""
+                              loading="lazy"
+                              decoding="async"
+                              draggable="false"
+                            />
+                          </span>
+                        </span>
+                      ))}
+                    </span>
+                  ) : (
+                    <span className="pillar__motes" aria-hidden="true">
+                      {MOTES.map((mote) => (
+                        <span
+                          key={mote.d}
+                          className="pillar__mote"
+                          style={{
+                            '--mote-x': mote.x,
+                            '--mote-s': mote.s,
+                            '--mote-delay': `${mote.d}ms`,
+                          }}
+                        />
+                      ))}
+                    </span>
+                  )}
 
                   {pillar.doodles?.map((doodle, n) => (
                     <span
@@ -333,9 +421,7 @@ export default function FourPillars() {
                     </span>
                   ))}
 
-                  <span className="pillar__lid" aria-hidden="true">
-                    <span className="pillar__lid-face" />
-                  </span>
+                  <span className="pillar__lid" aria-hidden="true" />
                 </span>
 
                 <span className="pillar__caption">
@@ -354,10 +440,6 @@ export default function FourPillars() {
             </Reveal>
           ))}
         </ul>
-
-        <Reveal className="pillars__outro">
-          <p className="pillars__closer">Elevate Your Morning Ritual.</p>
-        </Reveal>
       </div>
     </section>
   )

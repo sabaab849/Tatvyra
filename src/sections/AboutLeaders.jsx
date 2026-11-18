@@ -1,21 +1,23 @@
 /**
- * The people behind Tatvyra: the founder's story, then the co-founder's.
+ * The people behind Tatvyra: the founder, then the co-founder. It follows "The
+ * brand" on the About page.
  *
  * Both are set the same way — the heading across the top, then the portrait in
- * one column and the story in the other, starting on the same line, so the eye
- * meets the person and their first sentence together. The name and the title
- * sit under the photograph, where a caption belongs, rather than at the foot of
- * the column. The portrait changes sides between the two, so the pair reads as
- * a spread rather than a list. The copy is the brand's own, unaltered; only the
- * order of the blocks is set here.
+ * one column and a brief story in the other. The name and the title sit under
+ * the photograph, where a caption belongs. The portrait changes sides between
+ * the two, so the pair reads as a spread rather than a list.
+ *
+ * The copy is cut down from the brand's own longer text to the facts that
+ * matter: who each person is, where they came from, and why Tatvyra. Nothing
+ * is added that the longer text did not say.
  */
 
-/* The founder's statement, kept as one block so it stays whole: the closing
-   line is the brand line, and the sign-off is his. */
+/* The founder's statement: its opening and closing sentences, word for word,
+   the brand line, and his sign-off. */
 const FOUNDER_STATEMENT = {
-  body: 'Forty-two years of engineering for the pharmaceutical industry taught us one thing: purity is built into the process, not added at the end. At Tatvyra, we bring that same discipline to the food you eat every day. We believe good nutrition should come from real, whole ingredients, not long labels and hidden additives. That’s why our moringa brings the goodness of one of nature’s most nutrient-dense leaves, our nut butters deliver clean protein and healthy fats with nothing unnecessary added, and our honey offers natural sweetness the way nature intended. Every product is made to nourish your body, fit easily into your daily routine, and earn your trust with every spoonful. Honest ingredients, careful craft, nothing hidden.',
-  line: 'Tatvyra — trusted ingredients for your healthy life.',
-  sign: '— DV, Founder',
+  body: 'Forty-two years of engineering for the pharmaceutical industry taught us one thing: purity is built into the process, not added at the end. At Tatvyra, we bring that same discipline to the food you eat every day. Honest ingredients, careful craft, nothing hidden.',
+  line: 'Tatvyra: trusted ingredients for your healthy life.',
+  sign: 'DV Vishwakarma',
 }
 
 export default function AboutLeaders() {
@@ -26,9 +28,9 @@ export default function AboutLeaders() {
           <header className="leader__head">
             <p className="leader__eyebrow">Founder Story</p>
             <h2 id="founder-title" className="leader__title">
-              Built on experience.
+              Built on Experience.
               <br />
-              Driven by a vision.
+              Driven by a Vision.
             </h2>
           </header>
 
@@ -36,47 +38,40 @@ export default function AboutLeaders() {
             <figure className="leader__portrait">
               <img
                 src="/images/about/founder-dv-vishwakarma.webp"
-                alt="Mr. D. V. Vishwakarma, founder of Tatvyra, seated at the Tatvyra stand."
+                alt="Mr. DV Vishwakarma, Founder and MD of Tatvyra, seated at the Tatvyra stand."
                 width={1600}
                 height={1200}
+                loading="lazy"
                 decoding="async"
               />
               <figcaption className="leader__caption">
-                <span className="leader__name">Mr. D. V. Vishwakarma</span>
-                <span className="leader__role">Founder &amp; Visionary Entrepreneur</span>
+                <span className="leader__name">Mr. DV Vishwakarma</span>
+                <span className="leader__role">Founder &amp; MD</span>
               </figcaption>
             </figure>
           </div>
 
-          {/* His own words, opening under his photograph and running past the
-              column, so the page closes on his voice rather than on a gap. */}
-          <blockquote className="leader__statement">
-            <p>{FOUNDER_STATEMENT.body}</p>
-            <p className="leader__statement-line">{FOUNDER_STATEMENT.line}</p>
-            <footer className="leader__statement-sign">{FOUNDER_STATEMENT.sign}</footer>
-          </blockquote>
-
           <div className="leader__body">
             <p>
-              Mr. D. V. Vishwakarma is a second-generation entrepreneur and alumnus of NMIMS
-              Business School. He joined his father’s business legacy at the age of 21 and went
-              on to successfully lead and grow the engineering industry for over two decades,
-              gaining extensive experience in entrepreneurship, business management, operations,
-              and strategic growth.
+              A second-generation entrepreneur and NMIMS Business School alumnus, Mr. Vishwakarma
+              joined his father’s business at 21 and led it in the engineering
+              industry for over two decades. He founded Tatvyra to make honest nutrition
+              from pure, natural ingredients, free from unnecessary fillers, additives and
+              artificial preservatives.
             </p>
-            <p>
-              After 20 years in the engineering sector, Mr. Vishwakarma ventured into the Health
-              &amp; Wellness industry, driven by a growing awareness of the need for
-              high-quality, clean-label nutrition. He recognized the increasing demand for
-              products made from pure, natural ingredients—free from unnecessary fillers,
-              additives, and artificial preservatives.
-            </p>
+
+            {/* His own words, under his story. */}
+            <blockquote className="leader__statement">
+              <p>{FOUNDER_STATEMENT.body}</p>
+              <p className="leader__statement-line">{FOUNDER_STATEMENT.line}</p>
+              <footer className="leader__statement-sign">{FOUNDER_STATEMENT.sign}</footer>
+            </blockquote>
           </div>
         </article>
 
         <article className="leader leader--flip" aria-labelledby="cofounder-title">
           <header className="leader__head">
-            <p className="leader__eyebrow">Co-Founder</p>
+            <p className="leader__eyebrow">CEO</p>
             <h2 id="cofounder-title" className="leader__title">
               Vijeta Rathod
             </h2>
@@ -86,7 +81,7 @@ export default function AboutLeaders() {
             <figure className="leader__portrait">
               <img
                 src="/images/about/cofounder-vijeta-rathod.webp"
-                alt="Vijeta Rathod, co-founder and CEO of Tatvyra, seated at the Tatvyra stand."
+                alt="Vijeta Rathod, CEO of Tatvyra, seated at the Tatvyra stand."
                 width={1280}
                 height={960}
                 loading="lazy"
@@ -94,32 +89,26 @@ export default function AboutLeaders() {
               />
               <figcaption className="leader__caption">
                 <span className="leader__name">Vijeta Rathod</span>
-                <span className="leader__role">Co-Founder &amp; CEO, Tatvyra by Feynman Foodcraft</span>
+                <span className="leader__role">CEO</span>
               </figcaption>
             </figure>
           </div>
 
           <div className="leader__body">
             <p>
-              Vijeta Rathod is the Co-Founder and CEO of Tatvyra, a wellness brand built on a
-              simple belief: good health starts with how you begin your day. Tatvyra was created
-              around the philosophy of “Beginning every day the fit way” — a mission to educate
-              and inspire healthier daily habits, not just among Gen Z, but across every
-              generation.
+              Vijeta Rathod is the CEO of Tatvyra, a wellness brand built on the
+              belief that good health begins with how we start our day. Guided by her deep
+              connection with nature and a passion for mindful living, she helped build Tatvyra by
+              Feynman Foodcraft to make healthier daily habits and mindful nutrition accessible to
+              every generation. Rooted in the philosophy of “Beginning every day the fit way,”
+              Tatvyra aims to inspire a more conscious approach to everyday wellness that goes
+              beyond fitness trends.
             </p>
             <p>
-              The idea for Tatvyra didn’t come from a market gap — it came from a personal one.
-              Vijeta has always felt a deep connection to nature, and after two decades in the
-              corporate world, she felt pulled to build something that reflected that connection:
-              a business rooted in wellness, mindful nutrition, and everyday vitality. Tatvyra by
-              Feynman Foodcraft is the result — a brand designed to make fitness-first mornings
-              accessible and relevant to a much wider audience than the wellness industry
-              typically targets.
-            </p>
-            <p>
-              Vijeta brings over 20 years of professional experience to Tatvyra’s leadership,
-              including a strong foundation in human resources and organizational building —
-              talent management &amp; culture-building.
+              With over 20 years of experience in human resources, talent management and
+              organisational development, Vijeta leads the team that turns Tatvyra’s vision into
+              meaningful everyday experiences, bringing together people, purpose and a shared
+              commitment to making wellness a natural part of daily life.
             </p>
           </div>
         </article>

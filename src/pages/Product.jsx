@@ -22,7 +22,7 @@ export default function Product() {
   const category = product ? getCategory(product.category) : null
 
   usePageMeta({
-    title: product ? `${product.name} — Tatvyra` : 'Product — Tatvyra',
+    title: product ? `${product.name} | Tatvyra` : 'Product | Tatvyra',
     description: product ? (product.description ?? product.descriptor) : undefined,
   })
 
@@ -46,9 +46,8 @@ export default function Product() {
         <ProductInfo product={product} category={category} />
       </div>
 
-      {/* Straight after the buy box, ahead of the rest of the range and the FAQ,
-          so the story stays with the product it tells. Renders only for SKUs
-          that carry `journey` data. */}
+      {/* Straight after the buy box, ahead of the FAQ, so the story stays with
+          the product it tells. Renders only for SKUs that carry `journey` data. */}
       <ProductJourney product={product} />
 
       <ProductStory product={product} />
@@ -61,24 +60,25 @@ export default function Product() {
 
       <ProductOriginTrail product={product} />
 
+      <ProductSpotlight product={product} />
+      <ProductCampaign product={product} />
+      <ProductFaq product={product} />
+      <ProductInformation />
+
+      {/* Last, after everything about this product: the rest of the range. */}
       {related.length > 0 && (
         <section className="section section--sunken" aria-labelledby="related-title">
           <div className="shell">
             <SectionHeading
               id="related-title"
               eyebrow={`More ${category.name}`}
-              title="The rest of the range."
+              title="More Products"
               size="s"
             />
             <ProductGrid products={related} columns={4} />
           </div>
         </section>
       )}
-
-      <ProductSpotlight product={product} />
-      <ProductCampaign product={product} />
-      <ProductFaq product={product} />
-      <ProductInformation />
     </div>
   )
 }

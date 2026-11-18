@@ -231,11 +231,6 @@ export default function ProductOriginMap({ product }) {
         </Reveal>
 
         <Reveal className="omap__aside" delay={140}>
-          <p className="omap__tagline">
-            {map.tagline.map((line) => (
-              <span key={line}>{line} </span>
-            ))}
-          </p>
           <div className="omap__note">
             <h3 className="omap__note-title">{map.about.title}</h3>
             <p className="omap__note-body">{map.about.body}</p>

@@ -26,7 +26,6 @@ const BENEFIT_ICONS = {
 /* The catalogue's mark keys, given the glyphs used in the design. */
 const MARK_ICONS = {
   'clean-label': LeafMarkIcon,
-  vegan: SproutIcon,
   'nutrition-forward': DumbbellIcon,
   'gluten-free': LeafMarkIcon,
   'single-origin': LeafMarkIcon,
@@ -41,7 +40,7 @@ export default function ProductSpotlight({ product }) {
     spotlight.marks ??
     (product.marks ?? [])
       .filter((key) => MARKS[key])
-      .map((key) => ({ icon: key, title: MARKS[key].label, body: MARKS[key].definition }))
+      .map((key) => ({ icon: key, title: MARKS[key].label, body: MARKS[key].pdp ?? MARKS[key].definition }))
   const lines = Array.isArray(spotlight.title)
 
   return (

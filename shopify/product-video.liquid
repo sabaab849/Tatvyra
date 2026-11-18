@@ -1,0 +1,625 @@
+{% comment %}
+  TATVYRA — "IN USE" PRODUCT VIDEO STORIES
+  One self-contained block for Shopify's Custom Liquid section.
+  Markup, CSS and JavaScript are all in this file. No theme edits, no build step.
+
+  ── 1. EDIT THESE ───────────────────────────────────────────────────────────
+  Each story needs: a Shopify-hosted .mp4, a poster image, and a product handle.
+  Upload under Content → Files, click the link icon to copy the URL, paste below.
+  Leave a video blank ('') and the story shows its poster only — nothing breaks.
+
+  s1_* is the Moringa Leaf Powder story, s2_* the Natural Peanut Butter Creamy one.
+  'steps' are the three captions, separated by |.
+  'times' are the seconds at which each step begins in that video, separated by |.
+  They move the highlight along the steps as the film plays. Match them to your cut.
+{% endcomment %}
+
+{%- liquid
+  assign pv_eyebrow = 'In use'
+  assign pv_title   = 'One scoop. One spread.'
+  assign pv_accent  = 'Every day.'
+
+  assign s1_video   = 'https://cdn.shopify.com/videos/c/o/v/REPLACE-moringa-smoothie.mp4'
+  assign s1_poster  = 'https://cdn.shopify.com/s/files/1/0000/0000/0000/files/REPLACE-moringa-poster.jpg'
+  assign s1_handle  = 'moringa-leaf-powder'
+  assign s1_kicker  = 'Moringa Leaf Powder'
+  assign s1_head    = 'A scoop into the blender.'
+  assign s1_body    = 'Open the pouch, level one scoop, and let the smoothie do the rest.'
+  assign s1_steps   = 'Open the pouch|Scoop the powder|Blend it in'
+  assign s1_times   = '0|3|6'
+  assign s1_alt     = 'A pouch of Tatvyra moringa leaf powder standing beside a green smoothie.'
+
+  assign s2_video   = 'https://cdn.shopify.com/videos/c/o/v/REPLACE-peanut-butter-toast.mp4'
+  assign s2_poster  = 'https://cdn.shopify.com/s/files/1/0000/0000/0000/files/REPLACE-peanut-butter-poster.jpg'
+  assign s2_handle  = 'natural-peanut-butter-creamy'
+  assign s2_kicker  = 'Natural Peanut Butter Creamy'
+  assign s2_head    = 'Straight from the jar to the toast.'
+  assign s2_body    = 'A knife, a jar, and warm bread. Nothing hydrogenated in between.'
+  assign s2_steps   = 'Scoop from the jar|Spread it thick|Take a bite'
+  assign s2_times   = '0|3|6'
+  assign s2_alt     = 'A jar of Tatvyra natural peanut butter beside a plate of toast.'
+
+
+  assign pv_id = section.id | default: 'tatvyra'
+-%}
+
+{% comment %} ── 2. MARKUP — no need to edit below this line ─────────────────── {% endcomment %}
+
+<section class="tv-pv" id="tv-pv-{{ pv_id }}" aria-labelledby="tv-pv-title-{{ pv_id }}">
+  <div class="tv-pv__wrap">
+
+    <header class="tv-pv__head" data-tv-reveal>
+      <p class="tv-pv__eyebrow">{{ pv_eyebrow | escape }}</p>
+      <h2 class="tv-pv__title" id="tv-pv-title-{{ pv_id }}">
+        {{ pv_title | escape }} <span class="tv-pv__title-accent">{{ pv_accent | escape }}</span>
+      </h2>
+    </header>
+
+    {%- for i in (1..2) -%}
+      {%- liquid
+        if i == 1
+          assign video = s1_video
+          assign poster = s1_poster
+          assign handle = s1_handle
+          assign kicker = s1_kicker
+          assign head = s1_head
+          assign body = s1_body
+          assign steps = s1_steps | split: '|'
+          assign times = s1_times | split: '|'
+          assign alt = s1_alt
+        else
+          assign video = s2_video
+          assign poster = s2_poster
+          assign handle = s2_handle
+          assign kicker = s2_kicker
+          assign head = s2_head
+          assign body = s2_body
+          assign steps = s2_steps | split: '|'
+          assign times = s2_times | split: '|'
+          assign alt = s2_alt
+        endif
+        assign product_url = routes.root_url | append: '/products/' | append: handle | replace: '//', '/'
+      -%}
+
+      <article class="tv-pv__story{% if i == 2 %} tv-pv__story--flip{% endif %}" data-tv-story>
+
+        <div class="tv-pv__stage" data-tv-reveal>
+          <div class="tv-pv__frame" data-tv-player data-state="poster">
+            {%- comment -%} The product name sits under the poster, so a missing poster still reads. {%- endcomment -%}
+            <span class="tv-pv__fallback" aria-hidden="true">{{ kicker | escape }}</span>
+
+            <img
+              class="tv-pv__poster"
+              src="{{ poster | escape }}"
+              alt="{{ alt | escape }}"
+              width="1200"
+              height="1500"
+              loading="lazy"
+              decoding="async"
+              data-tv-poster
+            >
+
+            {%- if video != blank -%}
+              <video
+                class="tv-pv__video"
+                muted
+                loop
+                playsinline
+                webkit-playsinline
+                preload="none"
+                disablepictureinpicture
+                aria-label="{{ alt | escape }} Short film, no sound."
+                data-tv-video
+                data-src="{{ video | escape }}"
+              ></video>
+
+              <button type="button" class="tv-pv__toggle" data-tv-toggle aria-pressed="false" hidden>
+                <svg class="tv-pv__icon tv-pv__icon--play" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>
+                <svg class="tv-pv__icon tv-pv__icon--pause" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor"/></svg>
+                <span class="tv-pv__toggle-label" data-tv-toggle-label>Play film</span>
+              </button>
+
+              <span class="tv-pv__progress" aria-hidden="true"><span data-tv-progress></span></span>
+            {%- endif -%}
+          </div>
+        </div>
+
+        <div class="tv-pv__copy" data-tv-reveal>
+          <p class="tv-pv__index" aria-hidden="true">0{{ i }}</p>
+          <p class="tv-pv__kicker">{{ kicker | escape }}</p>
+          <h3 class="tv-pv__headline">{{ head | escape }}</h3>
+          <p class="tv-pv__body">{{ body | escape }}</p>
+
+          <ol class="tv-pv__steps">
+            {%- for step in steps -%}
+              <li class="tv-pv__step{% if forloop.first %} is-current{% endif %}" data-tv-step data-at="{{ times[forloop.index0] | default: 0 }}">
+                <span class="tv-pv__step-no" aria-hidden="true">{{ forloop.index }}</span>
+                <span>{{ step | escape }}</span>
+              </li>
+            {%- endfor -%}
+          </ol>
+
+          <a class="tv-pv__cta" href="{{ product_url }}">
+            <span>Shop {{ kicker | escape }}</span>
+            <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M3.5 10h13M11.5 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+
+      </article>
+    {%- endfor -%}
+
+  </div>
+</section>
+
+{% comment %} ── 3. STYLES ──────────────────────────────────────────────────────── {% endcomment %}
+
+<style>
+  .tv-pv {
+    --tv-purple: #5a218a;
+    --tv-orange: #f26422;
+    --tv-lilac: #c9b8e8;
+    --tv-aubergine: #30143f;
+    --tv-peach: #f6b39b;
+    --tv-cream: #f8f5ec;
+    --tv-ink: #2a2118;
+    --tv-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --tv-gutter: clamp(1.25rem, 0.6rem + 3vw, 3.5rem);
+
+    background: var(--tv-cream);
+    color: var(--tv-ink);
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    padding-block: clamp(3.5rem, 2rem + 6vw, 8rem);
+    overflow: hidden;
+  }
+
+  .tv-pv *, .tv-pv *::before, .tv-pv *::after { box-sizing: border-box; }
+  .tv-pv p, .tv-pv h2, .tv-pv h3, .tv-pv ol { margin: 0; padding: 0; }
+  .tv-pv ol { list-style: none; }
+
+  .tv-pv__wrap {
+    width: min(100% - var(--tv-gutter) * 2, 82rem);
+    margin-inline: auto;
+  }
+
+  /* --- Heading ------------------------------------------------------------ */
+
+  .tv-pv__eyebrow {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--tv-orange);
+  }
+
+  .tv-pv .tv-pv__title {
+    margin-top: 0.75rem;
+    max-width: 14ch;
+    font-size: clamp(2.75rem, 1.2rem + 7.2vw, 7.5rem);
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: -0.035em;
+    color: var(--tv-purple);
+    text-wrap: balance;
+  }
+
+  .tv-pv__title-accent { color: var(--tv-orange); }
+
+  /* --- A story: the film beside its copy ---------------------------------- */
+
+  .tv-pv__story {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+    margin-top: clamp(3rem, 2rem + 5vw, 7rem);
+  }
+
+  @media (min-width: 56rem) {
+    .tv-pv__story {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      align-items: center;
+      column-gap: clamp(2.5rem, 1rem + 5vw, 6.5rem);
+    }
+
+    .tv-pv__story--flip { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+    .tv-pv__story--flip .tv-pv__stage { order: 2; }
+  }
+
+  /* --- The frame ----------------------------------------------------------
+     A fixed ratio holds the space before anything loads, so nothing shifts.
+     Tall on a phone, where the product should fill the screen; wider beside
+     the copy on a desktop. */
+
+  .tv-pv__frame {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    border-radius: 6px;
+    background: var(--tv-lilac);
+    isolation: isolate;
+  }
+
+  .tv-pv__story--flip .tv-pv__frame { background: var(--tv-peach); }
+
+  @media (min-width: 56rem) {
+    .tv-pv__frame { aspect-ratio: 5 / 4; }
+  }
+
+  .tv-pv__fallback {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 1.5rem;
+    font-size: clamp(1.5rem, 1rem + 2.4vw, 2.75rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    text-align: center;
+    color: var(--tv-aubergine);
+    z-index: -1;
+  }
+
+  .tv-pv__poster,
+  .tv-pv__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* A poster that fails to load steps aside for the fallback, without the
+     browser's broken-image mark. */
+  .tv-pv__poster.is-missing { visibility: hidden; }
+
+  .tv-pv__poster {
+    transition: opacity 700ms var(--tv-ease), scale 1200ms var(--tv-ease);
+  }
+
+  /* The film sits under the poster until it is really playing, then the
+     poster fades away over it — no flash of black, no jump. */
+  .tv-pv__video { opacity: 0; transition: opacity 500ms linear; }
+  .tv-pv__frame[data-state='playing'] .tv-pv__video,
+  .tv-pv__frame[data-state='paused'] .tv-pv__video { opacity: 1; }
+  .tv-pv__frame[data-state='playing'] .tv-pv__poster,
+  .tv-pv__frame[data-state='paused'] .tv-pv__poster { opacity: 0; scale: 1.03; pointer-events: none; }
+
+  /* --- Play / pause -------------------------------------------------------- */
+
+  .tv-pv__toggle {
+    position: absolute;
+    left: 1rem;
+    bottom: 1rem;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0 1rem 0 0.75rem;
+    border: 0;
+    border-radius: 999px;
+    background: var(--tv-cream);
+    color: var(--tv-aubergine);
+    font: inherit;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 250ms var(--tv-ease), color 250ms var(--tv-ease), translate 250ms var(--tv-ease);
+  }
+
+  .tv-pv__toggle[hidden] { display: none; }
+  .tv-pv__toggle:hover { background: var(--tv-aubergine); color: var(--tv-cream); }
+  .tv-pv__toggle:active { translate: 0 1px; }
+  .tv-pv__toggle:focus-visible,
+  .tv-pv__cta:focus-visible { outline: 2px solid var(--tv-orange); outline-offset: 3px; }
+
+  .tv-pv__icon--pause { display: none; }
+  .tv-pv__frame[data-state='playing'] .tv-pv__icon--play { display: none; }
+  .tv-pv__frame[data-state='playing'] .tv-pv__icon--pause { display: block; }
+
+  /* A hairline along the foot of the frame that fills as the film runs. */
+  .tv-pv__progress {
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 3px;
+    background: rgb(248 245 236 / 0.35);
+    opacity: 0;
+    transition: opacity 400ms linear;
+  }
+
+  .tv-pv__progress span {
+    display: block;
+    height: 100%;
+    background: var(--tv-orange);
+    transform-origin: left;
+    transform: scaleX(0);
+  }
+
+  .tv-pv__frame[data-state='playing'] .tv-pv__progress,
+  .tv-pv__frame[data-state='paused'] .tv-pv__progress { opacity: 1; }
+
+  /* --- Copy ---------------------------------------------------------------- */
+
+  .tv-pv__index {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    font-variant-numeric: tabular-nums;
+    color: rgb(42 33 24 / 0.4);
+  }
+
+  .tv-pv .tv-pv__kicker {
+    margin-top: 0.5rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--tv-purple);
+  }
+
+  .tv-pv .tv-pv__headline {
+    margin-top: 1rem;
+    font-size: clamp(2rem, 1.3rem + 2.8vw, 3.75rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--tv-ink);
+    text-wrap: balance;
+  }
+
+  .tv-pv .tv-pv__body {
+    margin-top: 1.25rem;
+    max-width: 34ch;
+    font-size: clamp(1rem, 0.95rem + 0.3vw, 1.1875rem);
+    line-height: 1.55;
+    color: rgb(42 33 24 / 0.72);
+  }
+
+  /* Three steps under a rule. The current one is carried by weight and a
+     filled number as the film reaches it. */
+  .tv-pv .tv-pv__steps {
+    margin-top: 2rem;
+    border-top: 1px solid rgb(42 33 24 / 0.16);
+  }
+
+  .tv-pv__step {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding-block: 0.875rem;
+    border-bottom: 1px solid rgb(42 33 24 / 0.16);
+    font-size: 1rem;
+    color: rgb(42 33 24 / 0.5);
+    transition: color 400ms var(--tv-ease);
+  }
+
+  .tv-pv__step-no {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 1.625rem;
+    height: 1.625rem;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    transition: background-color 400ms var(--tv-ease), color 400ms var(--tv-ease), border-color 400ms var(--tv-ease);
+  }
+
+  .tv-pv__step.is-current { color: var(--tv-ink); font-weight: 600; }
+  .tv-pv__step.is-current .tv-pv__step-no {
+    border-color: var(--tv-purple);
+    background: var(--tv-purple);
+    color: var(--tv-cream);
+  }
+
+  .tv-pv__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    min-height: 3.5rem;
+    margin-top: 2rem;
+    padding-inline: 1.75rem;
+    border-radius: 999px;
+    background: var(--tv-purple);
+    color: var(--tv-cream);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background-color 250ms var(--tv-ease), translate 250ms var(--tv-ease);
+  }
+
+  .tv-pv__cta svg { transition: translate 250ms var(--tv-ease); }
+  .tv-pv__cta:hover { background: var(--tv-aubergine); }
+  .tv-pv__cta:hover svg { translate: 4px 0; }
+  .tv-pv__cta:active { translate: 0 1px; }
+
+  @media (max-width: 30rem) {
+    .tv-pv__cta { width: 100%; justify-content: center; padding-inline: 1rem; }
+  }
+
+  /* --- Reveal on scroll ----------------------------------------------------
+     Only once the script has run (.tv-pv--js), so with scripts off or failed
+     everything is simply there. */
+
+  .tv-pv--js [data-tv-reveal] {
+    opacity: 0;
+    translate: 0 1.75rem;
+    transition: opacity 900ms var(--tv-ease), translate 900ms var(--tv-ease);
+  }
+
+  .tv-pv--js .tv-pv__copy[data-tv-reveal] { transition-delay: 120ms; }
+  .tv-pv--js [data-tv-reveal].is-in { opacity: 1; translate: 0 0; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tv-pv--js [data-tv-reveal] { opacity: 1; translate: none; transition: none; }
+    .tv-pv__poster,
+    .tv-pv__video,
+    .tv-pv__step,
+    .tv-pv__step-no,
+    .tv-pv__cta,
+    .tv-pv__cta svg,
+    .tv-pv__toggle { transition: none; }
+    .tv-pv__frame[data-state='playing'] .tv-pv__poster,
+    .tv-pv__frame[data-state='paused'] .tv-pv__poster { scale: none; }
+  }
+</style>
+
+{% comment %} ── 4. BEHAVIOUR ──────────────────────────────────────────────────── {% endcomment %}
+
+<script>
+  (function () {
+    var root = document.getElementById('tv-pv-{{ pv_id }}');
+    if (!root || root.dataset.tvReady) return;
+    root.dataset.tvReady = 'true';
+    root.classList.add('tv-pv--js');
+
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var saveData = navigator.connection && navigator.connection.saveData;
+    // Play on its own only where that is welcome; otherwise wait to be asked.
+    var autoplay = !reduceMotion && !saveData;
+    var hasObserver = 'IntersectionObserver' in window;
+
+    /* Reveals ----------------------------------------------------------- */
+    var reveals = root.querySelectorAll('[data-tv-reveal]');
+    if (hasObserver && !reduceMotion) {
+      var revealer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-in');
+          revealer.unobserve(entry.target);
+        });
+      }, { rootMargin: '0px 0px -12% 0px' });
+      reveals.forEach(function (el) { revealer.observe(el); });
+    } else {
+      reveals.forEach(function (el) { el.classList.add('is-in'); });
+    }
+
+    /* Posters: a missing one steps aside for the product name ------------ */
+    root.querySelectorAll('[data-tv-poster]').forEach(function (img) {
+      var miss = function () { img.classList.add('is-missing'); };
+      img.addEventListener('error', miss);
+      if (img.complete && img.naturalWidth === 0) miss();
+    });
+
+    /* Players ----------------------------------------------------------- */
+    root.querySelectorAll('[data-tv-story]').forEach(function (story) {
+      var frame = story.querySelector('[data-tv-player]');
+      var video = story.querySelector('[data-tv-video]');
+      if (!frame || !video) return;
+
+      var toggle = story.querySelector('[data-tv-toggle]');
+      var label = story.querySelector('[data-tv-toggle-label]');
+      var bar = story.querySelector('[data-tv-progress]');
+      var steps = Array.prototype.slice.call(story.querySelectorAll('[data-tv-step]'));
+      var times = steps.map(function (step) { return parseFloat(step.dataset.at) || 0; });
+
+      var loaded = false;      // the source has been attached
+      var failed = false;      // it could not be played
+      var userPaused = false;  // the visitor pressed pause; do not restart on scroll
+      var inView = false;
+
+      var setState = function (state) {
+        frame.dataset.state = state;
+        if (!toggle) return;
+        var playing = state === 'playing';
+        toggle.setAttribute('aria-pressed', playing ? 'true' : 'false');
+        label.textContent = playing ? 'Pause film' : 'Play film';
+      };
+
+      // On failure the poster stays, the control goes, and nothing looks broken.
+      var fail = function () {
+        if (failed) return;
+        failed = true;
+        video.removeAttribute('src');
+        try { video.load(); } catch (e) {}
+        if (toggle) toggle.hidden = true;
+        setState('poster');
+      };
+
+      // The film is not requested until it is about to be seen, or asked for.
+      var load = function () {
+        if (loaded || failed) return;
+        loaded = true;
+        video.src = video.dataset.src;
+        video.load();
+      };
+
+      var play = function () {
+        if (failed) return;
+        load();
+        video.muted = true;
+        var attempt = video.play();
+        if (attempt && attempt.catch) {
+          attempt.catch(function (error) {
+            // Refused (battery saver, policy): stay on the poster, keep the button.
+            if (error && error.name === 'NotSupportedError') fail();
+            else if (frame.dataset.state !== 'playing') setState(video.currentTime > 0 ? 'paused' : 'poster');
+          });
+        }
+      };
+
+      var pause = function () { if (!video.paused) video.pause(); };
+
+      video.addEventListener('playing', function () { setState('playing'); });
+      video.addEventListener('pause', function () {
+        if (!failed) setState(video.currentTime > 0 ? 'paused' : 'poster');
+      });
+      video.addEventListener('error', fail);
+      // A stalled source with nothing buffered is treated as a failure too.
+      video.addEventListener('stalled', function () {
+        if (video.readyState === 0 && video.networkState === 3) fail();
+      });
+
+      video.addEventListener('timeupdate', function () {
+        var t = video.currentTime;
+        if (bar && video.duration) bar.style.transform = 'scaleX(' + Math.min(1, t / video.duration) + ')';
+        var current = 0;
+        for (var i = 0; i < times.length; i++) if (t >= times[i]) current = i;
+        steps.forEach(function (step, i) { step.classList.toggle('is-current', i === current); });
+      });
+
+      if (toggle) {
+        toggle.hidden = false;
+        toggle.addEventListener('click', function () {
+          if (video.paused) { userPaused = false; play(); }
+          else { userPaused = true; pause(); }
+        });
+      }
+
+      // Play while it is on screen, pause when it leaves, and rest when the
+      // tab is hidden. One film is never left running out of sight.
+      if (hasObserver) {
+        new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            inView = entry.isIntersecting && entry.intersectionRatio >= 0.45;
+            if (inView && autoplay && !userPaused) play();
+            else if (!inView) pause();
+          });
+        }, { threshold: [0, 0.45, 0.75] }).observe(frame);
+
+        // Start fetching a little before it arrives, where autoplay is on.
+        if (autoplay) {
+          var warm = new IntersectionObserver(function (entries) {
+            if (!entries[0].isIntersecting) return;
+            video.preload = 'metadata';
+            load();
+            warm.disconnect();
+          }, { rootMargin: '300px 0px' });
+          warm.observe(frame);
+        }
+      }
+
+      document.addEventListener('visibilitychange', function () {
+        if (document.hidden) pause();
+        else if (inView && autoplay && !userPaused) play();
+      });
+    });
+  })();
+</script>

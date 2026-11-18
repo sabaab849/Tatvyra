@@ -1,20 +1,16 @@
 /**
  * The payment seam.
  *
- * The gateway has not been chosen yet, so nothing in this folder — and nothing
- * in the checkout pages — knows about a specific provider. A provider is any
- * object shaped like the contract below; the checkout renders whatever methods
- * the active provider advertises and calls one function to take a payment.
+ * Nothing in the checkout pages knows about a specific provider. A provider is
+ * any object shaped like the contract below; the checkout renders whatever
+ * methods the active provider advertises and calls one function to take a
+ * payment.
  *
- * TO CONNECT THE REAL GATEWAY LATER
- *   1. Add src/payments/<provider>.js exporting the same shape as mockGateway.
- *   2. Return it from getPaymentGateway() below.
- * Nothing else changes: no page imports a provider directly, and the payment
- * UI is driven by `provider.methods`, so a provider that offers different
- * methods renders different fields without the checkout being redesigned.
- *
- * Keys and secrets belong in the provider module, read from environment
- * variables at build time. None exist yet and none are invented here.
+ * The live provider is Razorpay (razorpay.js), backed by the server functions
+ * in api/razorpay/. Its keys are server environment variables
+ * (RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET) — never VITE_ variables, which would
+ * ship the secret to every browser. mockGateway.js is kept for demos: return
+ * it from getPaymentGateway() to take the checkout offline.
  *
  * PROVIDER CONTRACT
  *   id       string   short identifier, e.g. 'mock'
@@ -23,20 +19,23 @@
  *   methods  array    [{ id, label, hint, fields: [...] }]
  *   pay(request) -> Promise<PaymentResult>
  *
- *     request  { amount, currency, method, fields, reference, onStage }
+ *     request  { amount, currency, method, fields, reference, lines, customer, onStage }
  *       amount    rupees; a few MRPs carry paise, so it is not always whole.
- *                 A real provider that bills in paise converts on the way in.
+ *                 Display only for a server-priced provider like Razorpay,
+ *                 which re-prices `lines` itself.
  *       method    the chosen method id
  *       fields    { [fieldName]: value } for that method
  *       reference the order reference, for reconciliation
+ *       lines     [{ slug, size, quantity, ... }] the basket
+ *       customer  the delivery details from /checkout
  *       onStage   optional (stage) => void, for progress copy
  *
- *     PaymentResult { status, reference, method, message, code }
+ *     PaymentResult { status, reference, method, message, code, paymentId? }
  *       status  one of PaymentStatus.Succeeded | PaymentStatus.Failed
  *       code    machine-readable failure reason, null when succeeded
  *       message customer-facing sentence
  */
-import { mockGateway } from './mockGateway'
+import { razorpayGateway } from './razorpay'
 
 /** The states the payment UI can be in. */
 export const PaymentStatus = {
@@ -46,9 +45,7 @@ export const PaymentStatus = {
   Failed: 'failed',
 }
 
-/**
- * The active provider. Swap the return value when the client confirms theirs.
- */
+/** The active provider. */
 export function getPaymentGateway() {
-  return mockGateway
+  return razorpayGateway
 }

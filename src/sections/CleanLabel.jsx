@@ -3,10 +3,9 @@ import { MARKS } from '../data/brand'
 
 /**
  * Quotes the on-pack mark definitions from the catalogue verbatim. Each mark
- * carries the exact scope the brand published — including the note that raw
- * honey is excluded from the vegan mark.
+ * carries the exact scope the brand published.
  */
-const ORDER = ['clean-label', 'vegan', 'gluten-free', 'nutrition-forward', 'single-origin']
+const ORDER = ['gluten-free', 'nutrition-forward', 'single-origin']
 
 export default function CleanLabel() {
   return (
@@ -15,7 +14,7 @@ export default function CleanLabel() {
         <Reveal className="cleanlabel__lead">
           <p className="eyebrow eyebrow--on-dark">Standards</p>
           <h2 id="cleanlabel-title" className="display display--l cleanlabel__title">
-            What each mark means.
+            What Each Mark Means.
           </h2>
           <p className="cleanlabel__intro">
             The marks on a Tatvyra pack are defined, not decorative. Here is exactly what each one

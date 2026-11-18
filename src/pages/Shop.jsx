@@ -26,9 +26,9 @@ export default function Shop() {
 
   usePageMeta({
     title: category
-      ? `${category.name} — Tatvyra`
-      : 'Shop all — Tatvyra Wellness Essentials',
-    description: category ? category.description : 'The full Tatvyra range across four ranges.',
+      ? `${category.name} | Tatvyra`
+      : 'Shop all | Tatvyra',
+    description: category ? category.description : 'Every Tatvyra product: nut butters, moringa, spirulina and raw honey.',
   })
 
   if (categorySlug && !category) return <Navigate to="/shop" replace />
@@ -38,20 +38,19 @@ export default function Shop() {
       <header className="shop__head">
         <div className="shell">
           <Reveal>
-            <p className="eyebrow">{category ? `${category.number} — Range` : 'Wellness Essentials'}</p>
             <h1 className="display display--l shop__title">
-              {category ? category.name : 'The full range'}
+              {category ? category.name : 'All Products'}
             </h1>
             <p className="lede shop__intro">
               {category
                 ? category.description
-                : 'Sixteen products across nut butters, moringa, spirulina and raw honey.'}
+                : 'Nut butters, moringa, spirulina and raw honey.'}
             </p>
           </Reveal>
         </div>
       </header>
 
-      <nav className="shop__ranges" aria-label="Product ranges">
+      <nav className="shop__ranges" aria-label="Product categories">
         <div className="shell">
           <ul className="shop__range-list">
             <li>
@@ -98,9 +97,6 @@ export default function Shop() {
                 </button>
               ))}
             </div>
-            <p className="shop__count" aria-live="polite">
-              {visible.length} {visible.length === 1 ? 'product' : 'products'}
-            </p>
           </div>
         )}
 

@@ -59,7 +59,7 @@ export default function SearchPanel({ open, onClose }) {
           <div className="search__results" aria-live="polite">
             {query.trim() === '' ? (
               <div className="search__suggest">
-                <p className="eyebrow">Browse the range</p>
+                <p className="eyebrow">Browse our products</p>
                 <ul>
                   {CATEGORIES.map((category) => (
                     <li key={category.slug}>
