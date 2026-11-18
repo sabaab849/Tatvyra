@@ -199,27 +199,36 @@ function labelGeometry(radius, height, front, arc = LABEL_ARC) {
 /* A label's ground colour, row by row: the median of each row, which is the
    paper or the printed band rather than the lettering or the artwork on it.
    Kept as a strip one pixel wide, laid round the back of the band. */
+//
+// Each row's median is taken over 96 samples across it, picked out of the
+// label without blending (so paper stays paper and ink stays ink), rather
+// than over every other pixel: on a full-size label that was millions of
+// values to sort, and held the page for seconds as the walk was set up. The
+// median of an even spread of 96 is the same colour to the eye.
+const GROUND_SAMPLES = 96
+
 function labelGround(texture) {
   const image = texture.image
-  const w = image.width
+  const w = Math.min(GROUND_SAMPLES, image.width)
   const h = image.height
   const canvas = document.createElement('canvas')
   canvas.width = w
   canvas.height = h
-  const g = canvas.getContext('2d')
-  g.drawImage(image, 0, 0)
+  const g = canvas.getContext('2d', { willReadFrequently: true })
+  g.imageSmoothingEnabled = false
+  g.drawImage(image, 0, 0, w, h)
   const data = g.getImageData(0, 0, w, h).data
   const strip = document.createElement('canvas')
   strip.width = 1
   strip.height = h
   const s = strip.getContext('2d')
   const row = s.createImageData(1, h)
-  const median = (values) => values.sort((a, b) => a - b)[values.length >> 1]
+  const values = new Uint8Array(w)
   for (let y = 0; y < h; y++) {
     for (let k = 0; k < 3; k++) {
-      const values = []
-      for (let x = 0; x < w; x += 2) values.push(data[(y * w + x) * 4 + k])
-      row.data[y * 4 + k] = median(values)
+      for (let x = 0; x < w; x++) values[x] = data[(y * w + x) * 4 + k]
+      values.sort()
+      row.data[y * 4 + k] = values[w >> 1]
     }
     row.data[y * 4 + 3] = 255
   }

@@ -347,7 +347,7 @@ export default function JungleJourney() {
     [],
   )
 
-  // Set the scene up as the section comes within three screens of view, and
+  // Set the scene up as the section comes within five screens of view, and
   // run it only while the section is on screen. Setting up early, paused,
   // leaves the graphics driver time to compile the leaves' shaders in the
   // background before the first frame needs them; set up a screen away, the
@@ -364,10 +364,10 @@ export default function JungleJourney() {
           loader.disconnect()
         }
       },
-      { rootMargin: '300% 0px' },
+      { rootMargin: '500% 0px' },
     )
     const runner = new IntersectionObserver(([entry]) => setOnScreen(entry.isIntersecting))
-    // The code itself is fetched and parsed further out still, five screens
+    // The code itself is fetched and parsed further out still, eight screens
     // away, while the reader is on the sections above.
     const fetcher = new IntersectionObserver(
       ([entry]) => {
@@ -376,7 +376,7 @@ export default function JungleJourney() {
           fetcher.disconnect()
         }
       },
-      { rootMargin: '500% 0px' },
+      { rootMargin: '800% 0px' },
     )
     loader.observe(section)
     runner.observe(section)

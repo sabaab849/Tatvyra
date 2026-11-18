@@ -383,15 +383,16 @@ function Reflections() {
         const filters = [pmrem._ggxMaterial, pmrem._blurMaterial].filter(Boolean)
         const target = pmrem._pingPongRenderTarget
         if (gl.compileAsync && filters.length && target) {
+          // On the generator's own geometry: its attributes are part of
+          // which shader is compiled.
           const stage = new THREE.Scene()
-          const geometry = new THREE.BufferGeometry()
+          const geometry = pmrem._lodMeshes?.[0]?.geometry ?? new THREE.PlaneGeometry()
           filters.forEach((material) => stage.add(new THREE.Mesh(geometry, material)))
           const previous = gl.getRenderTarget()
           gl.setRenderTarget(target)
           const compiling = gl.compileAsync(stage, camera)
           gl.setRenderTarget(previous)
           await compiling
-          geometry.dispose()
         }
       } catch {
         // Fall through and build the ordinary way.
@@ -565,6 +566,11 @@ function WarmUp() {
       culled.forEach((object) => (object.frustumCulled = true))
       await compiling
       for (const texture of textures) {
+        if (cancelled) return
+        // The photograph is decoded off the main thread first; otherwise the
+        // upload decodes it on the spot, and that was most of its cost.
+        const image = texture.image
+        if (typeof image?.decode === "function") await image.decode().catch(() => {})
         if (cancelled) return
         gl.initTexture(texture)
         await nextFrame()

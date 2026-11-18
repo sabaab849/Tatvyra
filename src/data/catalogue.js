@@ -424,6 +424,10 @@ export const PRODUCTS = [
         src: '/images/products/packs/moringa-capsules-5.webp',
         alt: 'Hands opening a bottle of Tatvyra Moringa Capsules at a desk.',
       },
+      {
+        src: '/images/products/packs/moringa-capsules-nutrition.webp',
+        alt: 'The label of Tatvyra Moringa Capsules showing nutritional information per capsule (moringa leaves powder 2000 mg), cautions and usage notes.',
+      },
     ],
     descriptor: 'The leaf powder, encapsulated. No taste, no measuring.',
     // The supplied product description, verbatim, as the tablets and the
@@ -947,6 +951,10 @@ export const PRODUCTS = [
         src: '/images/products/packs/wild-forest-honey-5.webp',
         alt: 'Honey running from a dipper into an open jar of Tatvyra Wild Forest Honey.',
       },
+      {
+        src: '/images/products/packs/wild-forest-honey-nutrition.webp',
+        alt: 'The label of Tatvyra Wild Forest Honey showing nutrition facts per 1 tbsp (21g) serving, ingredients (raw honey) and allergen (pollen).',
+      },
     ],
     descriptor: 'Dark, dense forest florals.',
     sizes: ['250g', '500g'],
@@ -1070,6 +1078,10 @@ export const PRODUCTS = [
       {
         src: '/images/products/packs/multifloral-honey-5.webp',
         alt: 'Honey running from a dipper into an open jar of Tatvyra Multifloral Honey.',
+      },
+      {
+        src: '/images/products/packs/multifloral-honey-nutrition.webp',
+        alt: 'The label of Tatvyra Multifloral Honey showing nutrition facts per 1 tbsp (21g) serving, ingredients (raw honey) and allergen (pollen).',
       },
     ],
     descriptor: 'A balanced blend across many flowers.',
